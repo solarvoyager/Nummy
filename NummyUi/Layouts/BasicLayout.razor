@@ -1,0 +1,42 @@
+﻿@namespace NummyUi
+@inherits LayoutComponentBase
+
+<AntDesign.ProLayout.BasicLayout 
+    Logo="@("./pro_icon.svg")"
+    MenuData="_menuData">
+    <RightContentRender>
+        <NummyUi.Components.RightContent />
+    </RightContentRender>
+    <ChildContent>
+        @Body
+    </ChildContent>
+    <FooterRender>
+        <FooterView Copyright="2023 SolarVoyager" Links="Links"></FooterView>
+    </FooterRender>
+</AntDesign.ProLayout.BasicLayout>
+<SettingDrawer />
+
+@code
+{
+    private MenuDataItem[] _menuData = { };
+
+    [Inject] public HttpClient HttpClient { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _menuData = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
+    }
+
+
+    public LinkItem[] Links { get; set; } =
+    {
+        new LinkItem
+        {
+            Key = "github",
+            Title = (RenderFragment)(@<Icon Type="github" />),
+            Href = "https://github.com/orgs/solarvoyager",
+            BlankTarget = true,
+        }
+    };
+}

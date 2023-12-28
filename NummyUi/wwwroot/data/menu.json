@@ -1,0 +1,79 @@
+﻿[
+  {
+    "path": "/dashboard",
+    "name": "Dashboard",
+    "key": "dashboard",
+    "icon": "dashboard",
+    "children": [
+      {
+        "path": "/",
+        "name": "Analysis Page",
+        "key": "dashboard.analysis"
+      },
+      {
+        "path": "/dashboard/monitor",
+        "name": "Monitoring Page",
+        "key": "dashboard.monitor"
+      }
+    ]
+  },
+  {
+    "path": "/exception",
+    "name": "Exceptions",
+    "key": "exception",
+    "icon": "exception",
+    "children": [
+      {
+        "path": "/exception/dashboard",
+        "name": "Dashboard",
+        "key": "exception.dashboard"
+      },
+      {
+        "path": "/exception/management",
+        "name": "Management",
+        "key": "exception.management"
+      }
+    ]
+  },
+  {
+    "path": "/logging",
+    "name": "Logging",
+    "key": "logging",
+    "icon": "table",
+    "children": [
+      {
+        "path": "/logging/dashboard",
+        "name": "Dashboard",
+        "key": "logging.dashboard"
+      },
+      {
+        "path": "/logging/http",
+        "name": "HTTP logs",
+        "key": "logging.http"
+      },
+      {
+        "path": "/logging/code",
+        "name": "Code logs",
+        "key": "logging.code"
+      }
+    ]
+  },
+  {
+    "path": "/account",
+    "name": "Account",
+    "key": "account",
+    "icon": "user",
+    "children": [
+      {
+        "path": "/account/center",
+        "name": "Account Center",
+        "key": "account.center"
+      },
+      {
+        "path": "/account/settings",
+        "name": "Personal settings",
+        "key": "account.settings"
+      }
+    ]
+  }
+]
