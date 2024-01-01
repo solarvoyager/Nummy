@@ -3,7 +3,7 @@ using NummyUi.Data.Entitites;
 
 namespace NummyUi.Data.DataContext;
 
-internal class NummyDataContext : DbContext
+public class NummyDataContext : DbContext
 {
     public NummyDataContext(DbContextOptions<NummyDataContext> options) : base(options)
     {

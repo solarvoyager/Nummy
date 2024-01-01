@@ -22,8 +22,11 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+//docker run -d --name nummy_postgres -e POSTGRES_USER=nummyuser -e POSTGRES_PASSWORD=nummypassword -p 5432:5432 postgres:latest
+//var connectionString = "Host=localhost;Database=nummydatabase;Username=nummyuser;Password=nummypassword";
+var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
 
 builder.Services.AddDbContext<NummyDataContext>(dbOptions => dbOptions.UseNpgsql(connectionString));
 

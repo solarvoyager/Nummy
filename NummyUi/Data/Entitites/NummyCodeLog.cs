@@ -1,6 +1,6 @@
 ﻿namespace NummyUi.Data.Entitites;
 
-internal class NummyCodeLog
+public class NummyCodeLog
 {
     public int NummyCodeLogId { get; set; }
     public required string LogGuid { get; set; }

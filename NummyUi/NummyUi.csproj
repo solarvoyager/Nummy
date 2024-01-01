@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c4e9842a-4a86-463a-8831-1012a87f8731</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,8 +13,35 @@
     <PackageReference Include="AntDesign.ProLayout" Version="0.16.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Pages\Database\Dashboard\Index.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Bar\Bar.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\ChartCard\ChartCard.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Field\Field.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Gauge\Gauge.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\MiniArea\MiniArea.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\MiniBar\MiniBar.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\MiniProgress\MiniProgress.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Pie\Pie.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\TagCloud\TagCloud.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\TimelineChart\TimelineChart.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\WaterWave\WaterWave.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\NumberInfo\NumberInfo.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\PageLoading\PageLoading.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Trend\Trend.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\SalesCard.razor" />
   </ItemGroup>
   
 </Project>

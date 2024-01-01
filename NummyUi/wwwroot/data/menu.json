@@ -80,5 +80,18 @@
         "key": "account.settings"
       }
     ]
+  },
+  {
+    "path": "/database",
+    "name": "Database",
+    "key": "database",
+    "icon": "database",
+    "children": [
+      {
+        "path": "/database/dashboard",
+        "name": "Database Dashboard",
+        "key": "database.dashboard"
+      }
+    ]
   }
 ]

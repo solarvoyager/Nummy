@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+
+  # PostgreSQL service
+  postgres:
+    image: postgres:latest
+    # db host name
+    container_name: nummy_postgres
+    environment:
+      - POSTGRES_DB=nummy_database
+      - POSTGRES_USER=nummyuser
+      - POSTGRES_PASSWORD=nummypassword
+    networks:
+      - nummy_network
+
+  # Your Nummy service
+  web:
+    image: hamidmusayev04/nummy:latest
+    container_name: nummy_ui
+    # connection string of your postgresql database created below
+    environment:
+      - POSTGRES_CONNECTION_STRING=Host=nummy_postgres;Database=nummydatabase;Username=nummyuser;Password=nummypassword
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - nummy_network
+
+networks:
+  nummy_network:
+    driver: bridge

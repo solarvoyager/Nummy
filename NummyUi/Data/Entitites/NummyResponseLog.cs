@@ -1,6 +1,6 @@
 ﻿namespace NummyUi.Data.Entitites;
 
-internal class NummyResponseLog
+public class NummyResponseLog
 {
     public int NummyResponseLogId { get; set; }
     public required string HttpLogGuid { get; set; }
