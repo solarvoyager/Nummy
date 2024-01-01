@@ -1,5 +1,7 @@
 using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using NummyUi.Data.DataContext;
 using NummyUi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,16 +10,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
+
 builder.Services.AddScoped(sp => new HttpClient
 {
     BaseAddress = new Uri(sp.GetService<NavigationManager>()!.BaseUri)
 });
+
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
+builder.Services.AddDbContext<NummyDataContext>(dbOptions => dbOptions.UseNpgsql(connectionString));
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 
