@@ -16,7 +16,7 @@ services:
 
   # Your Nummy service
   web:
-    image: hamidmusayev04/nummy:latest
+    image: hamidmusayev04/nummy:1.0.1
     container_name: nummy_ui
     # connection string of your postgresql database created below
     environment:
