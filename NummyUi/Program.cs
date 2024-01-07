@@ -1,7 +1,6 @@
 using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using NummyUi.Data.DataContext;
+using NummyUi;
 using NummyUi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,13 +23,15 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 
-//docker run -d --name nummy_postgres -e POSTGRES_USER=nummyuser -e POSTGRES_PASSWORD=nummypassword -p 5432:5432 postgres:latest
-//var connectionString = "Host=localhost;Database=nummydatabase;Username=nummyuser;Password=nummypassword";
-var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+var apiHost = Environment.GetEnvironmentVariable("NUMMY_API_HOST");
+var apiPort = Environment.GetEnvironmentVariable("NUMMY_API_PORT");
 
-builder.Services.AddDbContext<NummyDataContext>(dbOptions => dbOptions.UseNpgsql(connectionString));
-
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+builder.Services.AddHttpClient(NummyContants.ClientName, config =>
+{
+    config.BaseAddress = new Uri($"http://{apiHost}:{apiPort}/api");
+    config.Timeout = new TimeSpan(0, 0, 30);
+    config.DefaultRequestHeaders.Clear();
+});
 
 var app = builder.Build();
 

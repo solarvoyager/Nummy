@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NummyUi.Data.DataContext;
-
-namespace NummyUi.Services;
+﻿namespace NummyUi.Services;
 
 public interface IDatabaseService
 {
@@ -9,31 +6,21 @@ public interface IDatabaseService
     Task<bool> Migrate();
 }
 
-public class DatabaseService : IDatabaseService
+public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseService
 {
-    private readonly NummyDataContext _dataContext;
-
-    public DatabaseService(NummyDataContext dataContext)
-    {
-        _dataContext = dataContext;
-    }
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
 
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {
-        // Ensure the database exists, and create it if not
-        // this commented because this is migrating initial migration also
-        // don't know about other migrations
-        //await _dataContext.Database.EnsureCreatedAsync();
-
-        var pendingMigrations = await _dataContext.Database.GetPendingMigrationsAsync();
-
-        return pendingMigrations;
+        var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyContants.GetPendingMigrationsUrl);
+        
+        return response?? Array.Empty<string>();
     }
 
     public async Task<bool> Migrate()
     {
-        await _dataContext.Database.MigrateAsync();
+        var response = await _client.PutAsync(NummyContants.ApplyPendingMigrationsUrl, null);
 
-        return true;
+        return response.IsSuccessStatusCode;
     }
 }

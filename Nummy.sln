@@ -5,6 +5,13 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NummyUi", "NummyUi\NummyUi.csproj", "{8F17FB03-BABD-43EA-9CC3-0719D498B06C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NummyApi", "NummyApi\NummyApi.csproj", "{80AE5D79-709E-42C5-8510-C0511EA781AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2590B573-C0DC-4CD8-AF09-AB23C8DA016E}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{8F17FB03-BABD-43EA-9CC3-0719D498B06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F17FB03-BABD-43EA-9CC3-0719D498B06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F17FB03-BABD-43EA-9CC3-0719D498B06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

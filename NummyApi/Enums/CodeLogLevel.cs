@@ -1,6 +1,6 @@
-﻿namespace NummyUi.Data.Entitites;
+﻿namespace NummyApi.Enums;
 
-public enum NummyCodeLogLevel
+public enum CodeLogLevel
 {
     Trace,
     Debug,
