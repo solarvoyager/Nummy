@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NummyApi.DataContext;
 using NummyApi.Services.Abstract;
 
 namespace NummyApi.Services.Concrete;
 
-public class DatabaseService(DataContext.DataContext dataContext, IMapper mapper) : IDatabaseService
+public class DatabaseService(NummyDataContext dataContext, IMapper mapper) : IDatabaseService
 {
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {

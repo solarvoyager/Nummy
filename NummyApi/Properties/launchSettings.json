@@ -9,6 +9,20 @@
     }
   },
   "profiles": {
+    "http.Local.Postgres": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5098",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "POSTGRES_HOST": "localhost",
+        "POSTGRES_DB":"nummydatabase",
+        "POSTGRES_USER":"nummyuser",
+        "POSTGRES_PASSWORD":"nummypassword"
+      }
+    },
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,

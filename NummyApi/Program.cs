@@ -20,7 +20,7 @@ var connectionString =
 
 // example for testing:
 // docker run --name postgres-container -e POSTGRES_PASSWORD=nummypassword -e POSTGRES_USER=nummyuser -p 5432:5432 -d postgres:latest
-builder.Services.AddDbContext<DataContext>(options =>
+builder.Services.AddDbContext<NummyDataContext>(options =>
     options.UseNpgsql(connectionString));
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

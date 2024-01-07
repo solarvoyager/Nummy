@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using NummyApi.DataContext;
 using NummyApi.Dtos;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
 
 namespace NummyApi.Services.Concrete;
 
-public class LogService(DataContext.DataContext dataContext, IMapper mapper) : ILogService
+public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogService
 {
     public async Task AddRequestLog(RequestLogToAddDto dto)
     {

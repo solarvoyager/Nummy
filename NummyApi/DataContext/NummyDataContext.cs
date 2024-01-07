@@ -4,9 +4,9 @@ using NummyApi.Entitites.Generic;
 
 namespace NummyApi.DataContext;
 
-public class DataContext : DbContext
+public class NummyDataContext : DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    public NummyDataContext(DbContextOptions<NummyDataContext> options) : base(options)
     {
     }
 
