@@ -6,6 +6,7 @@ on:
       - master
 
 jobs:
+  
   build-and-push:
     runs-on: ubuntu-latest
 
@@ -43,7 +44,6 @@ jobs:
           docker build -t hamidmusayev04/nummy-api:$NEW_VERSION -t hamidmusayev04/nummy-api:latest .
           docker push hamidmusayev04/nummy-api:latest
           docker push hamidmusayev04/nummy-api:$NEW_VERSION
-
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
