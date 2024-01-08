@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Mappers;
@@ -6,13 +7,7 @@ using NummyApi.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//if (OperatingSystem.IsLinux())
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(8082);
-    // to listen for incoming https connection
-    //options.ListenAnyIP(8083, configure => configure.UseHttps());
-});
+builder.WebHost.UseUrls("http://*:8082", "https://*.8083");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
