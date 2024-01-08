@@ -6,7 +6,6 @@ on:
       - master
 
 jobs:
-  
   build-and-push:
     runs-on: ubuntu-latest
 
@@ -14,41 +13,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set version based on commit SHA
+        id: set-version
+        run: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          echo "Setting version $COMMIT_SHA"
+          echo "::set-output name=version::$COMMIT_SHA"
+
+      - name: Get latest version from Docker Hub
+        id: latest-version
+        run: |
+          DOCKER_IMAGE_UI="hamidmusayev04/nummy-ui"
+          LATEST_VERSION_UI=$(docker manifest inspect $DOCKER_IMAGE_UI | jq -r '.schema2.config.digest' | cut -d ":" -f2)
+          echo "Latest version for $DOCKER_IMAGE_UI on Docker Hub: $LATEST_VERSION_UI"
+          echo "::set-output name=version_ui::$LATEST_VERSION_UI"
+
+          DOCKER_IMAGE_API="hamidmusayev04/nummy-api"
+          LATEST_VERSION_API=$(docker manifest inspect $DOCKER_IMAGE_API | jq -r '.schema2.config.digest' | cut -d ":" -f2)
+          echo "Latest version for $DOCKER_IMAGE_API on Docker Hub: $LATEST_VERSION_API"
+          echo "::set-output name=version_api::$LATEST_VERSION_API"
+
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Install semver
-        run: npm install -g semver
-
-      - name: Get current version
-        id: version
-        run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || echo '1.0.0')"
-
-      - name: Set specific tag for commit
-        id: set-tag
-        run: |
-          CURRENT_VERSION=${{ steps.version.outputs.version }}
-          NEW_VERSION=$(semver bump patch $CURRENT_VERSION)
-          echo "Setting version $NEW_VERSION"
-          echo "::set-output name=tag::$NEW_VERSION"
-
       - name: Build and push Docker UI image
         run: |
-          NEW_VERSION=${{ steps.set-tag.outputs.tag }}
-          cd NummyUi
-          docker build -t hamidmusayev04/nummy-ui:$NEW_VERSION -t hamidmusayev04/nummy-ui:latest .
+          COMMIT_SHA=${{ steps.set-version.outputs.version }}
+          LATEST_VERSION=${{ steps.latest-version.outputs.version_ui }}
+          docker build -t hamidmusayev04/nummy-ui:$COMMIT_SHA -t hamidmusayev04/nummy-ui:latest .
           docker push hamidmusayev04/nummy-ui:latest
-          docker push hamidmusayev04/nummy-ui:$NEW_VERSION
-          cd ..
-
+          docker push hamidmusayev04/nummy-ui:$COMMIT_SHA
+          
       - name: Build and push Docker API image
         run: |
-          NEW_VERSION=${{ steps.set-tag.outputs.tag }}
-          cd NummyApi
-          docker build -t hamidmusayev04/nummy-api:$NEW_VERSION -t hamidmusayev04/nummy-api:latest .
+          COMMIT_SHA=${{ steps.set-version.outputs.version }}
+          LATEST_VERSION=${{ steps.latest-version.outputs.version_api }}
+          docker build -t hamidmusayev04/nummy-api:$COMMIT_SHA -t hamidmusayev04/nummy-api:latest .
           docker push hamidmusayev04/nummy-api:latest
-          docker push hamidmusayev04/nummy-api:$NEW_VERSION
-          cd ..
+          docker push hamidmusayev04/nummy-api:$COMMIT_SHA
