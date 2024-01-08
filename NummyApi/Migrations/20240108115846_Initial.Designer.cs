@@ -12,7 +12,7 @@ using NummyApi.DataContext;
 namespace NummyApi.Migrations
 {
     [DbContext(typeof(NummyDataContext))]
-    [Migration("20240108060657_Initial")]
+    [Migration("20240108115846_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -79,7 +79,7 @@ namespace NummyApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NummyCodeLogs");
+                    b.ToTable("CodeLogs");
                 });
 
             modelBuilder.Entity("NummyApi.Entitites.RequestLog", b =>
@@ -133,7 +133,7 @@ namespace NummyApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NummyRequestLogs");
+                    b.ToTable("RequestLogs");
                 });
 
             modelBuilder.Entity("NummyApi.Entitites.ResponseLog", b =>
@@ -175,7 +175,7 @@ namespace NummyApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NummyResponseLogs");
+                    b.ToTable("ResponseLogs");
                 });
 #pragma warning restore 612, 618
         }

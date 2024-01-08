@@ -12,7 +12,7 @@ namespace NummyApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "NummyCodeLogs",
+                name: "CodeLogs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -33,11 +33,11 @@ namespace NummyApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NummyCodeLogs", x => x.Id);
+                    table.PrimaryKey("PK_CodeLogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "NummyRequestLogs",
+                name: "RequestLogs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -57,11 +57,11 @@ namespace NummyApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NummyRequestLogs", x => x.Id);
+                    table.PrimaryKey("PK_RequestLogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "NummyResponseLogs",
+                name: "ResponseLogs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -78,7 +78,7 @@ namespace NummyApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NummyResponseLogs", x => x.Id);
+                    table.PrimaryKey("PK_ResponseLogs", x => x.Id);
                 });
         }
 
@@ -86,13 +86,13 @@ namespace NummyApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "NummyCodeLogs");
+                name: "CodeLogs");
 
             migrationBuilder.DropTable(
-                name: "NummyRequestLogs");
+                name: "RequestLogs");
 
             migrationBuilder.DropTable(
-                name: "NummyResponseLogs");
+                name: "ResponseLogs");
         }
     }
 }

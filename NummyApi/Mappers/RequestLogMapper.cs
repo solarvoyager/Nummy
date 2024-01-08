@@ -9,5 +9,6 @@ public class RequestLogMapper : Profile
     public RequestLogMapper()
     {
         CreateMap<RequestLogToAddDto, RequestLog>();
+        CreateMap<RequestLog, RequestLogToListDto>();
     }
 }

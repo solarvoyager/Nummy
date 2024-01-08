@@ -18,9 +18,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "POSTGRES_HOST": "localhost",
-        "POSTGRES_DB":"nummydatabase",
-        "POSTGRES_USER":"nummyuser",
-        "POSTGRES_PASSWORD":"nummypassword"
+        "POSTGRES_DB": "nummydatabase",
+        "POSTGRES_USER": "nummyuser",
+        "POSTGRES_PASSWORD": "nummypassword"
       }
     },
     "http": {

@@ -16,7 +16,7 @@
                     <TitleTemplate><a>@context.Title</a></TitleTemplate>
                 </CardMeta>
                 <div class="cardItemContent">
-                    <span>@context.UpdatedAt.ToFriendlyDisplay()</span>
+                    <span>@context.UpdatedAt.ToString()</span>
                     <div class="avatarList">
                         <AvatarList>
                             @foreach (var member in context.Members)

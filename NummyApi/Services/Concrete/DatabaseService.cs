@@ -11,7 +11,7 @@ public class DatabaseService(NummyDataContext dataContext, IMapper mapper) : IDa
     {
         await dataContext.Database.EnsureCreatedAsync();
     }
-    
+
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {
         var pendingMigrations = await dataContext.Database.GetPendingMigrationsAsync();

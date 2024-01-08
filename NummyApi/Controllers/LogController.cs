@@ -7,24 +7,48 @@ namespace NummyApi.Controllers;
 [Route("api/[controller]")]
 public class LogController(ILogService logService) : Controller
 {
-    [HttpPost("code/log")]
-    public async Task<IActionResult> AddCodeLog(CodeLogToAddDto request)
+    [HttpPost("code")]
+    public async Task<IActionResult> AddCodeLog([FromBody] CodeLogToAddDto request)
     {
         await logService.AddCodeLog(request);
         return Ok();
     }
 
-    [HttpPost("request/log")]
-    public async Task<IActionResult> AddRequestLog(RequestLogToAddDto request)
+    [HttpPost("request")]
+    public async Task<IActionResult> AddRequestLog([FromBody] RequestLogToAddDto request)
     {
         await logService.AddRequestLog(request);
         return Ok();
     }
 
-    [HttpPost("response/log")]
-    public async Task<IActionResult> AddResponseLog(ResponseLogToAddDto request)
+    [HttpPost("response")]
+    public async Task<IActionResult> AddResponseLog([FromBody] ResponseLogToAddDto request)
     {
         await logService.AddResponseLog(request);
         return Ok();
+    }
+
+    [HttpGet("code")]
+    public async Task<IActionResult> GetCodeLogs([FromQuery] int pageIndex, [FromQuery] int pageSize)
+    {
+        var response = await logService.GetCodeLogs(pageIndex, pageSize);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("request")]
+    public async Task<IActionResult> GetRequestLogs([FromQuery] int pageIndex, [FromQuery] int pageSize)
+    {
+        var response = await logService.GetRequestLogs(pageIndex, pageSize);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("response")]
+    public async Task<IActionResult> GetResponseLogs([FromQuery] int pageIndex, [FromQuery] int pageSize)
+    {
+        var response = await logService.GetResponseLogs(pageIndex, pageSize);
+
+        return Ok(response);
     }
 }

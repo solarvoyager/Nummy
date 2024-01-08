@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NummyUi.Services;
 
-namespace NummyUi.Pages.Database.Dashboard;
+namespace NummyUi.Pages.Dashboard.Database;
 
-public partial class Index
+public partial class Dashboard
 {
+    [Inject] private IDatabaseService DatabaseService { get; set; }
+    
     private IEnumerable<string> _pendingMigrations = new List<string>();
-    private bool? _migrationResult = null;
-    [Inject] public IDatabaseService DatabaseService { get; set; }
+    private bool? _migrationResult;
     
     protected override async Task OnInitializedAsync()
     {

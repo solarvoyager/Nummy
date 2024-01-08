@@ -16,17 +16,7 @@ public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseServic
     {
         var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyContants.GetPendingMigrationsUrl);
 
-        /*if (response.IsSuccessStatusCode)
-        {
-            await using var contentStream =
-                await response.Content.ReadAsStreamAsync();
-            
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(contentStream);
-
-            return result!;
-        }*/
-        
-        return response??Array.Empty<string>();
+        return response!;
     }
 
     public async Task<bool> Migrate()
@@ -36,3 +26,13 @@ public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseServic
         return response.IsSuccessStatusCode;
     }
 }
+
+/*if (response.IsSuccessStatusCode)
+{
+    await using var contentStream =
+        await response.Content.ReadAsStreamAsync();
+
+    var result = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(contentStream);
+
+    return result!;
+}*/

@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Pages\Database\Dashboard\Index.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Bar\Bar.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\ChartCard\ChartCard.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Charts\Field\Field.razor" />
@@ -35,6 +31,7 @@
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\PageLoading\PageLoading.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Trend\Trend.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\SalesCard.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Database\Dashboard\Dashboard.razor" />
   </ItemGroup>
   
 </Project>

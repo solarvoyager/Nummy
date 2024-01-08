@@ -11,12 +11,12 @@ public class NummyDataContext : DbContext
     }
 
     // Nummy.HttpLogger
-    public DbSet<RequestLog> NummyRequestLogs { get; set; }
+    public DbSet<RequestLog> RequestLogs { get; set; }
 
-    public DbSet<ResponseLog> NummyResponseLogs { get; set; }
+    public DbSet<ResponseLog> ResponseLogs { get; set; }
 
-    // Nummy.CodeLogger
-    public DbSet<CodeLog> NummyCodeLogs { get; set; }
+    // Nummy.CodeLogger & Nummy.ExceptionHandler
+    public DbSet<CodeLog> CodeLogs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

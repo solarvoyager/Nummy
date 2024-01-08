@@ -19,24 +19,11 @@
         "path": "/dashboard/workplace",
         "name": "Workplace Page",
         "key": "dashboard.workplace"
-      }
-    ]
-  },
-  {
-    "path": "/exception",
-    "name": "Exceptions",
-    "key": "exception",
-    "icon": "exception",
-    "children": [
-      {
-        "path": "/exception/dashboard",
-        "name": "Dashboard",
-        "key": "exception.dashboard"
       },
       {
-        "path": "/exception/management",
-        "name": "Management",
-        "key": "exception.management"
+        "path": "/dashboard/database",
+        "name": "Database Page",
+        "key": "dashboard.database"
       }
     ]
   },
@@ -53,7 +40,7 @@
       },
       {
         "path": "/logging/http",
-        "name": "HTTP logs",
+        "name": "Http logs",
         "key": "logging.http"
       },
       {
@@ -78,19 +65,6 @@
         "path": "/account/settings",
         "name": "Personal settings",
         "key": "account.settings"
-      }
-    ]
-  },
-  {
-    "path": "/database",
-    "name": "Database",
-    "key": "database",
-    "icon": "database",
-    "children": [
-      {
-        "path": "/database/dashboard",
-        "name": "Database Dashboard",
-        "key": "database.dashboard"
       }
     ]
   }

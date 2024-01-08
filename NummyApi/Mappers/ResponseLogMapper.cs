@@ -9,5 +9,6 @@ public class ResponseLogMapper : Profile
     public ResponseLogMapper()
     {
         CreateMap<ResponseLogToAddDto, ResponseLog>();
+        CreateMap<ResponseLog, ResponseLogToListDto>();
     }
 }

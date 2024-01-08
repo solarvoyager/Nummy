@@ -23,6 +23,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
+builder.Services.AddScoped<ILogService, LogService>();
 
 var apiHost = Environment.GetEnvironmentVariable("NUMMY_API_HOST");
 var apiPort = Environment.GetEnvironmentVariable("NUMMY_API_PORT");

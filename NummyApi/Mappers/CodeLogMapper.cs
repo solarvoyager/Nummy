@@ -9,5 +9,6 @@ public class CodeLogMapper : Profile
     public CodeLogMapper()
     {
         CreateMap<CodeLogToAddDto, CodeLog>();
+        CreateMap<CodeLog, CodeLogToListDto>();
     }
 }

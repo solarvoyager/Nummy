@@ -1,10 +1,4 @@
-﻿namespace NummyApi.Dtos;
-
-public record ResponseLogToAddDto(
-    Guid HttpLogId,
-    string Body,
-    int StatusCode
-);
+﻿namespace NummyUi.Dtos;
 
 public record ResponseLogToListDto(
     Guid Id,
