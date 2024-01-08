@@ -6,6 +6,14 @@ using NummyApi.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//if (OperatingSystem.IsLinux())
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8082);
+    // to listen for incoming https connection
+    //options.ListenAnyIP(8083, configure => configure.UseHttps());
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

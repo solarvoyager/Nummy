@@ -3,6 +3,6 @@
 public class NummyContants
 {
     public const string ClientName = "NummyApiClient";
-    public const string GetPendingMigrationsUrl = "/database/migrations/pending";
-    public const string ApplyPendingMigrationsUrl = "/database/migrations/pending/apply";
+    public const string GetPendingMigrationsUrl = "api/database/migrations/pending";
+    public const string ApplyPendingMigrationsUrl = "api/database/migrations/pending/apply";
 }

@@ -18,8 +18,8 @@ public class DatabaseController(IDatabaseService databaseService) : Controller
     [HttpPut("migrations/pending/apply")]
     public async Task<IActionResult> ApplyPendingMigrations()
     {
-        var data = await databaseService.GetPendingMigrations();
+        await databaseService.ApplyPendingMigrations();
 
-        return Ok(data);
+        return Ok();
     }
 }

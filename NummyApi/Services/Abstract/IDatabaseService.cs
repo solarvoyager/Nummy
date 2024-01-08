@@ -2,6 +2,7 @@
 
 public interface IDatabaseService
 {
+    Task EnsureCreated();
     Task<IEnumerable<string>> GetPendingMigrations();
     Task ApplyPendingMigrations();
 }

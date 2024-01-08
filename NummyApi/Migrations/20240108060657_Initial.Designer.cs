@@ -12,7 +12,7 @@ using NummyApi.DataContext;
 namespace NummyApi.Migrations
 {
     [DbContext(typeof(NummyDataContext))]
-    [Migration("20240107205734_Initial")]
+    [Migration("20240108060657_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

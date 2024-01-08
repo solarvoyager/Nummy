@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(options => options.DetailedErrors = true);
+
 builder.Services.AddAntDesign();
 
 builder.Services.AddScoped(sp => new HttpClient
@@ -26,10 +27,12 @@ builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 var apiHost = Environment.GetEnvironmentVariable("NUMMY_API_HOST");
 var apiPort = Environment.GetEnvironmentVariable("NUMMY_API_PORT");
 
+var baseUrl = $"http://{apiHost}:{apiPort}";
+
 builder.Services.AddHttpClient(NummyContants.ClientName, config =>
 {
-    config.BaseAddress = new Uri($"http://{apiHost}:{apiPort}/api");
-    config.Timeout = new TimeSpan(0, 0, 30);
+    config.BaseAddress = new Uri(baseUrl);
+    //config.Timeout = new TimeSpan(0, 0, 15);
     config.DefaultRequestHeaders.Clear();
 });
 

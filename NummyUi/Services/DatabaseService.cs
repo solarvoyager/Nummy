@@ -1,4 +1,6 @@
-﻿namespace NummyUi.Services;
+﻿using System.Text.Json;
+
+namespace NummyUi.Services;
 
 public interface IDatabaseService
 {
@@ -13,8 +15,18 @@ public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseServic
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {
         var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyContants.GetPendingMigrationsUrl);
+
+        /*if (response.IsSuccessStatusCode)
+        {
+            await using var contentStream =
+                await response.Content.ReadAsStreamAsync();
+            
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(contentStream);
+
+            return result!;
+        }*/
         
-        return response?? Array.Empty<string>();
+        return response??Array.Empty<string>();
     }
 
     public async Task<bool> Migrate()
