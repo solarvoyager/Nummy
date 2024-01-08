@@ -7,7 +7,7 @@ using NummyApi.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseUrls("http://*:8082", "https://*.8083");
+builder.WebHost.UseUrls("http://*:8082"); //,"https://*.8083"
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
