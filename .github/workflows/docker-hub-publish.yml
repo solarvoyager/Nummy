@@ -41,16 +41,20 @@ jobs:
 
       - name: Build and push Docker UI image
         run: |
+          cd NummyUi
           COMMIT_SHA=${{ steps.set-version.outputs.version }}
           LATEST_VERSION=${{ steps.latest-version.outputs.version_ui }}
           docker build -t hamidmusayev04/nummy-ui:$COMMIT_SHA -t hamidmusayev04/nummy-ui:latest .
           docker push hamidmusayev04/nummy-ui:latest
           docker push hamidmusayev04/nummy-ui:$COMMIT_SHA
+          cd ..
           
       - name: Build and push Docker API image
         run: |
+          cd NummyApi
           COMMIT_SHA=${{ steps.set-version.outputs.version }}
           LATEST_VERSION=${{ steps.latest-version.outputs.version_api }}
           docker build -t hamidmusayev04/nummy-api:$COMMIT_SHA -t hamidmusayev04/nummy-api:latest .
           docker push hamidmusayev04/nummy-api:latest
           docker push hamidmusayev04/nummy-api:$COMMIT_SHA
+          cd ..
