@@ -35,7 +35,7 @@ public class LogController(ILogService logService) : Controller
 
         return Ok(response);
     }
-    
+
     [HttpGet("request")]
     public async Task<IActionResult> GetRequestLogs([FromQuery] int pageIndex, [FromQuery] int pageSize)
     {
@@ -43,7 +43,7 @@ public class LogController(ILogService logService) : Controller
 
         return Ok(response);
     }
-    
+
     [HttpGet("response")]
     public async Task<IActionResult> GetResponseLogs([FromQuery] int pageIndex, [FromQuery] int pageSize)
     {

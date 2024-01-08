@@ -34,11 +34,6 @@
     "icon": "table",
     "children": [
       {
-        "path": "/logging/dashboard",
-        "name": "Dashboard",
-        "key": "logging.dashboard"
-      },
-      {
         "path": "/logging/http",
         "name": "Http logs",
         "key": "logging.http"

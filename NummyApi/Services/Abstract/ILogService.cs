@@ -1,4 +1,5 @@
 ﻿using NummyApi.Dtos;
+using NummyApi.Dtos.Generic;
 
 namespace NummyApi.Services.Abstract;
 
@@ -7,8 +8,8 @@ public interface ILogService
     Task AddRequestLog(RequestLogToAddDto dto);
     Task AddResponseLog(ResponseLogToAddDto dto);
     Task AddCodeLog(CodeLogToAddDto dto);
-    
-    Task<IEnumerable<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize);
-    Task<IEnumerable<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize);
-    Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(int pageIndex, int pageSize);
+
+    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize);
+    Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize);
+    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(int pageIndex, int pageSize);
 }

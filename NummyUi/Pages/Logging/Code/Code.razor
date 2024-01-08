@@ -1,7 +1,4 @@
 ﻿@page "/logging/code"
-@using System.Web
-@using System.Reflection
-@using System.ComponentModel
 @using NummyApi.Enums
 
 <div>
@@ -19,26 +16,18 @@
                 Loading="_loading"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
-                OnPageIndexChange="PageIndexChanged">
-                <PropertyColumn Property="c => c.Id"/>
-                @*
-                    <PropertyColumn Property="c=>c.Date" Format="yyyy-MM-dd"/>
-                    *@
-                <PropertyColumn Property="c => c.Title"/>
-                <PropertyColumn Title="Temp. (F)" Field="@context.Description"/>
-                <PropertyColumn Property="c => c.LogLevel"/>
-                <PropertyColumn Property="c=>c.LogLevel">
-                    <Tag Color="@(context.LogLevel switch
-                                {
-                                    CodeLogLevel.Fatal => "magenta",
-                                    CodeLogLevel.Error => "volcano",
-                                    CodeLogLevel.Warning => "gold",
-                                    CodeLogLevel.Debug => "blue",
-                                    CodeLogLevel.Trace => "cyan",
-                                    CodeLogLevel.Info => "green",
-                                    _ => "green"
-                                })">@context.LogLevel</Tag>
+                RowKey="x => x.Id"
+                OnPageIndexChange="PageIndexChanged"
+                RemoteDataSource>
+                <Selection Key="@(context.Id.ToString())"/>
+                <PropertyColumn Hidden Property="c => c.Id"/>
+                <PropertyColumn Property="c => c.LogLevel">
+                    <Tag Color="@(context.LogLevel switch { CodeLogLevel.Fatal => "magenta", CodeLogLevel.Error => "volcano", CodeLogLevel.Warning => "gold", CodeLogLevel.Debug => "blue", CodeLogLevel.Trace => "cyan", CodeLogLevel.Info => "green", _ => "green" })">@context.LogLevel</Tag>
                 </PropertyColumn>
+                <PropertyColumn Property="c => c.Title"/>
+                <PropertyColumn Property="c => c.ExceptionType"/>
+                <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd"/>
+                <PropertyColumn Property="c => c.TraceIdentifier"/>
             </Table>
         </ChildContent>
     </PageContainer>

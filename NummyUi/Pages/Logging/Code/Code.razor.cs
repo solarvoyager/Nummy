@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Web;
 using AntDesign;
+using AntDesign.TableModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using NummyUi.Dtos;
 using NummyUi.Services;
+using NummyUi.Dtos;
 
 namespace NummyUi.Pages.Logging.Code;
 
@@ -21,24 +22,26 @@ public partial class Code
 
     protected override async Task OnInitializedAsync()
     {
-        _total = 50;
         await LoadDataAsync();
     }
 
-    private void PageIndexChanged(PaginationEventArgs args)
+    private async Task PageIndexChanged(PaginationEventArgs args)
     {
         _pageSize = args.PageSize;
         _pageIndex = args.Page;
         
-        LoadDataAsync().Wait();
+        await LoadDataAsync();
     }
 
     private async Task LoadDataAsync()
     {
         _loading = true;
         StateHasChanged();
-        
-        _codeLogs = (await LogService.GetCodeLogs(_pageIndex, _pageSize)).ToArray();
+
+        var result = await LogService.GetCodeLogs(_pageIndex, _pageSize);
+
+        _codeLogs = result.Datas.ToArray();
+        _total = result.TotalCount;
         
         _loading = false;
         StateHasChanged();

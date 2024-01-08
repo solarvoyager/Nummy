@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Dtos;
+using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
 
@@ -33,7 +34,7 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize)
     {
         var skip = (pageIndex - 1) * pageSize;
 
@@ -41,13 +42,15 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
+
+        var totalCount = await dataContext.RequestLogs.CountAsync();
         
         var mapped = mapper.Map<IEnumerable<RequestLogToListDto>>(data);
 
-        return mapped;
+        return new PaginatedListDto<RequestLogToListDto>(totalCount, mapped);
     }
 
-    public async Task<IEnumerable<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize)
     {
         var skip = (pageIndex - 1) * pageSize;
 
@@ -55,12 +58,15 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
+        
+        var totalCount = await dataContext.ResponseLogs.CountAsync();
+        
         var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(data);
 
-        return mapped;
+        return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
     }
 
-    public async Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(int pageIndex, int pageSize)
     {
         var skip = (pageIndex - 1) * pageSize;
 
@@ -68,9 +74,11 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
-        
+
+        var totalCount = await dataContext.CodeLogs.CountAsync();
+
         var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(data);
 
-        return mapped;
+        return new PaginatedListDto<CodeLogToListDto>(totalCount, mapped);
     }
 }
