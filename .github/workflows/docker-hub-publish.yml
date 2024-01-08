@@ -31,8 +31,6 @@ jobs:
           NEW_VERSION=$(semver bump patch $CURRENT_VERSION)
           echo "Setting version $NEW_VERSION"
           echo "::set-output name=tag::$NEW_VERSION"
-          docker tag hamidmusayev04/nummy-ui:latest hamidmusayev04/nummy-ui:$NEW_VERSION
-          docker tag hamidmusayev04/nummy-api:latest hamidmusayev04/nummy-api:$NEW_VERSION
 
       - name: Build and push Docker UI image
         run: |
