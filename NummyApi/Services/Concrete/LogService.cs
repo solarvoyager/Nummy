@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Dtos;
+using NummyApi.Dtos.Domain;
 using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
@@ -66,16 +67,20 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
     }
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsRequestDto dto)
     {
-        var skip = (pageIndex - 1) * pageSize;
+        var skip = (dto.PageIndex - 1) * dto.PageSize;
 
         var data = await dataContext.CodeLogs
             .Skip(skip)
-            .Take(pageSize)
+            .Take(dto.PageSize)
+            .Where(l => dto.Levels.Contains(l.LogLevel))
+            .OrderByDescending(l => l.CreatedAt)
             .ToListAsync();
 
-        var totalCount = await dataContext.CodeLogs.CountAsync();
+        var totalCount = await dataContext.CodeLogs
+            .Where(l => dto.Levels.Contains(l.LogLevel))
+            .CountAsync();
 
         var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(data);
 

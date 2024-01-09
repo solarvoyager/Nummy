@@ -10,25 +10,72 @@
             </Breadcrumb>
         </Breadcrumb>
         <ChildContent>
+            <Card>
+                <TitleTemplate>
+                    <p>Filter by Level</p>
+                </TitleTemplate>
+                <ChildContent>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Trace] ? "cyan-inverse" : PresetColor.Cyan.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Trace]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Trace)">Trace</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Debug] ? "blue-inverse" : PresetColor.Blue.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Debug]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Debug)">Debug</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Info] ? "green-inverse" : PresetColor.Green.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Info]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Info)">Info</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Warning] ? "gold-inverse" : PresetColor.Gold.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Warning]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Warning)">Warning</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Error] ? "volcano-inverse" : PresetColor.Volcano.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Error]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Error)">Error</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Fatal] ? "magenta-inverse" : PresetColor.Magenta.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Fatal]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Fatal)">Fatal</Tag>
+                </ChildContent>
+            </Card>
+            <br/>
             <Table
                 DataSource="@_codeLogs"
-                Total="_total"
-                Loading="_loading"
+                Total="@_total"
+                Loading="@_loading"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
                 RowKey="x => x.Id"
                 OnPageIndexChange="PageIndexChanged"
                 RemoteDataSource>
-                <Selection Key="@(context.Id.ToString())"/>
-                <PropertyColumn Hidden Property="c => c.Id"/>
-                <PropertyColumn Property="c => c.LogLevel">
-                    <Tag Color="@(context.LogLevel switch { CodeLogLevel.Fatal => "magenta", CodeLogLevel.Error => "volcano", CodeLogLevel.Warning => "gold", CodeLogLevel.Debug => "blue", CodeLogLevel.Trace => "cyan", CodeLogLevel.Info => "green", _ => "green" })">@context.LogLevel</Tag>
-                </PropertyColumn>
-                <PropertyColumn Property="c => c.Title"/>
-                <PropertyColumn Property="c => c.ExceptionType"/>
-                <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd"/>
-                <PropertyColumn Property="c => c.TraceIdentifier"/>
+                @*<TitleTemplate>
+                    $1$<GridRow>
+                        <GridCol Span="4">
+                            $2$<Title Level="3">Table Title</Title>#2#
+                        </GridCol>
+                        <GridCol Span="8" Offset="12">
+                            $2$<Search Placeholder="Search Name" @bind-Value="searchString" OnSearch="() => _table?.ReloadData()"/>#2#
+                        </GridCol>
+                    </GridRow>#1#
+                </TitleTemplate>*@
+                <ColumnDefinitions>
+                    <Selection Key="@(context.Id.ToString())"/>
+                    <PropertyColumn Property="c => c.Id" Hidden/>
+                    <PropertyColumn Property="c => c.TraceIdentifier"/>
+                    <PropertyColumn Property="c => c.LogLevel">
+                        <Tag Class="log-level" Color="@(context.LogLevel switch { CodeLogLevel.Fatal => PresetColor.Magenta.ToString(), CodeLogLevel.Error => PresetColor.Volcano.ToString(), CodeLogLevel.Warning => PresetColor.Gold.ToString(), CodeLogLevel.Debug => PresetColor.Blue.ToString(), CodeLogLevel.Trace => PresetColor.Cyan.ToString(), CodeLogLevel.Info => PresetColor.Green.ToString(), _ => "default" })">@context.LogLevel</Tag>
+                    </PropertyColumn>
+                    <PropertyColumn Property="c => c.Title"/>
+                    <PropertyColumn Property="c => c.ExceptionType"/>
+                    <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd"/>
+                    @*<ActionColumn Title="Action">
+                                        <Space Size=@("middle")>
+                                            <SpaceItem>
+                                                <Button Style="color: #00A0E9" Type="@ButtonType.Text">
+                                                    Share
+                                                </Button>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Button Danger Type="@ButtonType.Text">
+                                                    Delete
+                                                </Button>
+                                            </SpaceItem>
+                                        </Space>
+                                    </ActionColumn>*@
+                </ColumnDefinitions>
             </Table>
         </ChildContent>
     </PageContainer>
 </div>
+
+<style>
+    .log-level {
+        font-size: 13px; 
+        padding: 5px 11px;
+    }
+</style>
