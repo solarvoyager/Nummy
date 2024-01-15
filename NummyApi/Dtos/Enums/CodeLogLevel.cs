@@ -1,4 +1,4 @@
-﻿namespace NummyApi.Enums;
+﻿namespace NummyApi.Dtos.Enums;
 
 public enum CodeLogLevel
 {

@@ -1,5 +1,5 @@
 ﻿@page "/logging/code"
-@using NummyApi.Enums
+@using NummyUi.Dtos.Enums
 
 <div>
     <PageContainer Title="Code Logs">
@@ -10,39 +10,46 @@
             </Breadcrumb>
         </Breadcrumb>
         <ChildContent>
-            <Card>
-                <TitleTemplate>
-                    <p>Filter by Level</p>
-                </TitleTemplate>
-                <ChildContent>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Trace] ? "cyan-inverse" : PresetColor.Cyan.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Trace]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Trace)">Trace</Tag>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Debug] ? "blue-inverse" : PresetColor.Blue.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Debug]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Debug)">Debug</Tag>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Info] ? "green-inverse" : PresetColor.Green.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Info]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Info)">Info</Tag>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Warning] ? "gold-inverse" : PresetColor.Gold.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Warning]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Warning)">Warning</Tag>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Error] ? "volcano-inverse" : PresetColor.Volcano.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Error]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Error)">Error</Tag>
-                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Fatal] ? "magenta-inverse" : PresetColor.Magenta.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Fatal]" CheckedChanged="value => CheckFilterChanged(value, CodeLogLevel.Fatal)">Fatal</Tag>
-                </ChildContent>
-            </Card>
+            <Collapse DefaultActiveKey="@(new[] { "1" })">
+                <Panel Header="Search" Key="1">
+                    <ChildContent>
+                        <Search Placeholder="Search by Title, Description, ExceptionType, Id..." @bind-Value="_query" OnSearch="OnSearch"/> @* OnSearch="() => _table?.ReloadData()"*@
+                    </ChildContent>
+                </Panel>
+                <Panel Header="Filter" Key="2">
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Trace] ? "cyan-inverse" : PresetColor.Cyan.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Trace]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Trace)">Trace</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Debug] ? "blue-inverse" : PresetColor.Blue.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Debug]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Debug)">Debug</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Info] ? "green-inverse" : PresetColor.Green.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Info]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Info)">Info</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Warning] ? "gold-inverse" : PresetColor.Gold.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Warning]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Warning)">Warning</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Error] ? "volcano-inverse" : PresetColor.Volcano.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Error]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Error)">Error</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Fatal] ? "magenta-inverse" : PresetColor.Magenta.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Fatal]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Fatal)">Fatal</Tag>
+                </Panel>
+                <Panel Header="Sort" Key="3">
+                    <ChildContent>
+                        <Segmented TValue="SortOrder" OnChange="OnSortOrderChanged">
+                            <SegmentedItem Label="Ascending" Value="SortOrder.Ascending" Icon="@IconType.Outline.SortAscending"/>
+                            <SegmentedItem Label="Descending" Value="SortOrder.Descending" Icon="@IconType.Outline.SortDescending"/>
+                        </Segmented>
+                        <Segmented TValue="CodeLogSortType" OnChange="OnSortTypeChanged">
+                            <SegmentedItem Label="TraceIdentifier" Value="CodeLogSortType.TraceIdentifier"/>
+                            <SegmentedItem Label="LogLevel" Value="CodeLogSortType.LogLevel"/>
+                            <SegmentedItem Label="Title" Value="CodeLogSortType.Title"/>
+                            <SegmentedItem Label="Description" Value="CodeLogSortType.Description"/>
+                            <SegmentedItem Label="ExceptionType" Value="CodeLogSortType.ExceptionType"/>
+                            <SegmentedItem Label="CreatedAt" Value="CodeLogSortType.CreatedAt"/>
+                        </Segmented>
+                    </ChildContent>
+                </Panel>
+            </Collapse>
             <br/>
             <Table
                 DataSource="@_codeLogs"
-                Total="@_total"
                 Loading="@_loading"
+                Total="@_total"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
                 RowKey="x => x.Id"
-                OnPageIndexChange="PageIndexChanged"
-                RemoteDataSource>
-                @*<TitleTemplate>
-                    $1$<GridRow>
-                        <GridCol Span="4">
-                            $2$<Title Level="3">Table Title</Title>#2#
-                        </GridCol>
-                        <GridCol Span="8" Offset="12">
-                            $2$<Search Placeholder="Search Name" @bind-Value="searchString" OnSearch="() => _table?.ReloadData()"/>#2#
-                        </GridCol>
-                    </GridRow>#1#
-                </TitleTemplate>*@
+                OnPageIndexChange="OnPageIndexChanged">
                 <ColumnDefinitions>
                     <Selection Key="@(context.Id.ToString())"/>
                     <PropertyColumn Property="c => c.Id" Hidden/>
@@ -52,7 +59,7 @@
                     </PropertyColumn>
                     <PropertyColumn Property="c => c.Title"/>
                     <PropertyColumn Property="c => c.ExceptionType"/>
-                    <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd"/>
+                    <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd HH:mm:ss"/>
                     @*<ActionColumn Title="Action">
                                         <Space Size=@("middle")>
                                             <SpaceItem>
@@ -76,6 +83,6 @@
 <style>
     .log-level {
         font-size: 13px; 
-        padding: 5px 11px;
+        padding: 4px 10px;
     }
 </style>

@@ -1,4 +1,4 @@
-﻿using NummyApi.Enums;
+﻿using NummyUi.Dtos.Enums;
 
 namespace NummyUi.Dtos;
 

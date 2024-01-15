@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Dtos;
 using NummyApi.Dtos.Domain;
+using NummyApi.Dtos.Enums;
 using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
@@ -71,18 +72,51 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
-        var data = await dataContext.CodeLogs
+        var query = dataContext.CodeLogs
+            .Where(l => dto.Levels.Contains(l.LogLevel));
+
+        if (!string.IsNullOrWhiteSpace(dto.Query))
+        {
+            query = query.Where(l =>
+                EF.Functions.Like(l.TraceIdentifier!.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(l.Title.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(l.Description!.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(l.ExceptionType!.ToLower(), $"%{dto.Query.ToLower()}%"));
+        }
+
+        var totalCount = await query.CountAsync();
+
+        query = query
             .Skip(skip)
-            .Take(dto.PageSize)
-            .Where(l => dto.Levels.Contains(l.LogLevel))
-            .OrderByDescending(l => l.CreatedAt)
-            .ToListAsync();
+            .Take(dto.PageSize);
 
-        var totalCount = await dataContext.CodeLogs
-            .Where(l => dto.Levels.Contains(l.LogLevel))
-            .CountAsync();
+        if (dto.SortType is not null && dto.SortOrder is not null)
+        {
+            query = dto.SortType switch
+            {
+                CodeLogSortType.TraceIdentifier => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.TraceIdentifier)
+                    : query.OrderBy(q => q.TraceIdentifier),
+                CodeLogSortType.LogLevel => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.LogLevel)
+                    : query.OrderBy(q => q.LogLevel),
+                CodeLogSortType.Title => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.Title)
+                    : query.OrderBy(q => q.Title),
+                CodeLogSortType.Description => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.Description)
+                    : query.OrderBy(q => q.Description),
+                CodeLogSortType.ExceptionType => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.ExceptionType)
+                    : query.OrderBy(q => q.ExceptionType),
+                CodeLogSortType.CreatedAt => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.CreatedAt)
+                    : query.OrderBy(q => q.CreatedAt),
+                _ => query
+            };
+        }
 
-        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(data);
+        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(await query.ToListAsync());
 
         return new PaginatedListDto<CodeLogToListDto>(totalCount, mapped);
     }
