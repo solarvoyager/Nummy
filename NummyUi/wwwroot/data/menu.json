@@ -35,12 +35,12 @@
     "children": [
       {
         "path": "/logging/http",
-        "name": "Http logs",
+        "name": "Http Logs",
         "key": "logging.http"
       },
       {
         "path": "/logging/code",
-        "name": "Code logs",
+        "name": "Code Logs",
         "key": "logging.code"
       }
     ]

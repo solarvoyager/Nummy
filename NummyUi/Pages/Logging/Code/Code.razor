@@ -26,10 +26,11 @@
                 </Panel>
                 <Panel Header="Sort" Key="3">
                     <ChildContent>
-                        <Segmented TValue="SortOrder" OnChange="OnSortOrderChanged">
+                        <Segmented Style="margin-bottom: 12px" TValue="SortOrder" OnChange="OnSortOrderChanged">
                             <SegmentedItem Label="Ascending" Value="SortOrder.Ascending" Icon="@IconType.Outline.SortAscending"/>
                             <SegmentedItem Label="Descending" Value="SortOrder.Descending" Icon="@IconType.Outline.SortDescending"/>
                         </Segmented>
+                        <br/>
                         <Segmented TValue="CodeLogSortType" OnChange="OnSortTypeChanged">
                             <SegmentedItem Label="TraceIdentifier" Value="CodeLogSortType.TraceIdentifier"/>
                             <SegmentedItem Label="LogLevel" Value="CodeLogSortType.LogLevel"/>
@@ -43,12 +44,14 @@
             </Collapse>
             <br/>
             <Table
-                DataSource="@_codeLogs"
+                DataSource="@_items"
+                RowKey="x => x.Id"
                 Loading="@_loading"
                 Total="@_total"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
-                RowKey="x => x.Id"
+                PaginationPosition="topleft"
+                OnPageSizeChange="OnPageIndexChanged"
                 OnPageIndexChange="OnPageIndexChanged">
                 <ColumnDefinitions>
                     <Selection Key="@(context.Id.ToString())"/>
@@ -60,21 +63,36 @@
                     <PropertyColumn Property="c => c.Title"/>
                     <PropertyColumn Property="c => c.ExceptionType"/>
                     <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd HH:mm:ss"/>
-                    @*<ActionColumn Title="Action">
-                                        <Space Size=@("middle")>
-                                            <SpaceItem>
-                                                <Button Style="color: #00A0E9" Type="@ButtonType.Text">
-                                                    Share
-                                                </Button>
-                                            </SpaceItem>
-                                            <SpaceItem>
-                                                <Button Danger Type="@ButtonType.Text">
-                                                    Delete
-                                                </Button>
-                                            </SpaceItem>
-                                        </Space>
-                                    </ActionColumn>*@
+                    <ActionColumn>
+                        <Button Type="@ButtonType.Link" OnClick="() => ShowViewModal(context.Id)">
+                            View Details
+                        </Button>
+                    </ActionColumn>
+                    <ActionColumn Title="Action">
+                        <Space>
+                            <SpaceItem>
+                                <Tooltip Title="Share">
+                                    <Button Shape="@ButtonShape.Circle" Icon="@IconType.Outline.ShareAlt"></Button>
+                                </Tooltip>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <Tooltip Title="Share">
+                                    <Button Danger Shape="@ButtonShape.Circle" Icon="@IconType.Outline.Delete"></Button>
+                                </Tooltip>
+                            </SpaceItem>
+                        </Space>
+                    </ActionColumn>
                 </ColumnDefinitions>
+                <PaginationTemplate>
+                    <Pagination Class="@(context.PaginationClass + " my-custom-pagination")"
+                                Total="context.Total"
+                                PageSize="context.PageSize"
+                                Current="context.PageIndex"
+                                ShowSizeChanger
+                                ShowQuickJumper
+                                PageSizeOptions="new[] { 5, 10, 20, 50, 100, 1000 }"
+                                OnChange="context.HandlePageChange"/>
+                </PaginationTemplate>
             </Table>
         </ChildContent>
     </PageContainer>
