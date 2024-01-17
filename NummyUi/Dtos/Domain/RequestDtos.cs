@@ -2,7 +2,7 @@
 
 namespace NummyUi.Dtos.Domain;
 
-public record GetCodeLogsRequestDto
+public record GetCodeLogsDto
 (
     int PageSize,
     int PageIndex, 
@@ -10,4 +10,37 @@ public record GetCodeLogsRequestDto
     CodeLogSortType? SortType,
     SortOrder? SortOrder,
     ICollection<CodeLogLevel> Levels
+);
+
+public record GetRequestLogsDto
+(
+    int PageSize,
+    int PageIndex, 
+    string? Query, 
+    RequestLogSortType? SortType,
+    SortOrder? SortOrder
+);
+
+public record GetResponseLogsDto
+(
+    int PageSize,
+    int PageIndex, 
+    string? Query, 
+    ResponseLogSortType? SortType,
+    SortOrder? SortOrder
+);
+
+public record DeleteCodeLogsDto
+(
+    ICollection<Guid> Ids
+);
+
+public record DeleteRequestLogsDto
+(
+    ICollection<Guid> Ids
+);
+
+public record DeleteResponseLogsDto
+(
+    ICollection<Guid> Ids
 );

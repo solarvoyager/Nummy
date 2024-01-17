@@ -1,5 +1,8 @@
 ﻿@page "/logging/code"
 @using NummyUi.Dtos.Enums
+@using NummyUi.Dtos.Domain
+@using NummyUi.Utils
+@using NummyUi.Dtos
 
 <div>
     <PageContainer Title="Code Logs">
@@ -43,16 +46,30 @@
                 </Panel>
             </Collapse>
             <br/>
+            
+            @if (_selectedItems.Any())
+            {
+                @foreach (var selected in _selectedItems)
+                {
+                    <Tag @key="selected" Closable OnClose="e => { }">@selected.Id</Tag>
+                }
+
+                <Button Danger Size="small" OnClick="@(e => { _table.SetSelection(null); })">Clear</Button>
+            }
+
+            <br/>
             <Table
+                @ref="@_table"
                 DataSource="@_items"
-                RowKey="x => x.Id"
                 Loading="@_loading"
                 Total="@_total"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
+                RowKey="@(x => x.Id.ToString())"
+                SelectedRows="@_selectedItems"
                 PaginationPosition="topleft"
-                OnPageSizeChange="OnPageIndexChanged"
-                OnPageIndexChange="OnPageIndexChanged">
+                OnPageSizeChange="@OnPageIndexChanged"
+                OnPageIndexChange="@OnPageIndexChanged">
                 <ColumnDefinitions>
                     <Selection Key="@(context.Id.ToString())"/>
                     <PropertyColumn Property="c => c.Id" Hidden/>
@@ -65,7 +82,7 @@
                     <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd HH:mm:ss"/>
                     <ActionColumn>
                         <Button Type="@ButtonType.Link" OnClick="() => ShowViewModal(context.Id)">
-                            View Details
+                            Details
                         </Button>
                     </ActionColumn>
                     <ActionColumn Title="Action">
@@ -85,13 +102,13 @@
                 </ColumnDefinitions>
                 <PaginationTemplate>
                     <Pagination Class="@(context.PaginationClass + " my-custom-pagination")"
-                                Total="context.Total"
-                                PageSize="context.PageSize"
-                                Current="context.PageIndex"
+                                Total="@context.Total"
+                                PageSize="@context.PageSize"
+                                Current="@context.PageIndex"
                                 ShowSizeChanger
                                 ShowQuickJumper
-                                PageSizeOptions="new[] { 5, 10, 20, 50, 100, 1000 }"
-                                OnChange="context.HandlePageChange"/>
+                                PageSizeOptions="@(NummyContants.PageSizes)"
+                                OnChange="@context.HandlePageChange"/>
                 </PaginationTemplate>
             </Table>
         </ChildContent>

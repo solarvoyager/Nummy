@@ -10,65 +10,17 @@ using NummyApi.Services.Abstract;
 
 namespace NummyApi.Services.Concrete;
 
-public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogService
+public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICodeLogService
 {
-    public async Task AddRequestLog(RequestLogToAddDto dto)
-    {
-        var mapped = mapper.Map<RequestLog>(dto);
-
-        await dataContext.AddAsync(mapped);
-        await dataContext.SaveChangesAsync();
-    }
-
-    public async Task AddResponseLog(ResponseLogToAddDto dto)
-    {
-        var mapped = mapper.Map<ResponseLog>(dto);
-
-        await dataContext.AddAsync(mapped);
-        await dataContext.SaveChangesAsync();
-    }
-
-    public async Task AddCodeLog(CodeLogToAddDto dto)
+    public async Task Add(CodeLogToAddDto dto)
     {
         var mapped = mapper.Map<CodeLog>(dto);
 
         await dataContext.AddAsync(mapped);
         await dataContext.SaveChangesAsync();
     }
-
-    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize)
-    {
-        var skip = (pageIndex - 1) * pageSize;
-
-        var data = await dataContext.RequestLogs
-            .Skip(skip)
-            .Take(pageSize)
-            .ToListAsync();
-
-        var totalCount = await dataContext.RequestLogs.CountAsync();
-
-        var mapped = mapper.Map<IEnumerable<RequestLogToListDto>>(data);
-
-        return new PaginatedListDto<RequestLogToListDto>(totalCount, mapped);
-    }
-
-    public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize)
-    {
-        var skip = (pageIndex - 1) * pageSize;
-
-        var data = await dataContext.ResponseLogs
-            .Skip(skip)
-            .Take(pageSize)
-            .ToListAsync();
-
-        var totalCount = await dataContext.ResponseLogs.CountAsync();
-
-        var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(data);
-
-        return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
-    }
-
-    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsRequestDto dto)
+    
+    public async Task<PaginatedListDto<CodeLogToListDto>> Get(GetCodeLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
@@ -119,5 +71,12 @@ public class LogService(NummyDataContext dataContext, IMapper mapper) : ILogServ
         var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(await query.ToListAsync());
 
         return new PaginatedListDto<CodeLogToListDto>(totalCount, mapped);
+    }
+
+    public async Task<bool> Delete(DeleteCodeLogsDto dto)
+    {
+        await dataContext.CodeLogs.Where(l => dto.Ids.Contains(l.Id)).ExecuteDeleteAsync();
+
+        return true;
     }
 }

@@ -16,7 +16,10 @@ public partial class Code
     [Inject] private ILogService LogService { get; set; }
     [Inject] private ModalService ModalService { get; set; }
 
-    private CodeLogToListDto[]? _items;
+    ITable? _table;
+    
+    private IEnumerable<CodeLogToListDto> _items = new List<CodeLogToListDto>();
+    private IEnumerable<CodeLogToListDto> _selectedItems = new List<CodeLogToListDto>();
 
     private int _pageIndex = 1;
     private int _pageSize = 10;
@@ -85,7 +88,7 @@ public partial class Code
         List<CodeLogLevel> pickedLevels = [];
         _logLevelFilters.Where(l => l.Value).ForEach(l => pickedLevels.Add(l.Key));
 
-        var request = new GetCodeLogsRequestDto(
+        var request = new GetCodeLogsDto(
             _pageSize,
             _pageIndex,
             _query,
@@ -95,7 +98,7 @@ public partial class Code
 
         var result = await LogService.GetCodeLogs(request);
 
-        _items = result.Datas.ToArray();
+        _items = result.Datas;
         _total = result.TotalCount;
 
         _loading = false;
@@ -105,15 +108,15 @@ public partial class Code
     private void ShowViewModal(Guid id)
     {
         var currentItem = _items!.First(i => i.Id == id);
-        
+
         RenderFragment content = builder =>
         {
             builder.OpenComponent<Text>(1);
             //builder.AddAttribute(2, "Style", "font-size: 29px");
-            builder.AddContent(1,  "<p>Text</>");
+            builder.AddContent(1, "<p>Text</>");
             builder.CloseComponent();
         };
-        
+
         ModalService.Info(new ConfirmOptions
         {
             Title = $"{currentItem.Title}",

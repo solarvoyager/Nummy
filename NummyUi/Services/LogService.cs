@@ -3,12 +3,13 @@ using System.Text.Json.Serialization;
 using NummyUi.Dtos;
 using NummyUi.Dtos.Domain;
 using NummyUi.Dtos.Generic;
+using NummyUi.Utils;
 
 namespace NummyUi.Services;
 
 public interface ILogService
 {
-    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsRequestDto dto);
+    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto);
     Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize);
     Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize);
 }
@@ -17,7 +18,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 {
     private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsRequestDto dto)
+    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto)
     {
         var requestContent = JsonContent.Create(dto);
         

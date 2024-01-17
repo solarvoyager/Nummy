@@ -30,7 +30,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
-builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddScoped<ICodeLogService, CodeLogService>();
+builder.Services.AddScoped<IRequestLogService, RequestLogService>();
+builder.Services.AddScoped<IResponseLogService, ResponseLogService>();
 
 var app = builder.Build();
 
