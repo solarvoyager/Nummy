@@ -17,7 +17,7 @@ public partial class Code
     [Inject] private ModalService ModalService { get; set; }
 
     ITable? _table;
-    
+
     private IEnumerable<CodeLogToListDto> _items = new List<CodeLogToListDto>();
     private IEnumerable<CodeLogToListDto> _selectedItems = new List<CodeLogToListDto>();
 
@@ -80,6 +80,36 @@ public partial class Code
         await LoadDataAsync();
     }
 
+    private void OnSelectionChanged(IEnumerable<CodeLogToListDto> selectedItems)
+    {
+        _selectedItems = selectedItems;
+    }
+
+    // todo fix this
+    /*private void OnSelectionRemoved(Guid id)
+    {
+        var itemToRemove = _selectedItems.First(i => i.Id == id);
+        _selectedItems.Remove(itemToRemove);
+
+        //_table!.SetSelection(_selectedItems.Select(i=>i.Id.ToString()).ToList());
+        _table!.ReloadData();
+    }*/
+
+    private void OnUnselectAll()
+    {
+        _table!.UnselectAll();
+    }
+
+    private void OnDelete(Guid id)
+    {
+        ShowDeleteModal(false, id);
+    }
+
+    private void OnDeleteAll()
+    {
+        ShowDeleteModal(true, null);
+    }
+
     private async Task LoadDataAsync()
     {
         _loading = true;
@@ -107,7 +137,7 @@ public partial class Code
 
     private void ShowViewModal(Guid id)
     {
-        var currentItem = _items!.First(i => i.Id == id);
+        var currentItem = _items.First(i => i.Id == id);
 
         RenderFragment content = builder =>
         {
@@ -130,12 +160,17 @@ public partial class Code
         });
     }
 
-    private void ShowDeleteModal()
+    private void ShowDeleteModal(bool isAll, Guid? id)
     {
-        Func<ModalClosingEventArgs, Task> onOk = (e) =>
+        Func<ModalClosingEventArgs, Task> onOk = async (e) =>
         {
-            Console.WriteLine("Ok");
-            return Task.CompletedTask;
+            var ids = isAll
+                ? _selectedItems.Select(i => i.Id)
+                : _selectedItems.Where(i => i.Id == id).Select(i => i.Id);
+
+            await LogService.DeleteCodeLogs(new DeleteCodeLogsDto(ids.ToList()));
+
+            await LoadDataAsync();
         };
 
         Func<ModalClosingEventArgs, Task> onCancel = (e) =>
@@ -147,9 +182,9 @@ public partial class Code
 
         ModalService.Confirm(new ConfirmOptions()
         {
-            Title = "Are you sure delete this task?",
-            //Icon =  ,
-            Content = "Some descriptions",
+            Title = "Are you sure?",
+            //Icon =  IconType.Outline.Search,
+            Content = isAll ? "This operation will delete all items" : "This operation will delete this item",
             OnOk = onOk,
             OnCancel = onCancel,
             OkType = "danger",

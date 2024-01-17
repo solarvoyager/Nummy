@@ -2,6 +2,7 @@
 @using NummyUi.Dtos.Enums
 @using NummyUi.Dtos.Domain
 @using NummyUi.Utils
+@using NummyUi.Dtos
 
 <div>
     <PageContainer Title="Code Logs">
@@ -44,29 +45,27 @@
                     </ChildContent>
                 </Panel>
             </Collapse>
-            <br/>
-            
             @if (_selectedItems.Any())
             {
-                @foreach (var selected in _selectedItems)
-                {
-                    <Tag @key="selected" Closable OnClose="e => { }">@selected.Id</Tag>
-                }
-
-                <Button Danger Size="small" OnClick="@(e => { _table.SetSelection(null); })">Clear</Button>
+                <br/>
+                <Flex Gap="middle">
+                    <h3>@_selectedItems.Count() Selected</h3>
+                    <Button OnClick="@OnUnselectAll" Icon="@IconType.Outline.Clear">Clear Selection</Button>
+                    <Button Danger OnClick="@OnDeleteAll" Icon="@IconType.Outline.Delete">Delete Selected</Button>
+                </Flex>
             }
-
-            <br/>
             <Table
                 @ref="@_table"
+                TItem="CodeLogToListDto"
                 DataSource="@_items"
                 Loading="@_loading"
                 Total="@_total"
                 PageIndex="@_pageIndex"
                 PageSize="@_pageSize"
                 RowKey="@(x => x.Id.ToString())"
-                SelectedRows="@_selectedItems"
                 PaginationPosition="topleft"
+                SelectedRows="@_selectedItems"
+                SelectedRowsChanged="@OnSelectionChanged"
                 OnPageSizeChange="@OnPageIndexChanged"
                 OnPageIndexChange="@OnPageIndexChanged">
                 <ColumnDefinitions>
@@ -92,8 +91,8 @@
                                 </Tooltip>
                             </SpaceItem>
                             <SpaceItem>
-                                <Tooltip Title="Share">
-                                    <Button Danger Shape="@ButtonShape.Circle" Icon="@IconType.Outline.Delete"></Button>
+                                <Tooltip Title="Delete">
+                                    <Button Danger Shape="@ButtonShape.Circle" Icon="@IconType.Outline.Delete" OnClick="@(()=>OnDelete(context.Id))"></Button>
                                 </Tooltip>
                             </SpaceItem>
                         </Space>
