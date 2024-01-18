@@ -28,20 +28,26 @@
     ]
   },
   {
-    "path": "/logging",
-    "name": "Logging",
-    "key": "logging",
+    "path": "/applications",
+    "name": "Applications",
+    "key": "applications",
+    "icon": "appstore"
+  },
+  {
+    "path": "/logs",
+    "name": "Logs",
+    "key": "logs",
     "icon": "table",
     "children": [
       {
-        "path": "/logging/http",
+        "path": "/logs/http",
         "name": "Http Logs",
-        "key": "logging.http"
+        "key": "logs.http"
       },
       {
-        "path": "/logging/code",
+        "path": "/logs/code",
         "name": "Code Logs",
-        "key": "logging.code"
+        "key": "logs.code"
       }
     ]
   },
@@ -52,14 +58,14 @@
     "icon": "user",
     "children": [
       {
-        "path": "/account/center",
-        "name": "Account Center",
-        "key": "account.center"
+        "path": "/account/teams",
+        "name": "Teams Center",
+        "key": "account.teams"
       },
       {
-        "path": "/account/settings",
-        "name": "Personal settings",
-        "key": "account.settings"
+        "path": "/account/profile",
+        "name": "Personal Account",
+        "key": "account.personal"
       }
     ]
   }
