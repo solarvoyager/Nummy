@@ -1,0 +1,124 @@
+﻿@page "/logs/code"
+@using NummyUi.Dtos.Enums
+@using NummyUi.Dtos.Domain
+@using NummyUi.Utils
+@using NummyUi.Dtos
+
+<div>
+    <PageContainer Title="Code Logs">
+        <Breadcrumb>
+            <Breadcrumb>
+                <BreadcrumbItem>Logging</BreadcrumbItem>
+                <BreadcrumbItem>Code Logs</BreadcrumbItem>
+            </Breadcrumb>
+        </Breadcrumb>
+        <ChildContent>
+            <Collapse DefaultActiveKey="@(new[] { "1" })">
+                <Panel Header="Search" Key="1">
+                    <ChildContent>
+                        <Search Placeholder="Search by Title, Description, ExceptionType, Id..." @bind-Value="_query" OnSearch="OnSearch"/> @* OnSearch="() => _table?.ReloadData()"*@
+                    </ChildContent>
+                </Panel>
+                <Panel Header="Filter" Key="2">
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Trace] ? "cyan-inverse" : PresetColor.Cyan.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Trace]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Trace)">Trace</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Debug] ? "blue-inverse" : PresetColor.Blue.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Debug]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Debug)">Debug</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Info] ? "green-inverse" : PresetColor.Green.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Info]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Info)">Info</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Warning] ? "gold-inverse" : PresetColor.Gold.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Warning]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Warning)">Warning</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Error] ? "volcano-inverse" : PresetColor.Volcano.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Error]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Error)">Error</Tag>
+                    <Tag Class="log-level" Color="@(_logLevelFilters[CodeLogLevel.Fatal] ? "magenta-inverse" : PresetColor.Magenta.ToString())" Checkable Checked="_logLevelFilters[CodeLogLevel.Fatal]" CheckedChanged="value => OnCheckFilterChanged(value, CodeLogLevel.Fatal)">Fatal</Tag>
+                </Panel>
+                <Panel Header="Sort" Key="3">
+                    <ChildContent>
+                        <Segmented Style="margin-bottom: 12px" TValue="SortOrder" OnChange="OnSortOrderChanged">
+                            <SegmentedItem Label="@nameof(SortOrder.Ascending)" Value="SortOrder.Ascending" Icon="@IconType.Outline.SortAscending"/>
+                            <SegmentedItem Label="@nameof(SortOrder.Descending)" Value="SortOrder.Descending" Icon="@IconType.Outline.SortDescending"/>
+                        </Segmented>
+                        <br/>
+                        <Segmented TValue="CodeLogSortType" OnChange="OnSortTypeChanged">
+                            <SegmentedItem Label="@nameof(CodeLogSortType.TraceIdentifier)" Value="CodeLogSortType.TraceIdentifier"/>
+                            <SegmentedItem Label="@nameof(CodeLogSortType.LogLevel)" Value="CodeLogSortType.LogLevel"/>
+                            <SegmentedItem Label="@nameof(CodeLogSortType.Title)" Value="CodeLogSortType.Title"/>
+                            <SegmentedItem Label="@nameof(CodeLogSortType.Description)" Value="CodeLogSortType.Description"/>
+                            <SegmentedItem Label="@nameof(CodeLogSortType.ExceptionType)" Value="CodeLogSortType.ExceptionType"/>
+                            <SegmentedItem Label="@nameof(CodeLogSortType.CreatedAt)" Value="CodeLogSortType.CreatedAt"/>
+                        </Segmented>
+                    </ChildContent>
+                </Panel>
+            </Collapse>
+            @if (_selectedItems.Any())
+            {
+                <br/>
+                <Flex Gap="middle">
+                    <h3>@_selectedItems.Count() Selected</h3>
+                    <Button OnClick="@OnUnselectAll" Icon="@IconType.Outline.Clear">Clear Selection</Button>
+                    <Button Danger OnClick="@OnDeleteAll" Icon="@IconType.Outline.Delete">Delete Selected</Button>
+                </Flex>
+            }
+            <Table
+                @ref="@_table"
+                TItem="CodeLogToListDto"
+                DataSource="@_items"
+                Loading="@_loading"
+                Total="@_total"
+                PageIndex="@_pageIndex"
+                PageSize="@_pageSize"
+                RowKey="@(x => x.Id.ToString())"
+                PaginationPosition="topleft"
+                SelectedRows="@_selectedItems"
+                SelectedRowsChanged="@OnSelectionChanged"
+                OnPageSizeChange="@OnPageIndexChanged"
+                OnPageIndexChange="@OnPageIndexChanged">
+                <ColumnDefinitions>
+                    <Selection Key="@(context.Id.ToString())"/>
+                    <PropertyColumn Property="c => c.Id" Hidden/>
+                    <PropertyColumn Property="c => c.TraceIdentifier"/>
+                    <PropertyColumn Property="c => c.LogLevel">
+                        <Tag Class="log-level" Color="@(context.LogLevel switch { CodeLogLevel.Fatal => PresetColor.Magenta.ToString(), CodeLogLevel.Error => PresetColor.Volcano.ToString(), CodeLogLevel.Warning => PresetColor.Gold.ToString(), CodeLogLevel.Debug => PresetColor.Blue.ToString(), CodeLogLevel.Trace => PresetColor.Cyan.ToString(), CodeLogLevel.Info => PresetColor.Green.ToString(), _ => "default" })">@context.LogLevel</Tag>
+                    </PropertyColumn>
+                    <PropertyColumn Property="c => c.Title"/>
+                    <PropertyColumn Property="c => c.ExceptionType"/>
+                    <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd HH:mm:ss"/>
+                    <ActionColumn>
+                        <Button Type="@ButtonType.Link" OnClick="() => ShowViewModal(context.Id)">
+                            Details
+                        </Button>
+                    </ActionColumn>
+                    <ActionColumn Title="Action">
+                        <Space>
+                            <SpaceItem>
+                                <Tooltip Title="Share">
+                                    <Button Shape="@ButtonShape.Circle" Icon="@IconType.Outline.ShareAlt"></Button>
+                                </Tooltip>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <Tooltip Title="Delete">
+                                    <Popconfirm Title="Are you sure delete this task?"
+                                                OnConfirm="@(() => OnDelete(context.Id))">
+                                        <Button Danger Shape="@ButtonShape.Circle" Icon="@IconType.Outline.Delete"></Button>
+                                    </Popconfirm>
+                                </Tooltip>
+                            </SpaceItem>
+                        </Space>
+                    </ActionColumn>
+                </ColumnDefinitions>
+                <PaginationTemplate>
+                    <Pagination Class="@(context.PaginationClass + " my-custom-pagination")"
+                                Total="@context.Total"
+                                PageSize="@context.PageSize"
+                                Current="@context.PageIndex"
+                                ShowSizeChanger
+                                ShowQuickJumper
+                                PageSizeOptions="@(NummyContants.PageSizes)"
+                                OnChange="@context.HandlePageChange"/>
+                </PaginationTemplate>
+            </Table>
+        </ChildContent>
+    </PageContainer>
+</div>
+
+<style>
+    .log-level {
+        font-size: 13px; 
+        padding: 4px 10px;
+    }
+</style>
