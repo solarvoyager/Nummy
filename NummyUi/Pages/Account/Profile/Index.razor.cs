@@ -1,7 +1,7 @@
 using AntDesign;
 using System.Collections.Generic;
 
-namespace NummyUi.Pages.Account.Settings
+namespace NummyUi.Pages.Account.Profile
 {
     public partial class Index
     {

@@ -18,6 +18,7 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
+
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();

@@ -6,7 +6,10 @@ using NummyApi.Services.Abstract;
 namespace NummyApi.Controllers;
 
 [Route("api/[controller]")]
-public class LogController(ICodeLogService codeLogService, IRequestLogService requestLogService, IResponseLogService responseLogService) : Controller
+public class LogController(
+    ICodeLogService codeLogService,
+    IRequestLogService requestLogService,
+    IResponseLogService responseLogService) : Controller
 {
     [HttpPost("add/code")]
     public async Task<IActionResult> AddCodeLog([FromBody] CodeLogToAddDto request)
@@ -52,7 +55,7 @@ public class LogController(ICodeLogService codeLogService, IRequestLogService re
 
         return Ok(response);
     }
-    
+
     [HttpDelete("delete/code")]
     public async Task<IActionResult> DeleteCodeLogs([FromBody] DeleteCodeLogsDto request)
     {

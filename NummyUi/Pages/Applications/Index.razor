@@ -1,0 +1,89 @@
+﻿@namespace NummyUi.Pages.Applications
+@page "/applications"
+
+<PageContainer Title="Applications">
+    <Breadcrumb>
+        <Breadcrumb>
+            <BreadcrumbItem>Applications</BreadcrumbItem>
+        </Breadcrumb>
+    </Breadcrumb>
+    <ChildContent>
+        <AntList Grid="grid" DataSource="@Data">
+            <ListItem>
+                <Card Bordered
+                      Hoverable
+                      BodyStyle="padding-bottom: 20px;"
+                      Actions="Actions">
+                    <CardMeta>
+                        <AvatarTemplate>
+                            <Avatar Size="small" Src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.klipartz.com%2Fen%2Fsticker-png-rbfna&psig=AOvVaw0odD9kM9ASWHJRQ63-uJ4N&ust=1705776656869000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCPiPzbCP6oMDFQAAAAAdAAAAABAD"/>
+                        </AvatarTemplate>
+                        <TitleTemplate>context.Title</TitleTemplate>
+                    </CardMeta>
+                    <div class="cardItemContent">
+                        <div class="cardInfo">
+                            <div>
+                                <p>Active User</p>
+                                <p>FormatWan(context.ActiveUser)</p>
+                            </div>
+                            <div>
+                                <p>New Users</p>
+                                <p>context.NewUser.ToString("0,0")</p>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+            </ListItem>
+        </AntList>
+    </ChildContent>
+</PageContainer>
+
+@code{
+
+    public ListGridType grid = new() { Gutter = 16, Column = 4 };
+
+    public List<BasicItem> Data = new()
+    {
+        new BasicItem { Title = "Title 1" },
+        new BasicItem { Title = "Title 2" },
+        new BasicItem { Title = "Title 3" },
+        new BasicItem { Title = "Title 4" },
+    };
+
+    public class BasicItem
+    {
+        public string Title { get; set; }
+    }
+
+    private static readonly RenderFragment Download = @<AntDesign.Tooltip Title="@("下载")">
+                                                          <Icon Type="download" Theme="outline"/>
+                                                      </AntDesign.Tooltip>;
+
+    private static readonly IList<RenderFragment> Actions = new List<RenderFragment>
+    {
+        Download,
+        @<AntDesign.Tooltip Title="@("Edit")">
+            <Icon Type="edit" Theme="outline"/>
+        </AntDesign.Tooltip>,
+        @<AntDesign.Tooltip Title="@("Share")">
+            <Icon Type="share-alt" Theme="outline"/>
+        </AntDesign.Tooltip>,
+        @<Dropdown>
+            <Icon Type="ellipsis" Theme="outline"/>
+        </Dropdown>
+    };
+
+    private static RenderFragment FormatWan(int val)
+    {
+        if (val > 10000)
+        {
+            val = (int)Math.Floor((double)val / 10000);
+        }
+
+        return @<span>
+                   @val
+                   <span style="position: relative; top: -2px; font-size: 14px; font-style: normal; margin-left: 2px;">万</span>
+               </span>;
+    }
+
+}

@@ -32,6 +32,10 @@
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\Trend\Trend.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Analysis\Components\SalesCard.razor" />
     <_ContentIncludedByDefault Remove="Pages\Database\Dashboard\Dashboard.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Applications\Applications.razor" />
+    <_ContentIncludedByDefault Remove="Pages\List\TableList\TableList.razor" />
+    <_ContentIncludedByDefault Remove="Pages\List\BasicList\BasicList.razor" />
+    <_ContentIncludedByDefault Remove="Pages\List\CardList\CardList.razor" />
   </ItemGroup>
   
 </Project>

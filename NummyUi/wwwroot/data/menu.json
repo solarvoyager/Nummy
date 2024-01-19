@@ -58,14 +58,14 @@
     "icon": "user",
     "children": [
       {
-        "path": "/account/teams",
-        "name": "Teams Center",
-        "key": "account.teams"
+        "path": "/account/center",
+        "name": "Accounts Center",
+        "key": "account.center"
       },
       {
         "path": "/account/profile",
         "name": "Personal Account",
-        "key": "account.personal"
+        "key": "account.profile"
       }
     ]
   }

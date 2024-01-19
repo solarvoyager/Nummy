@@ -3,7 +3,7 @@
 public enum SortOrder
 {
     Ascending,
-    Descending,
+    Descending
 }
 
 public enum CodeLogSortType
@@ -13,7 +13,7 @@ public enum CodeLogSortType
     Title,
     Description,
     ExceptionType,
-    CreatedAt,
+    CreatedAt
 }
 
 public enum RequestLogSortType
@@ -22,11 +22,11 @@ public enum RequestLogSortType
     Body,
     Method,
     Path,
-    RemoteIp,
+    RemoteIp
 }
 
 public enum ResponseLogSortType
 {
     Body,
-    StatusCode,
+    StatusCode
 }

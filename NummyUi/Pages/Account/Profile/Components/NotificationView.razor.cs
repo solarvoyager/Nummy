@@ -1,6 +1,6 @@
 using NummyUi.Models;
 
-namespace NummyUi.Pages.Account.Settings
+namespace NummyUi.Pages.Account.Profile
 {
     public partial class NotificationView
     {

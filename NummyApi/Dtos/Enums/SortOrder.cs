@@ -1,2 +1,1 @@
 ﻿namespace NummyApi.Dtos.Enums;
-

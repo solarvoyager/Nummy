@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Dtos;
 using NummyApi.Dtos.Domain;
-using NummyApi.Dtos.Enums;
 using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
@@ -19,28 +18,21 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         await dataContext.AddAsync(mapped);
         await dataContext.SaveChangesAsync();
     }
-    
+
     public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
-        var query = dataContext.ResponseLogs.Where(l=>true);
+        var query = dataContext.ResponseLogs.Where(l => true);
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
-        {
             query = query.Where(l =>
                 EF.Functions.Like(l.Body.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(l.StatusCode.ToString().ToLower(), $"%{dto.Query.ToLower()}%"));
-        }
 
         var totalCount = await query.CountAsync();
 
-        query = query
-            .Skip(skip)
-            .Take(dto.PageSize);
-
         if (dto.SortType is not null && dto.SortOrder is not null)
-        {
             query = dto.SortType switch
             {
                 ResponseLogSortType.Body => dto.SortOrder == SortOrder.Descending
@@ -51,13 +43,16 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
                     : query.OrderBy(q => q.StatusCode),
                 _ => query
             };
-        }
+
+        query = query
+            .Skip(skip)
+            .Take(dto.PageSize);
 
         var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(await query.ToListAsync());
 
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
     }
-    
+
     public async Task<bool> Delete(DeleteResponseLogsDto dto)
     {
         await dataContext.ResponseLogs.Where(l => dto.Ids.Contains(l.Id)).ExecuteDeleteAsync();

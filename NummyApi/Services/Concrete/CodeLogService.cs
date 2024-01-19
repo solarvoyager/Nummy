@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Dtos;
 using NummyApi.Dtos.Domain;
-using NummyApi.Dtos.Enums;
 using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
@@ -19,7 +18,7 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
         await dataContext.AddAsync(mapped);
         await dataContext.SaveChangesAsync();
     }
-    
+
     public async Task<PaginatedListDto<CodeLogToListDto>> Get(GetCodeLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
@@ -28,22 +27,15 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
             .Where(l => dto.Levels.Contains(l.LogLevel));
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
-        {
             query = query.Where(l =>
                 EF.Functions.Like(l.TraceIdentifier!.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(l.Title.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(l.Description!.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(l.ExceptionType!.ToLower(), $"%{dto.Query.ToLower()}%"));
-        }
 
         var totalCount = await query.CountAsync();
 
-        query = query
-            .Skip(skip)
-            .Take(dto.PageSize);
-
         if (dto.SortType is not null && dto.SortOrder is not null)
-        {
             query = dto.SortType switch
             {
                 CodeLogSortType.TraceIdentifier => dto.SortOrder == SortOrder.Descending
@@ -66,7 +58,10 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
                     : query.OrderBy(q => q.CreatedAt),
                 _ => query
             };
-        }
+
+        query = query
+            .Skip(skip)
+            .Take(dto.PageSize);
 
         var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(await query.ToListAsync());
 

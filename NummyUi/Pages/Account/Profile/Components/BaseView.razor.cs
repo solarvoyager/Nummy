@@ -3,7 +3,7 @@ using NummyUi.Models;
 using NummyUi.Services;
 using System.Threading.Tasks;
 
-namespace NummyUi.Pages.Account.Settings
+namespace NummyUi.Pages.Account.Profile
 {
     public partial class BaseView
     {
