@@ -8,23 +8,25 @@ services:
   nummy-postgres:
     image: postgres:latest
     # db host name
-    container_name: nummypostgres
+    container_name: postgres
     environment:
       - POSTGRES_DB=nummydatabase
       - POSTGRES_USER=nummyuser
       - POSTGRES_PASSWORD=nummypassword
+    ports:
+      - "5432:5432"
     networks:
-      - nummy-network
+      - network
 
   # Nummy API instance
   nummy-api:
     # make sure nummy-api image version is same with nummy-ui instance. (recommended: just keep both latest)
     image: hamidmusayev04/nummy-api:latest
-    container_name: nummy-api
+    container_name: api
     # connection string of your postgresql database created below
     environment:
       # host is the name of your postgres container
-      - POSTGRES_HOST=nummypostgres
+      - POSTGRES_HOST=postgres
       - POSTGRES_DB=nummydatabase
       - POSTGRES_USER=nummyuser
       - POSTGRES_PASSWORD=nummypassword
@@ -32,22 +34,22 @@ services:
       - "8082:8082"
       - "8083:8083"
     networks:
-      - nummy-network
+      - network
         
   # Nummy UI instance
   nummy-ui:
     image: hamidmusayev04/nummy-ui:latest
-    container_name: nummy-ui
+    container_name: ui
     # port and container name of your nummy-api instance
     environment:
-      - NUMMY_API_HOST=nummy-api
+      - NUMMY_API_HOST=api
       - NUMMY_API_PORT=8082
     ports:
       - "8080:8080"
       - "8081:8081"
     networks:
-      - nummy-network
+      - network
         
 networks:
-  nummy-network:
+  network:
     driver: bridge
