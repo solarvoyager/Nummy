@@ -204,6 +204,8 @@ public partial class Code
         {
             Title = "Are you sure?",
             //Icon =  IconType.Outline.Search,
+            OkText = "Yes",
+            CancelText = "No",
             Content = isAll ? "This operation will delete all items" : "This operation will delete this item",
             OnOk = OnOk,
             OkType = "danger",

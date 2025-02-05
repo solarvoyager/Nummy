@@ -3,6 +3,7 @@
 @using NummyUi.Dtos.Domain
 @using NummyUi.Utils
 @using NummyUi.Dtos
+@using NummyUi.Components.MigrationPanel
 
 <div>
     <PageContainer Title="Code Logs">
@@ -13,6 +14,7 @@
             </Breadcrumb>
         </Breadcrumb>
         <ChildContent>
+        <MigrationPanel/>
             <Collapse DefaultActiveKey="@(new[] { "1" })">
                 <Panel Header="Search" Key="1">
                     <ChildContent>
@@ -93,6 +95,8 @@
                             <SpaceItem>
                                 <Tooltip Title="Delete">
                                     <Popconfirm Title="Are you sure delete this task?"
+                                                OkText="Yes"
+                                                CancelText="No"
                                                 OnConfirm="@(() => OnDelete(context.Id))">
                                         <Button Danger Shape="@ButtonShape.Circle" Icon="@IconType.Outline.Delete"></Button>
                                     </Popconfirm>

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using AntDesign;
+using Microsoft.AspNetCore.Components;
 using NummyUi.Services;
 
-namespace NummyUi.Pages.Dashboard.Database;
+namespace NummyUi.Components.MigrationPanel;
 
-public partial class Dashboard
+public partial class MigrationPanel
 {
     [Inject] private IDatabaseService DatabaseService { get; set; }
-    
     private IEnumerable<string> _pendingMigrations = new List<string>();
     private bool? _migrationResult;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -21,5 +21,4 @@ public partial class Dashboard
         _migrationResult = await DatabaseService.Migrate();
         await InvokeAsync(() => StateHasChanged());
     }
-
 }

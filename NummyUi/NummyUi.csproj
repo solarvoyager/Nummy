@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>c4e9842a-4a86-463a-8831-1012a87f8731</UserSecretsId>
@@ -36,6 +36,10 @@
     <_ContentIncludedByDefault Remove="Pages\List\TableList\TableList.razor" />
     <_ContentIncludedByDefault Remove="Pages\List\BasicList\BasicList.razor" />
     <_ContentIncludedByDefault Remove="Pages\List\CardList\CardList.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Components\MigrationPanel\MigrationPanel.razor" />
   </ItemGroup>
   
 </Project>

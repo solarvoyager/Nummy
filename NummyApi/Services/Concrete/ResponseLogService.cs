@@ -19,11 +19,13 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto)
+    public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto? dto, string? httpLogId)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
-        var query = dataContext.ResponseLogs.Where(l => true);
+        var query = dataContext.ResponseLogs.AsQueryable();
+
+        query = query.Where(l => l.HttpLogId.ToString() == httpLogId);
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(l =>

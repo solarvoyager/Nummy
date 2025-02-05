@@ -1,0 +1,67 @@
+﻿[
+  {
+    "path": "/dashboard",
+    "name": "Dashboard",
+    "key": "dashboard",
+    "icon": "dashboard",
+    "children": [
+      {
+        "path": "/",
+        "name": "Analysis Page",
+        "key": "dashboard.analysis"
+      },
+      {
+        "path": "/dashboard/monitor",
+        "name": "Monitoring Page",
+        "key": "dashboard.monitor"
+      },
+      {
+        "path": "/dashboard/workplace",
+        "name": "Workplace Page",
+        "key": "dashboard.workplace"
+      }
+    ]
+  },
+  {
+    "path": "/applications",
+    "name": "Applications",
+    "key": "applications",
+    "icon": "appstore"
+  },
+  {
+    "path": "/logs",
+    "name": "Logs",
+    "key": "logs",
+    "icon": "table",
+    "children": [
+      {
+        "path": "/logs/http",
+        "name": "Http Logs",
+        "key": "logs.http"
+      },
+      {
+        "path": "/logs/code",
+        "name": "Code Logs",
+        "key": "logs.code"
+      }
+    ]
+  },
+  {
+    "path": "/account",
+    "name": "Account",
+    "key": "account",
+    "icon": "user",
+    "children": [
+      {
+        "path": "/account/center",
+        "name": "Accounts Center",
+        "key": "account.center"
+      },
+      {
+        "path": "/account/profile",
+        "name": "Personal Account",
+        "key": "account.profile"
+      }
+    ]
+  }
+]

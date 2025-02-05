@@ -19,12 +19,14 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto)
+    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto? dto, string? httpLogId)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
-        var query = dataContext.RequestLogs.Where(l => true);
+        var query = dataContext.RequestLogs.AsQueryable();
 
+        query = query.Where(l => l.HttpLogId.ToString() == httpLogId);
+        
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(l =>
                 EF.Functions.Like(l.TraceIdentifier.ToLower(), $"%{dto.Query.ToLower()}%") ||
