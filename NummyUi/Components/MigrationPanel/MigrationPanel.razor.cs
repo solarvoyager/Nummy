@@ -19,6 +19,10 @@ public partial class MigrationPanel
     private async void Migrate()
     {
         _migrationResult = await DatabaseService.Migrate();
-        await InvokeAsync(() => StateHasChanged());
+
+        if (_migrationResult.Value)
+            _pendingMigrations = [];
+        
+        await InvokeAsync(StateHasChanged);
     }
 }

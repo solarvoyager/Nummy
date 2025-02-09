@@ -1,6 +1,6 @@
 @namespace NummyUi.Components.MigrationPanel
 
-@if (_pendingMigrations.Any())
+@if (_pendingMigrations.Any() && _migrationResult == null)
 {
     <Card Size="small" Style="margin-bottom: 12px; background-color: #fff0a8; border-color: #ffe21a" Bordered>
         <TitleTemplate>
@@ -8,22 +8,33 @@
         </TitleTemplate>
         <Body>
         <p>Click to sync all migrations to your database</p>
-        <Button OnClick="Migrate">
+        <Button OnClick="@Migrate">
             <Icon Type="fire"/>
             Migrate
         </Button>
         </Body>
     </Card>
-    
-    @if (_migrationResult != null)
+}
+
+@if (_migrationResult != null)
+{
+    @if (_migrationResult.Value)
     {
-        @if (_migrationResult.Value)
-        {
-            <p>Migrations completed successfully.</p>
-        }
-        else
-        {
-            <p>Error occurred while migration.</p>
-        }
+        <Card Size="small" Style="margin-bottom: 12px; background-color: #a8ffa9; border-color: #44ff1a" Bordered>
+            <TitleTemplate>
+                <Icon Type="double-right" Theme="outline" />
+                Migrations completed successfully
+            </TitleTemplate>
+            <Body>
+            <Button OnClick=@(()=>_migrationResult = null)>
+                <Icon Type="check"/>
+                Done
+            </Button>
+            </Body>
+        </Card>
+    }
+    else
+    {
+        <p>Error occurred while migration.</p>
     }
 }

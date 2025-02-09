@@ -1,5 +1,28 @@
 ﻿[
   {
+    "path": "/dashboard",
+    "name": "Dashboard",
+    "key": "dashboard",
+    "icon": "dashboard",
+    "children": [
+      {
+        "path": "/",
+        "name": "Analysis Page",
+        "key": "dashboard.analysis"
+      },
+      {
+        "path": "/dashboard/monitor",
+        "name": "Monitoring Page",
+        "key": "dashboard.monitor"
+      },
+      {
+        "path": "/dashboard/workplace",
+        "name": "Workplace Page",
+        "key": "dashboard.workplace"
+      }
+    ]
+  },
+  {
     "path": "/logs",
     "name": "Logs",
     "key": "logs",
