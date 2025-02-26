@@ -1,71 +1,78 @@
 @namespace NummyUi.Pages.Dashboard.Analysis
 @page "/"
 @using NummyUi.Components.MigrationPanel
-@attribute [ReuseTabsPage(Title ="Dashboard", Pin =true, Closable =false, Order =0)]
+@using NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
+@using NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
+@attribute [ReuseTabsPage(Title = "Dashboard", Pin = true, Closable = false, Order = 0)]
 
 <GridContent>
     <MigrationPanel/>
-    <Row Type="flex" Gutter="24">
-        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-            <ChartCard Title="Total Requests"
-                       Total="@_totalCounts?.TotalRequests.ToString()"
-                       ContentHeight="46">
-                <ChildContent>
-                    <Trend Flag="up">
-                        Requests Today
-                        <span class="trendText">@_totalCounts?.RequestsToday</span>
-                    </Trend>
-                    <Trend Flag="down">
-                        DoD Change
-                        <span class="trendText">11%</span>
-                    </Trend>
-                </ChildContent>
-                <Footer>
-                    <Field Label="Daily Sale" Value="$12,423"/>
-                </Footer>
-            </ChartCard>
-        </AntDesign.Col>
-        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-            <ChartCard Title="Visits"
-                       Total="8846"
-                       ContentHeight="46">
-                <ChildContent>
-                    <MiniArea/>
-                </ChildContent>
-                <Footer>
-                    <Field Label="Daily Visits" Value="1243"/>
-                </Footer>
-            </ChartCard>
-        </AntDesign.Col>
-        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-            <ChartCard Title="Payments"
-                       Total="6560"
-                       ContentHeight="46">
-                <ChildContent>
-                    <MiniBar/>
-                </ChildContent>
-                <Footer>
-                    <Field Label="Conversion Rate" Value="60%"/>
-                </Footer>
-            </ChartCard>
-        </AntDesign.Col>
-        <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-            <ChartCard Title="Operational Effect"
-                       Total="78%"
-                       ContentHeight="46">
-                <ChildContent>
-                    <MiniProgress
-                        Percent="78"
-                        StrokeWidth="8"
-                        Target="80"
-                        Color="#13C2C2"/>
-                </ChildContent>
-                <Footer>
-                    <Field Label="Conversion Rate" Value="60%"/>
-                </Footer>
-            </ChartCard>
-        </AntDesign.Col>
-    </Row>
+    @if (_loading)
+    {
+        <Spin Size="large"/>
+    }
+    else
+    {
+        <Row Type="flex" Gutter="24">
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="Requests Total"
+                           Total="@_totalCounts?.TotalRequests.ToString()"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <Field Label="Code logs" Value="@_totalCounts?.TotalCodeLogs.ToString()"/>
+                        <Field Label="Error and Fatal logs"
+                               Value="@_totalCounts?.TotalErrorAndFatals.ToString()"/>
+                    </ChildContent>
+                    <Footer>
+                        <Trend Flag="up">
+                            Today Error and Fatal logs
+                            <span class="trendText">@_totalCounts?.TodayErrorAndFatals</span>
+                        </Trend>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="Requests Today"
+                           Total="@_totalCounts?.RequestsToday.ToString()"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <DailyRequests WeeklyRequests="@_totalCounts?.WeeklyRequests"/>
+                    </ChildContent>
+                    <Footer>
+                        <Field Label="Weekly" Value="@_totalCounts?.RequestsThisWeek.ToString()"/>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="Payments"
+                           Total="6560"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <MiniBar/>
+                    </ChildContent>
+                    <Footer>
+                        <Field Label="Conversion Rate" Value="60%"/>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                <ChartCard Title="Operational Effect"
+                           Total="78%"
+                           ContentHeight="46">
+                    <ChildContent>
+                        <MiniProgress
+                            Percent="78"
+                            StrokeWidth="8"
+                            Target="80"
+                            Color="#13C2C2"/>
+                    </ChildContent>
+                    <Footer>
+                        <Field Label="Conversion Rate" Value="60%"/>
+                    </Footer>
+                </ChartCard>
+            </AntDesign.Col>
+        </Row>
+    }
 
-    <SalesCard/>
+    @*<SalesCard/>*@
 </GridContent>
