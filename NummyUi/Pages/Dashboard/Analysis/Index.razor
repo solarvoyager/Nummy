@@ -1,6 +1,6 @@
 @namespace NummyUi.Pages.Dashboard.Analysis
 @page "/"
-@using NummyUi.Components.MigrationPanel
+@using NummyUi.Components
 @using NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
 @attribute [ReuseTabsPage(Title = "Dashboard", Pin = true, Closable = false, Order = 0)]
 
@@ -72,6 +72,7 @@
             </AntDesign.Col>
         </Row>
     }
+    <DsnPanel/>
 
     @*<SalesCard/>*@
 </GridContent>

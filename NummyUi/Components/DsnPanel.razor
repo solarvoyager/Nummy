@@ -1,0 +1,20 @@
+@namespace NummyUi.Components
+
+@if (_loading)
+{
+    <Spin></Spin>
+}
+else
+{
+    <Card Size="CardSize.Small" Style="width:305px;">
+        <TitleTemplate>
+            <div>
+                <Icon Type="@IconType.Outline.Api"/>
+                Click to copy instance DSN
+            </div>
+        </TitleTemplate>
+        <Body>
+        <Paragraph Copyable>@dsn?.Url</Paragraph>
+        </Body>
+    </Card>
+}

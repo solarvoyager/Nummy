@@ -25,3 +25,8 @@ public record HourlyRequestDto
     string Hour,
     int Count
 );
+
+public record DsnResponseDto
+(
+    string Url
+);

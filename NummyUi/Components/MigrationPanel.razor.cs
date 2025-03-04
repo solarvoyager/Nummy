@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using NummyUi.Services;
 
-namespace NummyUi.Components.MigrationPanel;
+namespace NummyUi.Components;
 
 public partial class MigrationPanel
 {

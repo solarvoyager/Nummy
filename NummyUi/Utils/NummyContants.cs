@@ -1,6 +1,6 @@
 ﻿namespace NummyUi.Utils;
 
-public class NummyContants
+public static class NummyContants
 {
     public const string ClientName = "NummyApiClient";
     public const string GetPendingMigrationsUrl = "api/database/migrations/pending";
@@ -12,6 +12,8 @@ public class NummyContants
     public const string DeleteCodeLogsUrl = "api/log/delete/code";
     
     public const string GetTotalCountsUrl = "api/statistical/total";
+    
+    public const string GetDsnUrl = "api/helper/dsn";
 
     public static readonly int[] PageSizes = [5, 10, 20, 50, 100, 1000];
 }

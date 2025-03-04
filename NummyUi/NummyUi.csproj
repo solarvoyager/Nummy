@@ -37,10 +37,31 @@
     <_ContentIncludedByDefault Remove="Pages\List\BasicList\BasicList.razor" />
     <_ContentIncludedByDefault Remove="Pages\List\CardList\CardList.razor" />
     <_ContentIncludedByDefault Remove="Pages\Dashboard\Analysis\Components\Charts\MiniBar\MiniBar.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="Components\MigrationPanel\MigrationPanel.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\EditableLinkGroup\EditableLinkGroup.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\Radar\AutoHeight.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Components\Radar\Radar.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Workplace\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\ActiveChart\ActiveChart.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Gauge\Gauge.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Map\Map.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Map\MiniArea.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\Pie\Pie.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\TagCloud\TagCloud.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Components\Charts\WaterWave\WaterWave.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Monitor\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\ArticleListContent\ArticleListContent.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Articles\Articles.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\AvatarList\AvatarList.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\AvatarList\AvatarListItem.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Components\Projects\Projects.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Center\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\BaseView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\BindingView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\GeographicView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\NotificationView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\PhoneView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\SecurityView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Profile\Index.razor" />
   </ItemGroup>
   
 </Project>
