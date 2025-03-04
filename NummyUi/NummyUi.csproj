@@ -36,6 +36,7 @@
     <_ContentIncludedByDefault Remove="Pages\List\TableList\TableList.razor" />
     <_ContentIncludedByDefault Remove="Pages\List\BasicList\BasicList.razor" />
     <_ContentIncludedByDefault Remove="Pages\List\CardList\CardList.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dashboard\Analysis\Components\Charts\MiniBar\MiniBar.razor" />
   </ItemGroup>
 
   <ItemGroup>

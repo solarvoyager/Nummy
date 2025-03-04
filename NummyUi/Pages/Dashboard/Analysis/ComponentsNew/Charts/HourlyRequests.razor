@@ -1,22 +1,24 @@
 @using NummyUi.Dtos.Domain
-@namespace NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
+@using NummyUi.Services
+@namespace NummyUi.Pages.Dashboard.Analysis
+@inject IChartService ChartService
 
-<Area @ref="_chartRef" Config="_chartConfig" />
+<AntDesign.Charts.Column @ref="_chartRef" Config="_chartConfig" />
 
 @code
 {
-    [Parameter] public List<WeeklyRequestDto> WeeklyRequests { get; set; }
+    [Parameter] public List<HourlyRequestDto> HourlyCounts { get; set; }
     
     private IChartComponent _chartRef;
-
-    private readonly AreaConfig _chartConfig = new AreaConfig
+    
+    private ColumnConfig _chartConfig = new ColumnConfig
     {
-        XField = "day",
+        XField = "hour",
         YField = "count",
         Height = 45,
         Padding = new[] { 8, 8, 8, 8 },
         AutoFit = true,
-        XAxis = new ValueCatTimeAxis
+        XAxis = new CatAxis
         {
             Visible = false
         },
@@ -26,10 +28,9 @@
         }
     };
 
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await _chartRef.ChangeData(WeeklyRequests);
+        await _chartRef.ChangeData(HourlyCounts);
         
         await base.OnAfterRenderAsync(firstRender);
     }

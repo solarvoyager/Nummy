@@ -4,10 +4,10 @@ public record TotalCountsResponseDto
 (
     int TotalRequests,
     int RequestsToday,
-    int RequestsThisHour,
-    List<int> HourlyRequests,
     int RequestsThisWeek,
     List<WeeklyRequestDto> WeeklyRequests,
+    int RequestsThisHour,
+    List<HourlyRequestDto> HourlyRequests,
 
     int TotalCodeLogs,
     int TodayErrorAndFatals,
@@ -16,7 +16,12 @@ public record TotalCountsResponseDto
 
 public record WeeklyRequestDto
 (
-    string DayOfWeek,
     string Day,
+    int Count
+);
+
+public record HourlyRequestDto
+(
+    string Hour,
     int Count
 );

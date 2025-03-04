@@ -1,0 +1,36 @@
+@using NummyUi.Dtos.Domain
+@namespace NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
+
+<Area @ref="_chartRef" Config="_chartConfig" />
+
+@code
+{
+    [Parameter] public List<WeeklyRequestDto> WeeklyCounts { get; set; }
+    
+    private IChartComponent _chartRef;
+
+    private readonly AreaConfig _chartConfig = new AreaConfig
+    {
+        XField = "day",
+        YField = "count",
+        Height = 45,
+        Padding = new[] { 8, 8, 8, 8 },
+        AutoFit = true,
+        XAxis = new ValueCatTimeAxis
+        {
+            Visible = false
+        },
+        YAxis = new ValueAxis
+        {
+            Visible = false
+        }
+    };
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _chartRef.ChangeData(WeeklyCounts);
+        
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

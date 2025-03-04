@@ -47,13 +47,27 @@ public class StatisticalService(NummyDataContext dataContext, IMapper mapper) : 
             .CountAsync();
     }
 
-    private async Task<List<int>> CountRequestsGroupedByHourAsync(DateTimeOffset date)
+    private async Task<List<HourlyRequestDto>> CountRequestsGroupedByHourAsync(DateTimeOffset date)
     {
-        return await dataContext.RequestLogs
+        var result = await dataContext.RequestLogs
             .Where(l => l.CreatedAt >= date.Date && l.CreatedAt < date.Date.AddDays(1))
             .GroupBy(l => l.CreatedAt.Hour)
-            .Select(g => g.Count())
+            .OrderBy(g => g.Key)
+            .Select(g => new HourlyRequestDto(
+                $"{g.Key:00}:00",
+                g.Count()
+            ))
             .ToListAsync();
+
+        for (int hour = 0; hour < 24; hour++)
+        {
+            if (result.All(r => r.Hour != $"{hour:00}:00"))
+            {
+                result.Add(new HourlyRequestDto($"{hour:00}:00", 0));
+            }
+        }
+
+        return result.OrderBy(r => r.Hour).ToList();
     }
 
     private async Task<int> CountRequestsByWeekAsync(DateTimeOffset date)
