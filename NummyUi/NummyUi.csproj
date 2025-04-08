@@ -69,10 +69,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Logging\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="Pages\CodeLogger\CodeLogger.razor" />
   </ItemGroup>
   
