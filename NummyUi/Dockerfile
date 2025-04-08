@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NummyUi.csproj", "NummyUi/"]
+COPY ["NummyShared.csproj", "NummyShared/"]
 RUN dotnet restore "./NummyUi/./NummyUi.csproj"
 WORKDIR "/src/NummyUi"
 COPY . .

@@ -8,6 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NummyApi.csproj", "NummyApi/"]
+COPY ["NummyShared.csproj", "NummyShared/"]
 RUN dotnet restore "./NummyApi/./NummyApi.csproj"
 WORKDIR "/src/NummyApi"
 COPY . .
