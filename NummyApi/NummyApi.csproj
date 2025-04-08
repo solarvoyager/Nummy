@@ -28,4 +28,8 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NummyShared\NummyShared.csproj" />
+    </ItemGroup>
+
 </Project>

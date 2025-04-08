@@ -1,13 +1,13 @@
 ﻿using AntDesign;
 using Microsoft.AspNetCore.Components;
-using NummyUi.Dtos;
-using NummyUi.Dtos.Domain;
-using NummyUi.Dtos.Enums;
+using NummyShared.Dtos;
+using NummyShared.Dtos.Domain;
+using NummyShared.Dtos.Enums;
 using NummyUi.Services;
 
-namespace NummyUi.Pages.Logging.Code;
+namespace NummyUi.Pages.CodeLogger;
 
-public partial class Code
+public partial class CodeLogger
 {
     [Inject] private ILogService LogService { get; set; }
     [Inject] private ModalService ModalService { get; set; }

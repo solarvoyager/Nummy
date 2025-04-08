@@ -1,6 +1,6 @@
-﻿using NummyApi.Dtos.Enums;
+﻿using NummyShared.Dtos.Enums;
 
-namespace NummyApi.Dtos.Domain;
+namespace NummyShared.Dtos.Domain;
 
 public record GetCodeLogsDto(
     int PageSize,

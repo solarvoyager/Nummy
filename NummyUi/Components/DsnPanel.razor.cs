@@ -1,6 +1,5 @@
-﻿using AntDesign;
-using Microsoft.AspNetCore.Components;
-using NummyUi.Dtos.Domain;
+﻿using Microsoft.AspNetCore.Components;
+using NummyShared.Dtos.Domain;
 using NummyUi.Services;
 
 namespace NummyUi.Components;

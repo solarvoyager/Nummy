@@ -1,6 +1,4 @@
-﻿using NummyApi.Dtos;
-using NummyApi.Dtos.Domain;
-using NummyApi.Dtos.Generic;
+﻿using NummyShared.Dtos.Domain;
 
 namespace NummyApi.Services.Abstract;
 

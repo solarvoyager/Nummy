@@ -6,21 +6,15 @@
     "icon": "dashboard"
   },
   {
-    "path": "/logs",
-    "name": "Logs",
-    "key": "logs",
-    "icon": "table",
-    "children": [
-      {
-        "path": "/logs/http",
-        "name": "Http Logs",
-        "key": "logs.http"
-      },
-      {
-        "path": "/logs/code",
-        "name": "Code Logs",
-        "key": "logs.code"
-      }
-    ]
+    "path": "/http",
+    "name": "Http Logger",
+    "key": "http.logger",
+    "icon": "swap"
+  },
+  {
+    "path": "/code",
+    "name": "Code Logger",
+    "key": "code.logger",
+    "icon": "node-index"
   }
 ]

@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NummyShared", "NummyShared\NummyShared.csproj", "{91CFA9F0-0163-45AE-8E7E-49B192E3C60D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80AE5D79-709E-42C5-8510-C0511EA781AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91CFA9F0-0163-45AE-8E7E-49B192E3C60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91CFA9F0-0163-45AE-8E7E-49B192E3C60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91CFA9F0-0163-45AE-8E7E-49B192E3C60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91CFA9F0-0163-45AE-8E7E-49B192E3C60D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

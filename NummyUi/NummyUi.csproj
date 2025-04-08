@@ -63,5 +63,17 @@
     <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\SecurityView.razor" />
     <_ContentIncludedByDefault Remove="Pages\Account\Profile\Index.razor" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NummyShared\NummyShared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Logging\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Pages\CodeLogger\CodeLogger.razor" />
+  </ItemGroup>
   
 </Project>

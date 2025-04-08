@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
-using NummyApi.Dtos;
-using NummyApi.Dtos.Domain;
-using NummyApi.Dtos.Generic;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
+using NummyShared.Dtos;
+using NummyShared.Dtos.Domain;
+using NummyShared.Dtos.Generic;
 
 namespace NummyApi.Services.Concrete;
 

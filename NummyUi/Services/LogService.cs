@@ -1,8 +1,6 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using NummyUi.Dtos;
-using NummyUi.Dtos.Domain;
-using NummyUi.Dtos.Generic;
+﻿using NummyShared.Dtos;
+using NummyShared.Dtos.Domain;
+using NummyShared.Dtos.Generic;
 using NummyUi.Utils;
 
 namespace NummyUi.Services;
