@@ -7,8 +7,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NummyUi.csproj", "NummyUi/"]
-COPY ["NummyShared.csproj", "NummyShared/"]
+COPY ["NummyUi/NummyUi.csproj", "NummyUi/"]
+COPY ["NummyShared/NummyShared.csproj", "NummyShared/"]
 RUN dotnet restore "./NummyUi/./NummyUi.csproj"
 COPY . .
 WORKDIR "/src/NummyUi"
