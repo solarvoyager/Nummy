@@ -7,15 +7,15 @@
 else
 {
     <div class="rgb-border-card">
-        <Card Size="CardSize.Small" >
+        <Card Size="CardSize.Small" BodyStyle="padding: 18px; padding-left: 24px">
             <TitleTemplate>
-                <div style="margin: 0">
-                    <Icon Type="@IconType.Outline.Api"/>
-                    Click to copy Nummy DSN
+                <div style="margin: 0; display: flex; align-items: center; gap: 8px">
+                    <Icon Height="1.5em" Width="1.5em" Type="@IconType.Outline.Api"/>
+                    <Title Level="4">Click to copy Nummy DSN</Title>
                 </div>
             </TitleTemplate>
             <Body>
-            <Paragraph Style="margin: 0" Copyable>@dsn?.Url</Paragraph>
+            <Paragraph Style="margin: 0; font-size: 15px" Copyable>@dsn?.Url</Paragraph>
             </Body>
         </Card>
     </div>
