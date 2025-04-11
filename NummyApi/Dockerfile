@@ -7,9 +7,9 @@ EXPOSE 8083
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["./NummyApi/NummyApi.csproj", "NummyApi/"]
-COPY ["./NummyShared/NummyShared.csproj", "NummyShared/"]
-RUN dotnet restore "NummyApi/NummyApi.csproj"
+COPY ["NummyApi/NummyApi.csproj", "NummyApi/"]
+COPY ["NummyShared/NummyShared.csproj", "NummyShared/"]
+RUN dotnet restore "./NummyApi/./NummyApi.csproj"
 COPY . .
 WORKDIR "/src/NummyApi"
 RUN dotnet build "NummyApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
