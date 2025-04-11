@@ -50,7 +50,6 @@ jobs:
           
       - name: Build and push Docker API image
         run: |
-          cd NummyApi
           COMMIT_SHA=${{ steps.set-version.outputs.version }}
           LATEST_VERSION=${{ steps.latest-version.outputs.version_api }}
           docker build -t hamidmusayev04/nummy-api:$COMMIT_SHA -t hamidmusayev04/nummy-api:latest -f NummyApi/Dockerfile .
