@@ -23,6 +23,7 @@ public class StatisticalService(IHttpClientFactory clientFactory) : IStatistical
         var response = await _client.SendAsync(request);
 
         // TODO: Check if the response is successful
+        // show message to user
         if (!response.IsSuccessStatusCode)
         {
             return new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0);

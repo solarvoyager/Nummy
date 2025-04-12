@@ -13,7 +13,7 @@ public partial class CodeLogger
     [Inject] private ModalService ModalService { get; set; }
     [Inject] private IMessageService MessageServices { get; set; }
 
-    ITable? _table;
+    private Table<CodeLogToListDto>? _table;
 
     private IEnumerable<CodeLogToListDto> _items = new List<CodeLogToListDto>();
     private IEnumerable<CodeLogToListDto> _selectedItems = new List<CodeLogToListDto>();

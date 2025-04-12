@@ -19,14 +19,13 @@ public enum CodeLogSortType
 public enum RequestLogSortType
 {
     TraceIdentifier,
-    Body,
     Method,
     Path,
-    RemoteIp
+    RemoteIp,
+    CreatedAt
 }
 
 public enum ResponseLogSortType
 {
-    Body,
     StatusCode
 }

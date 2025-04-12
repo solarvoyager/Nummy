@@ -1,0 +1,32 @@
+﻿@implements IDisposable
+
+<div class="editor-container">
+    <div class="toolbar">
+        <button class="copy-btn @(_isCopied ? "copied" : "")" @onclick="CopyCode">
+            <span class="icon">@(_isCopied ? "✓" : "⎘")</span> @(_isCopied ? "Copied!" : "Copy")
+        </button>
+        <button class="format-json-btn" @onclick="FormatJson">
+            <span class="icon">{ }</span> Format JSON
+        </button>
+        <button class="format-xml-btn" @onclick="FormatXml">
+            <span class="icon">&lt;/&gt;</span> Format XML
+        </button>
+    </div>
+    <div class="code-wrapper">
+        <div class="line-numbers">
+            @foreach (var line in Enumerable.Range(1, LineCount))
+            {
+                @line<br />
+            }
+        </div>
+        <textarea class="code-box"
+                  @bind="Content"
+                  @bind:event="oninput"
+                  spellcheck="false"
+                  placeholder="Paste your JSON or XML here..."></textarea>
+    </div>
+</div>
+
+@code {
+    
+}

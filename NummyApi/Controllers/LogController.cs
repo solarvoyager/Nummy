@@ -55,6 +55,14 @@ public class LogController(
 
         return Ok(response);
     }
+    
+    [HttpGet("get/response")]
+    public async Task<IActionResult> GetResponseLog([FromQuery] Guid httpLogId)
+    {
+        var response = await responseLogService.Get(httpLogId);
+
+        return Ok(response);
+    }
 
     [HttpDelete("delete/code")]
     public async Task<IActionResult> DeleteCodeLogs([FromBody] DeleteCodeLogsDto request)

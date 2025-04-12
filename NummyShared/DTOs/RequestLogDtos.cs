@@ -13,7 +13,8 @@ public record RequestLogToListDto(
     Guid Id,
     Guid HttpLogId,
     string TraceIdentifier,
-    string Body,
+    // moved to response log to list dto
+    //string Body,
     string Method,
     string Path,
     string? RemoteIp,

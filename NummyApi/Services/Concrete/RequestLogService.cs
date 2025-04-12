@@ -19,13 +19,16 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto? dto, Guid? httpLogId)
+    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto, Guid? httpLogId)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
         var query = dataContext.RequestLogs.AsQueryable();
 
-        query = query.Where(l => l.HttpLogId == httpLogId);
+        if (httpLogId.HasValue)
+        {
+            query = query.Where(l => l.HttpLogId == httpLogId);
+        }
         
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(l =>
@@ -43,9 +46,6 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 RequestLogSortType.TraceIdentifier => dto.SortOrder == SortOrder.Descending
                     ? query.OrderByDescending(q => q.TraceIdentifier)
                     : query.OrderBy(q => q.TraceIdentifier),
-                RequestLogSortType.Body => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.Body)
-                    : query.OrderBy(q => q.Body),
                 RequestLogSortType.Method => dto.SortOrder == SortOrder.Descending
                     ? query.OrderByDescending(q => q.Method)
                     : query.OrderBy(q => q.Method),
@@ -55,6 +55,9 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 RequestLogSortType.RemoteIp => dto.SortOrder == SortOrder.Descending
                     ? query.OrderByDescending(q => q.RemoteIp)
                     : query.OrderBy(q => q.RemoteIp),
+                RequestLogSortType.CreatedAt => dto.SortOrder == SortOrder.Descending
+                    ? query.OrderByDescending(q => q.CreatedAt)
+                    : query.OrderBy(q => q.CreatedAt),
                 _ => query
             };
 

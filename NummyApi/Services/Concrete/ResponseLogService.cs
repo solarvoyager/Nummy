@@ -19,13 +19,16 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto? dto, Guid? httpLogId)
+    public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto, Guid? httpLogId)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
         var query = dataContext.ResponseLogs.AsQueryable();
 
-        query = query.Where(l => l.HttpLogId == httpLogId);
+        if (httpLogId.HasValue)
+        {
+            query = query.Where(l => l.HttpLogId == httpLogId);
+        }
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(l =>
@@ -37,9 +40,6 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         if (dto.SortType is not null && dto.SortOrder is not null)
             query = dto.SortType switch
             {
-                ResponseLogSortType.Body => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.Body)
-                    : query.OrderBy(q => q.Body),
                 ResponseLogSortType.StatusCode => dto.SortOrder == SortOrder.Descending
                     ? query.OrderByDescending(q => q.StatusCode)
                     : query.OrderBy(q => q.StatusCode),
@@ -53,6 +53,41 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(await query.ToListAsync());
 
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
+    }
+    
+    public async Task<ResponseLogDto> Get(Guid httpLogId)
+    {
+        var query =
+            from requestLog in dataContext.RequestLogs
+            join responseLog in dataContext.ResponseLogs
+                on requestLog.HttpLogId equals responseLog.HttpLogId into responseGroup
+            from responseLog in responseGroup.DefaultIfEmpty()
+            where requestLog.HttpLogId == httpLogId
+            select new
+            {
+                Id = responseLog != null ? responseLog.Id : Guid.Empty, // or whatever default you want
+                HttpLogId = requestLog.HttpLogId,
+                RequestBody = requestLog.Body,
+                ResponseBody = responseLog != null ? responseLog.Body : null,
+                StatusCode = responseLog != null ? responseLog.StatusCode : 0,
+                CreatedAt = responseLog != null ? responseLog.CreatedAt : DateTimeOffset.Now,
+                Duration = responseLog != null ? responseLog.CreatedAt - requestLog.CreatedAt : TimeSpan.Zero
+            };
+        
+        var data = await query.FirstOrDefaultAsync();
+
+        var mapped = new ResponseLogDto
+        (
+            Id: data!.Id,
+            HttpLogId: data.HttpLogId,
+            RequestBody: data.RequestBody,
+            ResponseBody: data.ResponseBody,
+            StatusCode: data.StatusCode,
+            CreatedAt: data.CreatedAt,
+            Duration: data.Duration
+        );
+            
+        return mapped;
     }
 
     public async Task<bool> Delete(DeleteResponseLogsDto dto)

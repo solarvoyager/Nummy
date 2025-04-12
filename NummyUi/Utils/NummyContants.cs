@@ -9,6 +9,7 @@ public static class NummyContants
     public const string GetCodeLogsUrl = "api/log/get/code";
     public const string GetRequestLogsUrl = "api/log/get/request";
     public const string GetResponseLogsUrl = "api/log/get/response";
+    public const string GetResponseLogUrl = "api/log/get/response";
     public const string DeleteCodeLogsUrl = "api/log/delete/code";
     
     public const string GetTotalCountsUrl = "api/statistical/total";
