@@ -2,7 +2,7 @@
 
 @if (_pendingMigrations.Any() && _migrationResult == null)
 {
-    <Card Size="small" Style="margin-bottom: 12px; background-color: #fff0a8; border-color: #ffe21a" Bordered>
+    <Card Size="small" Style="margin-bottom: 12px;  border-color: #eade08; border-radius: 4px; border-width: 3px" Bordered>
         <TitleTemplate>
             <Icon Type="alert" Theme="outline" /> You have @_pendingMigrations.Count() pending migrations
         </TitleTemplate>
@@ -20,7 +20,7 @@
 {
     @if (_migrationResult.Value)
     {
-        <Card Size="small" Style="margin-bottom: 12px; background-color: #a8ffa9; border-color: #44ff1a" Bordered>
+        <Card Size="small" Style="margin-bottom: 12px; border-color: #38e312; border-radius: 4px; border-width: 3px" Bordered>
             <TitleTemplate>
                 <Icon Type="double-right" Theme="outline" />
                 Migrations completed successfully

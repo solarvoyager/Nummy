@@ -8,8 +8,8 @@ namespace NummyUi.Services;
 public interface ILogService
 {
     Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto);
-    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize);
-    Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize);
+    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto, Guid? httpLogId);
+    Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId);
     
     Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);
 }
@@ -34,27 +34,41 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         return result!;
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto, Guid? httpLogId)
     {
-        var response =
-            await _client.GetFromJsonAsync<PaginatedListDto<RequestLogToListDto>>(NummyContants.GetRequestLogsUrl +
-                $"?pageIndex={pageIndex}&pageSize={pageSize}");
+        var request = new HttpRequestMessage
+        {
+            Content = JsonContent.Create(dto),
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(NummyContants.GetRequestLogsUrl + $"httpLogId={httpLogId}", UriKind.Relative)
+        };
+        
+        var response = await _client.SendAsync(request);
 
-        return response!;
+        var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<RequestLogToListDto>>();
+
+        return result!;
     }
 
-    public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(int pageIndex, int pageSize)
+    public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId)
     {
-        var response =
-            await _client.GetFromJsonAsync<PaginatedListDto<ResponseLogToListDto>>(NummyContants.GetResponseLogsUrl +
-                $"?pageIndex={pageIndex}&pageSize={pageSize}");
+        var request = new HttpRequestMessage
+        {
+            Content = JsonContent.Create(dto),
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(NummyContants.GetResponseLogsUrl + $"httpLogId={httpLogId}", UriKind.Relative)
+        };
+        
+        var response = await _client.SendAsync(request);
 
-        return response!;
+        var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<ResponseLogToListDto>>();
+
+        return result!;
     }
 
     public async Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto)
     {
-        var request = new HttpRequestMessage
+        var request = new HttpRequestMessage 
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Delete,

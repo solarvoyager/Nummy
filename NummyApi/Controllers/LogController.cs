@@ -41,7 +41,7 @@ public class LogController(
     }
 
     [HttpPost("get/request")]
-    public async Task<IActionResult> GetRequestLogs([FromBody] GetRequestLogsDto request, [FromQuery] string? httpLogId)
+    public async Task<IActionResult> GetRequestLogs([FromBody] GetRequestLogsDto request, [FromQuery] Guid? httpLogId)
     {
         var response = await requestLogService.Get(request, httpLogId);
 
@@ -49,7 +49,7 @@ public class LogController(
     }
 
     [HttpPost("get/response")]
-    public async Task<IActionResult> GetResponseLogs([FromBody] GetResponseLogsDto request, [FromQuery] string? httpLogId)
+    public async Task<IActionResult> GetResponseLogs([FromBody] GetResponseLogsDto request, [FromQuery] Guid? httpLogId)
     {
         var response = await responseLogService.Get(request, httpLogId);
 

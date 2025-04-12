@@ -9,17 +9,14 @@ else
     <div class="rgb-border-card">
         <Card Size="CardSize.Small" BodyStyle="padding: 18px; padding-left: 24px">
             <TitleTemplate>
-                <div style="margin: 0; display: flex; align-items: center; gap: 8px">
-                    <Icon Height="1.5em" Width="1.5em" Type="@IconType.Outline.Api"/>
-                    <Title Level="4">Click to copy Nummy DSN</Title>
-                </div>
+                <Icon Type="@IconType.Outline.Api"/>
+                Click to copy Nummy DSN
             </TitleTemplate>
             <Body>
             <Paragraph Style="margin: 0; font-size: 15px" Copyable>@dsn?.Url</Paragraph>
             </Body>
         </Card>
     </div>
-    
 }
 
 
@@ -41,28 +38,24 @@ else
         bottom: -2px;
         z-index: -1;
         background: linear-gradient(90deg,
-        #ff0000, /* Red */
-        #ff3d00, #ff6a00, #ff8f00, /* Orange progression */
-        #ffb300, #ffd000, #ffe600, /* Yellow progression */
-        #f2ff00, #c8ff00, #9dff00, /* Green progression */
-        #6eff00, #3fff00, #0fff00,
+        #ff0000, /* Red */ #ff3d00, #ff6a00, #ff8f00, /* Orange progression */ #ffb300, #ffd000, #ffe600, /* Yellow progression */ #f2ff00, #c8ff00, #9dff00, /* Green progression */ #6eff00, #3fff00, #0fff00,
         #00ff2a, #00ff55, #00ff80,
-        #00ffaa, #00ffd5, /* Cyan progression */
-        #00f2ff, #00d5ff, #00b8ff,
-        #0091ff, #006aff, #0040ff, /* Blue progression */
-        #0008ff, #3d00ff, #6200ff,
-        #8800ff, #ad00ff, #d100ff, /* Purple progression */
-        #f500ff, #ff00e6, #ff00c8,
-        #ff00a8, #ff0080, #ff0055, /* Pink/Red progression */
-        #ff0020, #ff0000 /* Back to Red */);
+        #00ffaa, #00ffd5, /* Cyan progression */ #00f2ff, #00d5ff, #00b8ff,
+        #0091ff, #006aff, #0040ff, /* Blue progression */ #0008ff, #3d00ff, #6200ff,
+        #8800ff, #ad00ff, #d100ff, /* Purple progression */ #f500ff, #ff00e6, #ff00c8,
+        #ff00a8, #ff0080, #ff0055, /* Pink/Red progression */ #ff0020, #ff0000 /* Back to Red */);
         background-size: 400% 400%;
         animation: rgbBorder 35s linear infinite;
         border-radius: 4px; /* Card radius + border thickness */
     }
 
     @@keyframes rgbBorder {
-        0% { background-position: 0% 400%; }
-        100% { background-position: -400% 400%; }
+        0% {
+            background-position: 0% 400%;
+        }
+        100% {
+            background-position: -400% 400%;
+        }
     }
 
     @*For diagonal sliding:

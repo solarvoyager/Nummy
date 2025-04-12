@@ -14,8 +14,22 @@ public class StatisticalService(IHttpClientFactory clientFactory) : IStatistical
 
     public async Task<TotalCountsResponseDto> GetTotalCounts()
     {
-        var response = await _client.GetFromJsonAsync<TotalCountsResponseDto>(NummyContants.GetTotalCountsUrl);
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(NummyContants.GetTotalCountsUrl, UriKind.Relative)
+        };
 
-        return response!;
+        var response = await _client.SendAsync(request);
+
+        // TODO: Check if the response is successful
+        if (!response.IsSuccessStatusCode)
+        {
+            return new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0);
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<TotalCountsResponseDto>();
+
+        return result!;
     }
 }
