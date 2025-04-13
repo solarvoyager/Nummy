@@ -68,53 +68,72 @@
 <Modal @bind-Visible="_responseModalVisible"
        Title="HTTP Request & Response Details"
        OnOk="CloseResponseModal"
-       OnCancel="CloseResponseModal">
+       OnCancel="CloseResponseModal"
+       Maximizable="@true"
+       Centered="@true"
+       DefaultMaximized="@true">
     @if (_responseLog != null)
     {
-        <div>
-            <Space Align="start">
-                <SpaceItem>
-                    <strong>Request:</strong>
-                </SpaceItem>
-                <SpaceItem>
-                    @*<TextArea @bind-Value="@_requestBody" Rows="4"></TextArea>*@
-                    <SimpleCodeEditor Content="@_requestBody" />
-                </SpaceItem>
-            </Space>
-            <br/>
-            <Space Align="center">
-                <SpaceItem>
-                    <strong>Duration:</strong>
-                </SpaceItem>
-                <SpaceItem>
-                    @($"{(_responseLog.Duration.Minutes > 0 ? $"{_responseLog.Duration.Minutes} minutes " : string.Empty )}" +
-                      $"{(_responseLog.Duration.Seconds > 0 ? $" {_responseLog.Duration.Seconds} seconds " : string.Empty)}" +
-                      $"{(_responseLog.Duration.Milliseconds > 0 ? $" {_responseLog.Duration.Milliseconds} milliseconds " : string.Empty)}" +
-                      $"({_responseLog.Duration.TotalMilliseconds} ms)")
-                </SpaceItem>
-            </Space>
-            <br/>
-            <Space Align="center">
-                <SpaceItem>
-                    <strong>Status Code:</strong>
-                </SpaceItem>
-                <SpaceItem>
-                    <Tag Color="@(GetTagColor(_responseLog.StatusCode))">
-                        @_responseLog.StatusCode - @GetStatusMessage(_responseLog.StatusCode)
-                    </Tag>
-                </SpaceItem>
-            </Space>
-            <br/>
-            <Space Align="start">
-                <SpaceItem>
-                    <strong>Response:</strong>
-                </SpaceItem>
-                <SpaceItem>
-                    @*<TextArea @bind-Value="@_responseBody" Rows="4"></TextArea>*@
+        <AntDesign.Row Gutter="24">
+            <AntDesign.Col Span="12">
+                <AntDesign.Card BodyStyle="margin: 16px 24px; padding: 0px;">
+                    <TitleTemplate>
+                        <Icon Type="@IconType.Outline.Key"/>
+                        Details
+                    </TitleTemplate>
+                    <Body>
+                    <AntDesign.Space Direction="DirectionVHType.Vertical">
+                        <AntDesign.SpaceItem>
+                            <strong>HTTP LogId:</strong>
+                            @(_responseLog.HttpLogId)
+                        </AntDesign.SpaceItem>
+                        <AntDesign.SpaceItem>
+                            <strong>HTTP TraceId:</strong>
+                            (_responseLog.TraceIdentifier)
+                        </AntDesign.SpaceItem>
+                    </AntDesign.Space>
+                    </Body>
+                </AntDesign.Card>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <AntDesign.Card BodyStyle="margin: 16px 24px;  padding: 0px;">
+                    <TitleTemplate>
+                        <Icon Type="@IconType.Outline.Swap"/>
+                        Response Details
+                    </TitleTemplate>
+                    <Body>
+                    <AntDesign.Space Direction="DirectionVHType.Vertical">
+                        <AntDesign.SpaceItem>
+                            <strong>Duration:</strong>
+                            @($"{(_responseLog.Duration.Minutes > 0 ? $"{_responseLog.Duration.Minutes} minutes " : string.Empty)}" +
+                                  $"{(_responseLog.Duration.Seconds > 0 ? $" {_responseLog.Duration.Seconds} seconds " : string.Empty)}" +
+                                  $"{(_responseLog.Duration.Milliseconds > 0 ? $" {_responseLog.Duration.Milliseconds} milliseconds " : string.Empty)}" +
+                                  $"({_responseLog.Duration.TotalMilliseconds} ms)")
+                        </AntDesign.SpaceItem>
+                        <AntDesign.SpaceItem>
+                            <strong>Status Code:</strong>
+                            <AntDesign.Tag Color="@(GetTagColor(_responseLog.StatusCode))">
+                                @_responseLog.StatusCode - @GetStatusMessage(_responseLog.StatusCode)
+                            </AntDesign.Tag>
+                        </AntDesign.SpaceItem>
+                    </AntDesign.Space>
+                    </Body>
+                </AntDesign.Card>
+            </AntDesign.Col>
+        </AntDesign.Row>
+        <br/>
+        <AntDesign.Row Gutter="16">
+            <AntDesign.Col Span="12">
+                <AntDesign.Card Title="Request Body" BodyStyle="margin: 0; padding: 8px;">
+                    <SimpleCodeEditor Content="@_requestBody"/>
+                </AntDesign.Card>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <AntDesign.Card Title="Response Body" BodyStyle="margin: 0; padding: 8px;">
                     <SimpleCodeEditor Content="@_responseBody" />
-                </SpaceItem>
-            </Space>
-        </div>
+                </AntDesign.Card>
+            </AntDesign.Col>
+        </AntDesign.Row>
     }
 </Modal>
 
@@ -318,13 +337,3 @@
         };
     }
 }
-
-<style>
-    .code-editor {
-        font-family: Consolas, Monaco, 'Courier New', monospace;
-        background-color: #f4f4f4;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        padding: 10px;
-    }
-</style>
