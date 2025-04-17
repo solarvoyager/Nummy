@@ -70,16 +70,16 @@
                 OnPageIndexChange="@OnPageIndexChanged">
                 <ColumnDefinitions>
                     <Selection Key="@(context.Id.ToString())"/>
-                    <PropertyColumn Property="c => c.Id" Hidden/>
-                    <PropertyColumn Property="c => c.TraceIdentifier"/>
-                    <PropertyColumn Property="c => c.LogLevel">
+                    <PropertyColumn Property="@(c => c.Id)" Hidden/>
+                    <PropertyColumn Property="@(c => c.TraceIdentifier)"/>
+                    <PropertyColumn Property="@(c => c.LogLevel)">
                         <Tag Class="log-level" Color="@(context.LogLevel switch { CodeLogLevel.Fatal => PresetColor.Magenta.ToString(), CodeLogLevel.Error => PresetColor.Volcano.ToString(), CodeLogLevel.Warning => PresetColor.Gold.ToString(), CodeLogLevel.Debug => PresetColor.Blue.ToString(), CodeLogLevel.Trace => PresetColor.Cyan.ToString(), CodeLogLevel.Info => PresetColor.Green.ToString(), _ => "default" })">@context.LogLevel</Tag>
                     </PropertyColumn>
-                    <PropertyColumn Property="c => c.Title"/>
-                    <PropertyColumn Property="c => c.ExceptionType"/>
-                    <PropertyColumn Property="c => c.CreatedAt" Format="yyyy-MM-dd HH:mm:ss"/>
+                    <PropertyColumn Property="@(c => c.Title)"/>
+                    <PropertyColumn Property="@(c => c.ExceptionType)"/>
+                    <PropertyColumn Property="@(c => c.CreatedAt)" Format="yyyy-MM-dd HH:mm:ss"/>
                     <ActionColumn>
-                        <Button Type="@ButtonType.Link" OnClick="() => ShowViewModal(context.Id)">
+                        <Button Type="@ButtonType.Link" OnClick="@(() => ShowViewModal(context.Id))">
                             Details
                         </Button>
                     </ActionColumn>

@@ -23,20 +23,25 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
-        var query = dataContext.RequestLogs.AsQueryable();
+        var query = dataContext.RequestLogs
+            .Join(
+                dataContext.ResponseLogs,
+                request => request.HttpLogId,
+                response => response.HttpLogId,
+                (request, response) => new { Request = request, Response = response }
+            );
 
         if (httpLogId.HasValue)
         {
-            query = query.Where(l => l.HttpLogId == httpLogId);
+            query = query.Where(x => x.Request.HttpLogId == httpLogId);
         }
-        
+
         if (!string.IsNullOrWhiteSpace(dto.Query))
-            query = query.Where(l =>
-                EF.Functions.Like(l.TraceIdentifier.ToLower(), $"%{dto.Query.ToLower()}%") ||
-                EF.Functions.Like(l.Body.ToLower(), $"%{dto.Query.ToLower()}%") ||
-                EF.Functions.Like(l.Method.ToLower(), $"%{dto.Query.ToLower()}%") ||
-                EF.Functions.Like(l.Path.ToLower(), $"%{dto.Query.ToLower()}%") ||
-                EF.Functions.Like(l.RemoteIp!.ToLower(), $"%{dto.Query.ToLower()}%"));
+            query = query.Where(x =>
+                EF.Functions.Like(x.Request.TraceIdentifier.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(x.Request.Method.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(x.Request.Path.ToLower(), $"%{dto.Query.ToLower()}%") ||
+                EF.Functions.Like(x.Request.RemoteIp!.ToLower(), $"%{dto.Query.ToLower()}"));
 
         var totalCount = await query.CountAsync();
 
@@ -44,30 +49,39 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
             query = dto.SortType switch
             {
                 RequestLogSortType.TraceIdentifier => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.TraceIdentifier)
-                    : query.OrderBy(q => q.TraceIdentifier),
+                    ? query.OrderByDescending(q => q.Request.TraceIdentifier)
+                    : query.OrderBy(q => q.Request.TraceIdentifier),
                 RequestLogSortType.Method => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.Method)
-                    : query.OrderBy(q => q.Method),
+                    ? query.OrderByDescending(q => q.Request.Method)
+                    : query.OrderBy(q => q.Request.Method),
                 RequestLogSortType.Path => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.Path)
-                    : query.OrderBy(q => q.Path),
+                    ? query.OrderByDescending(q => q.Request.Path)
+                    : query.OrderBy(q => q.Request.Path),
                 RequestLogSortType.RemoteIp => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.RemoteIp)
-                    : query.OrderBy(q => q.RemoteIp),
+                    ? query.OrderByDescending(q => q.Request.RemoteIp)
+                    : query.OrderBy(q => q.Request.RemoteIp),
                 RequestLogSortType.CreatedAt => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.CreatedAt)
-                    : query.OrderBy(q => q.CreatedAt),
+                    ? query.OrderByDescending(q => q.Request.CreatedAt)
+                    : query.OrderBy(q => q.Request.CreatedAt),
                 _ => query
             };
 
-        query = query
+        var result = await query
             .Skip(skip)
-            .Take(dto.PageSize);
+            .Take(dto.PageSize)
+            .Select(x => new RequestLogToListDto(
+                x.Request.Id,
+                x.Request.HttpLogId,
+                x.Request.TraceIdentifier,
+                x.Response.StatusCode,
+                x.Request.Method,
+                x.Request.Path,
+                x.Request.RemoteIp,
+                x.Request.CreatedAt
+            ))
+            .ToListAsync();
 
-        var mapped = mapper.Map<IEnumerable<RequestLogToListDto>>(await query.ToListAsync());
-
-        return new PaginatedListDto<RequestLogToListDto>(totalCount, mapped);
+        return new PaginatedListDto<RequestLogToListDto>(totalCount, result);
     }
 
     public async Task<bool> Delete(DeleteRequestLogsDto dto)

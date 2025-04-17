@@ -9,7 +9,6 @@ public interface ILogService
 {
     Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto);
     Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto, Guid? httpLogId);
-    //Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId);
     Task<ResponseLogDto> GetResponseLog(Guid httpLogId);
     
     Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);

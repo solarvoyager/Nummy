@@ -43,7 +43,7 @@
         </Col>
     </Row>
     <Table TItem="RequestLogToListDto"
-           @ref="_table"
+           @ref="@_table"
            RowKey="@(x => x.Id.ToString())"
            DataSource="@_requestLogs"
            Total="@_totalCount"
@@ -51,12 +51,16 @@
            PageIndex="@_pageIndex"
            OnChange="async (e) => await OnTableChange(e)">
         <PropertyColumn Property="@(x => x.Id)" Hidden/>
-        <PropertyColumn Property="@(x => x.HttpLogId)" Sortable/>
         <PropertyColumn Property="@(x => x.TraceIdentifier)" Sortable/>
+        <PropertyColumn Property="@(x => x.ResponseStatusCode)" Sortable>
+            <Template>
+                <StatusCodeTag StatusCode="@context.ResponseStatusCode" />
+            </Template>
+        </PropertyColumn>
         <PropertyColumn Property="@(x => x.Method)" Sortable/>
         <PropertyColumn Property="@(x => x.Path)" Sortable/>
         <PropertyColumn Property="@(x => x.RemoteIp)" Sortable/>
-        <PropertyColumn Property="@(x => x.CreatedAt)" Sortable/>
+        <PropertyColumn Property="@(x => x.CreatedAt)" Format="yyyy-MM-dd HH:mm:ss" Sortable/>
         <ActionColumn Title="Action">
             <Button Type="@ButtonType.Link" OnClick="@(async () => await ShowResponse(context))">
                 Show Details
@@ -112,9 +116,7 @@
                         </AntDesign.SpaceItem>
                         <AntDesign.SpaceItem>
                             <strong>Status Code:</strong>
-                            <AntDesign.Tag Color="@(GetTagColor(_responseLog.StatusCode))">
-                                @_responseLog.StatusCode - @GetStatusMessage(_responseLog.StatusCode)
-                            </AntDesign.Tag>
+                            <StatusCodeTag StatusCode="@_responseLog.StatusCode"></StatusCodeTag>
                         </AntDesign.SpaceItem>
                     </AntDesign.Space>
                     </Body>
@@ -136,204 +138,3 @@
         </AntDesign.Row>
     }
 </Modal>
-
-@code {
-    private Table<RequestLogToListDto>? _table;
-    private IEnumerable<RequestLogToListDto> _requestLogs = new List<RequestLogToListDto>();
-    private int _totalCount;
-    private int _pageSize = 10;
-    private int _pageIndex = 1;
-
-    private bool _responseModalVisible;
-    private ResponseLogDto? _responseLog;
-    private string _requestBody = string.Empty;
-    private string _responseBody = string.Empty;
-
-    private string _searchQuery = string.Empty;
-    private RequestLogSortType? _sortType;
-    private SortOrder? _sortOrder;
-
-    private TotalCountsResponseDto _totalCounts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadData();
-        await LoadStatistics();
-    }
-
-    private async Task LoadData()
-    {
-        try
-        {
-            var dto = new GetRequestLogsDto
-            (
-                PageSize: _pageSize,
-                PageIndex: _pageIndex,
-                Query: _searchQuery,
-                SortType: _sortType,
-                SortOrder: _sortOrder
-            );
-
-            var result = await LogService.GetRequestLogs(dto, null);
-            _requestLogs = result.Datas;
-            _totalCount = result.TotalCount;
-        }
-        catch (Exception ex)
-        {
-            await MessageService.Error("Failed to load request logs");
-        }
-    }
-
-    private async Task LoadStatistics()
-    {
-        try
-        {
-            _totalCounts = await StatisticalService.GetTotalCounts();
-        }
-        catch (Exception ex)
-        {
-            await MessageService.Error("Failed to load statistics");
-        }
-    }
-
-    private async Task OnTableChange(QueryModel<RequestLogToListDto> queryModel)
-    {
-        _pageSize = queryModel.PageSize;
-        _pageIndex = queryModel.PageIndex;
-
-        if (queryModel.SortModel != null && queryModel.SortModel.Count > 0)
-        {
-            var sort = queryModel.SortModel.First();
-            _sortType = sort.FieldName switch
-            {
-                nameof(RequestLogToListDto.TraceIdentifier) => RequestLogSortType.TraceIdentifier,
-                nameof(RequestLogToListDto.Method) => RequestLogSortType.Method,
-                nameof(RequestLogToListDto.Path) => RequestLogSortType.Path,
-                nameof(RequestLogToListDto.RemoteIp) => RequestLogSortType.RemoteIp,
-                nameof(RequestLogToListDto.CreatedAt) => RequestLogSortType.CreatedAt,
-                _ => null
-            };
-            _sortOrder = sort.Sort == SortOrder.Ascending.ToString()
-                ? SortOrder.Ascending
-                : SortOrder.Descending;
-        }
-        else
-        {
-            _sortType = null;
-            _sortOrder = null;
-        }
-
-        await LoadData();
-    }
-
-    private async Task OnSearch(ChangeEventArgs e)
-    {
-        _searchQuery = e.Value?.ToString() ?? string.Empty;
-        _pageIndex = 1;
-        await LoadData();
-    }
-
-    private async Task ShowResponse(RequestLogToListDto request)
-    {
-        try
-        {
-            _responseLog = await LogService.GetResponseLog(request.HttpLogId);
-            _requestBody = _responseLog.RequestBody;
-            _responseBody = _responseLog.ResponseBody;
-            
-            _responseModalVisible = true;
-        }
-        catch (Exception ex)
-        {
-            await MessageService.Error("Failed to load response");
-        }
-    }
-
-    private void CloseResponseModal()
-    {
-        _responseModalVisible = false;
-        _responseLog = null;
-    }
-
-    private string GetTagColor(int statusCode)
-    {
-        return statusCode switch
-        {
-            >= 200 and < 300 => "green", // Success
-            >= 300 and < 400 => "cyan", // Redirection
-            >= 400 and < 500 => "orange", // Client Error
-            >= 500 => "red", // Server Error
-            _ => "blue" // Default
-        };
-    }
-
-    private string GetStatusMessage(int statusCode)
-    {
-        return statusCode switch
-        {
-            100 => "Continue",
-            101 => "Switching Protocols",
-            102 => "Processing",
-            103 => "Early Hints",
-            200 => "OK",
-            201 => "Created",
-            202 => "Accepted",
-            203 => "Non-Authoritative Information",
-            204 => "No Content",
-            205 => "Reset Content",
-            206 => "Partial Content",
-            207 => "Multi-Status",
-            208 => "Already Reported",
-            226 => "IM Used",
-            300 => "Multiple Choices",
-            301 => "Moved Permanently",
-            302 => "Found",
-            303 => "See Other",
-            304 => "Not Modified",
-            305 => "Use Proxy",
-            307 => "Temporary Redirect",
-            308 => "Permanent Redirect",
-            400 => "Bad Request",
-            401 => "Unauthorized",
-            402 => "Payment Required",
-            403 => "Forbidden",
-            404 => "Not Found",
-            405 => "Method Not Allowed",
-            406 => "Not Acceptable",
-            407 => "Proxy Authentication Required",
-            408 => "Request Timeout",
-            409 => "Conflict",
-            410 => "Gone",
-            411 => "Length Required",
-            412 => "Precondition Failed",
-            413 => "Payload Too Large",
-            414 => "URI Too Long",
-            415 => "Unsupported Media Type",
-            416 => "Range Not Satisfiable",
-            417 => "Expectation Failed",
-            418 => "I'm a Teapot",
-            421 => "Misdirected Request",
-            422 => "Unprocessable Entity",
-            423 => "Locked",
-            424 => "Failed Dependency",
-            425 => "Too Early",
-            426 => "Upgrade Required",
-            428 => "Precondition Required",
-            429 => "Too Many Requests",
-            431 => "Request Header Fields Too Large",
-            451 => "Unavailable For Legal Reasons",
-            500 => "Internal Server Error",
-            501 => "Not Implemented",
-            502 => "Bad Gateway",
-            503 => "Service Unavailable",
-            504 => "Gateway Timeout",
-            505 => "HTTP Version Not Supported",
-            506 => "Variant Also Negotiates",
-            507 => "Insufficient Storage",
-            508 => "Loop Detected",
-            510 => "Not Extended",
-            511 => "Network Authentication Required",
-            _ => "Unknown Status"
-        };
-    }
-}

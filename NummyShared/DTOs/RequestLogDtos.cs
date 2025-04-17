@@ -15,6 +15,7 @@ public record RequestLogToListDto(
     string TraceIdentifier,
     // moved to response log to list dto
     //string Body,
+    int ResponseStatusCode,
     string Method,
     string Path,
     string? RemoteIp,
