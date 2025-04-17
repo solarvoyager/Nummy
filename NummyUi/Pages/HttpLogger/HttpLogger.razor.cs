@@ -3,6 +3,7 @@ using AntDesign.TableModels;
 using Microsoft.AspNetCore.Components;
 using NummyShared.Dtos;
 using NummyShared.Dtos.Domain;
+using NummyShared.Dtos.Enums;
 
 namespace NummyUi.Pages.HttpLogger;
 
@@ -18,6 +19,7 @@ public partial class HttpLogger : ComponentBase
     private ResponseLogDto? _responseLog;
     private string _requestBody = string.Empty;
     private string _responseBody = string.Empty;
+    private IEnumerable<CodeLogToListDto> _codeLogs = [];
 
     private string _searchQuery = string.Empty;
     private RequestLogSortType? _sortType;
@@ -110,7 +112,19 @@ public partial class HttpLogger : ComponentBase
             _responseLog = await LogService.GetResponseLog(request.HttpLogId);
             _requestBody = _responseLog.RequestBody;
             _responseBody = _responseLog.ResponseBody;
-            
+
+            // Fetch code logs for this request
+            var codeLogsDto = new GetCodeLogsDto(
+                PageSize: 100,
+                PageIndex: 1,
+                Query: request.TraceIdentifier,
+                SortType: null,
+                SortOrder: SortOrder.Ascending,
+                Levels: Enum.GetValues<CodeLogLevel>().ToArray()
+            );
+            var codeLogsResult = await LogService.GetCodeLogs(codeLogsDto);
+            _codeLogs = codeLogsResult.Datas;
+
             _responseModalVisible = true;
         }
         catch (System.Exception ex)

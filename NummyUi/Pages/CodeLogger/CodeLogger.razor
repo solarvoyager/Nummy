@@ -3,6 +3,7 @@
 @using NummyShared.Dtos.Domain
 @using NummyShared.Dtos.Enums
 @using NummyUi.Utils
+@using NummyUi.Components
 
 <div>
     <PageContainer Title="Code Logs">
@@ -73,7 +74,7 @@
                     <PropertyColumn Property="@(c => c.Id)" Hidden/>
                     <PropertyColumn Property="@(c => c.TraceIdentifier)"/>
                     <PropertyColumn Property="@(c => c.LogLevel)">
-                        <Tag Class="log-level" Color="@(context.LogLevel switch { CodeLogLevel.Fatal => PresetColor.Magenta.ToString(), CodeLogLevel.Error => PresetColor.Volcano.ToString(), CodeLogLevel.Warning => PresetColor.Gold.ToString(), CodeLogLevel.Debug => PresetColor.Blue.ToString(), CodeLogLevel.Trace => PresetColor.Cyan.ToString(), CodeLogLevel.Info => PresetColor.Green.ToString(), _ => "default" })">@context.LogLevel</Tag>
+                        <LogLevelTag LogLevel="@context.LogLevel"></LogLevelTag>
                     </PropertyColumn>
                     <PropertyColumn Property="@(c => c.Title)"/>
                     <PropertyColumn Property="@(c => c.ExceptionType)"/>
