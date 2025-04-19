@@ -7,6 +7,6 @@ namespace NummyApi.Services.Abstract;
 public interface IRequestLogService
 {
     Task Add(RequestLogToAddDto dto);
-    Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto, Guid? httpLogId);
+    Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto);
     Task<bool> Delete(DeleteRequestLogsDto dto);
 }

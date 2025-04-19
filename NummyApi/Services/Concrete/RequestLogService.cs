@@ -19,7 +19,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto, Guid? httpLogId)
+    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
@@ -30,11 +30,6 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 response => response.HttpLogId,
                 (request, response) => new { Request = request, Response = response }
             );
-
-        if (httpLogId.HasValue)
-        {
-            query = query.Where(x => x.Request.HttpLogId == httpLogId);
-        }
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(x =>

@@ -8,9 +8,9 @@ namespace NummyUi.Services;
 public interface ILogService
 {
     Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto);
-    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto, Guid? httpLogId);
+    Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier);
+    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto);
     Task<ResponseLogDto> GetResponseLog(Guid httpLogId);
-    
     Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);
 }
 
@@ -26,7 +26,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
             Method = HttpMethod.Post,
             RequestUri = new Uri(NummyContants.GetCodeLogsUrl, UriKind.Relative)
         };
-        
+
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
@@ -34,26 +34,41 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 
         return result!;
     }
+    
+    public async Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(NummyContants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}", UriKind.Relative)
+        };
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto, Guid? httpLogId)
+        var response = await _client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<CodeLogToListDto>>();
+
+        return result!;
+    }
+
+    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto)
     {
         var request = new HttpRequestMessage
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Post,
-            
-            RequestUri = new Uri(NummyContants.GetRequestLogsUrl + $"?httpLogId={httpLogId}", UriKind.Relative)
+            RequestUri = new Uri(NummyContants.GetRequestLogsUrl, UriKind.Relative)
         };
-        
+
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
-        
+
         var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<RequestLogToListDto>>();
 
         return result!;
     }
 
-    public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId)
+    /*public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId)
     {
         var request = new HttpRequestMessage
         {
@@ -61,23 +76,23 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
             Method = HttpMethod.Post,
             RequestUri = new Uri(NummyContants.GetResponseLogUrl + $"?httpLogId={httpLogId}", UriKind.Relative)
         };
-        
+
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<ResponseLogToListDto>>();
 
         return result!;
-    }
+    }*/
 
     public async Task<ResponseLogDto> GetResponseLog(Guid httpLogId)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyContants.GetResponseLogsUrl + $"?httpLogId={httpLogId}", UriKind.Relative)
+            RequestUri = new Uri(NummyContants.GetResponseLogsUrl + $"/{httpLogId}", UriKind.Relative)
         };
-        
+
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
@@ -88,15 +103,15 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 
     public async Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto)
     {
-        var request = new HttpRequestMessage 
+        var request = new HttpRequestMessage
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Delete,
             RequestUri = new Uri(NummyContants.DeleteCodeLogsUrl, UriKind.Relative)
         };
-        
+
         var response = await _client.SendAsync(request);
-        
+
         return response.IsSuccessStatusCode;
     }
 }

@@ -19,7 +19,7 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto, Guid? httpLogId)
+    /*public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto, Guid? httpLogId)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
@@ -53,7 +53,7 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(await query.ToListAsync());
 
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
-    }
+    }*/
     
     public async Task<ResponseLogDto> Get(Guid httpLogId)
     {

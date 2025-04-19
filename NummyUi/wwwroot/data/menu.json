@@ -7,14 +7,26 @@
   },
   {
     "path": "/http",
-    "name": "Http Logger",
-    "key": "http.logger",
+    "name": "Http Logs",
+    "key": "http",
     "icon": "swap"
   },
   {
     "path": "/code",
-    "name": "Code Logger",
-    "key": "code.logger",
+    "name": "Code Logs",
+    "key": "code",
     "icon": "node-index"
+  },
+  {
+    "path": "/application",
+    "name": "Applications (in dev)",
+    "key": "application",
+    "icon": "appstore"
+  },
+  {
+    "path": "/team",
+    "name": "Teams (in dev)",
+    "key": "team",
+    "icon": "team"
   }
 ]

@@ -46,7 +46,7 @@ public partial class HttpLogger : ComponentBase
                 SortOrder: _sortOrder
             );
 
-            var result = await LogService.GetRequestLogs(dto, null);
+            var result = await LogService.GetRequestLogs(dto);
             _requestLogs = result.Datas;
             _totalCount = result.TotalCount;
         }
@@ -98,9 +98,9 @@ public partial class HttpLogger : ComponentBase
         await LoadData();
     }
 
-    private async Task OnSearch(ChangeEventArgs e)
+    private async Task OnSearch(string query)
     {
-        _searchQuery = e.Value?.ToString() ?? string.Empty;
+        _searchQuery = string.IsNullOrWhiteSpace(query) ? string.Empty : query;
         _pageIndex = 1;
         await LoadData();
     }
@@ -113,17 +113,8 @@ public partial class HttpLogger : ComponentBase
             _requestBody = _responseLog.RequestBody;
             _responseBody = _responseLog.ResponseBody;
 
-            // Fetch code logs for this request
-            var codeLogsDto = new GetCodeLogsDto(
-                PageSize: 100,
-                PageIndex: 1,
-                Query: request.TraceIdentifier,
-                SortType: null,
-                SortOrder: SortOrder.Ascending,
-                Levels: Enum.GetValues<CodeLogLevel>().ToArray()
-            );
-            var codeLogsResult = await LogService.GetCodeLogs(codeLogsDto);
-            _codeLogs = codeLogsResult.Datas;
+            // Fetch code logs for this request using the new endpoint
+            _codeLogs = await LogService.GetCodeLogs(request.TraceIdentifier);
 
             _responseModalVisible = true;
         }

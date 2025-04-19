@@ -70,8 +70,25 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
 
     public async Task<bool> Delete(DeleteCodeLogsDto dto)
     {
-        await dataContext.CodeLogs.Where(l => dto.Ids.Contains(l.Id)).ExecuteDeleteAsync();
+        var logs = await dataContext.CodeLogs
+            .Where(x => dto.Ids.Contains(x.Id))
+            .ToListAsync();
+
+        dataContext.CodeLogs.RemoveRange(logs);
+        await dataContext.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task<IEnumerable<CodeLogToListDto>> Get(string traceIdentifier)
+    {
+        var logs = await dataContext.CodeLogs
+            .Where(x => x.TraceIdentifier == traceIdentifier)
+            .OrderBy(x => x.CreatedAt)
+            .ToListAsync();
+
+        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(logs);
+
+        return mapper.Map<IEnumerable<CodeLogToListDto>>(mapped);
     }
 }

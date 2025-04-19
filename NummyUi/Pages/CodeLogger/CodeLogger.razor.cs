@@ -59,10 +59,9 @@ public partial class CodeLogger
 
     private async Task OnSearch()
     {
-        if (!string.IsNullOrWhiteSpace(_query))
-        {
-            await LoadDataAsync();
-        }
+        if (string.IsNullOrWhiteSpace(_query)) _query = string.Empty;
+
+        await LoadDataAsync();
     }
 
     private async Task OnSortOrderChanged(SortOrder sortOrder)
@@ -147,7 +146,7 @@ public partial class CodeLogger
                 CodeLogLevel.Fatal => "#fff0f6",
                 _ => null
             };
-            
+
             var typeBorderColor = currentItem.LogLevel switch
             {
                 CodeLogLevel.Trace => "#1e9c9d",

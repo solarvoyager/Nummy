@@ -8,7 +8,7 @@
 @inject IStatisticalService StatisticalService
 @inject MessageService MessageService
 
-<PageHeader Title="HTTP Logs"/>
+<PageHeader Style="margin-bottom: 16px" Title="HTTP Logs" Subtitle="View and manage http logs."/>
 
 @*<Row Gutter="16">
     <Col Span="6">
@@ -34,14 +34,12 @@
 </Row>*@
 
 
-<Card Style="margin-top: 16px">
+<Card>
     <Row Style="margin-bottom: 16px">
-        <Col Span="8">
-        <Input @bind-Value="_searchQuery"
-               Placeholder="Search logs..."
-               OnInput="@(async (e) => await OnSearch(e))"
-               AllowClear/>
-        </Col>
+        <Search Placeholder="Search logs..."
+                EnterButton="true"
+                OnSearch="@(async (e) => await OnSearch(e))"
+                AllowClear/> @*ClassicSearchIcon*@
     </Row>
     <Table TItem="RequestLogToListDto"
            @ref="@_table"
@@ -55,7 +53,7 @@
         <PropertyColumn Property="@(x => x.TraceIdentifier)" Sortable/>
         <PropertyColumn Property="@(x => x.ResponseStatusCode)" Sortable>
             <Template>
-                <StatusCodeTag StatusCode="@context.ResponseStatusCode" />
+                <StatusCodeTag StatusCode="@context.ResponseStatusCode"/>
             </Template>
         </PropertyColumn>
         <PropertyColumn Property="@(x => x.Method)" Sortable/>
@@ -111,9 +109,9 @@
                         <AntDesign.SpaceItem>
                             <strong>Duration:</strong>
                             @($"{(_responseLog.Duration.Minutes > 0 ? $"{_responseLog.Duration.Minutes} minutes " : string.Empty)}" +
-                                  $"{(_responseLog.Duration.Seconds > 0 ? $" {_responseLog.Duration.Seconds} seconds " : string.Empty)}" +
-                                  $"{(_responseLog.Duration.Milliseconds > 0 ? $" {_responseLog.Duration.Milliseconds} milliseconds " : string.Empty)}" +
-                                  $"({_responseLog.Duration.TotalMilliseconds} ms)")
+                            $"{(_responseLog.Duration.Seconds > 0 ? $" {_responseLog.Duration.Seconds} seconds " : string.Empty)}" +
+                            $"{(_responseLog.Duration.Milliseconds > 0 ? $" {_responseLog.Duration.Milliseconds} milliseconds " : string.Empty)}" +
+                            $"({_responseLog.Duration.TotalMilliseconds} ms)")
                         </AntDesign.SpaceItem>
                         <AntDesign.SpaceItem>
                             <strong>Status Code:</strong>
@@ -133,14 +131,15 @@
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <AntDesign.Card Title="Response Body" BodyStyle="margin: 0; padding: 8px;">
-                    <SimpleCodeEditor Content="@_responseBody" />
+                    <SimpleCodeEditor Content="@_responseBody"/>
                 </AntDesign.Card>
             </AntDesign.Col>
         </AntDesign.Row>
         <br/>
         <AntDesign.Row Gutter="16">
             <AntDesign.Col Span="24">
-                <AntDesign.Card Title="Logs During This Request" BodyStyle="margin: 0; padding: 8px;">
+                <AntDesign.Card Title="@($"Logs During This Request - {_codeLogs.Count()}")"
+                                BodyStyle="margin: 0; padding: 8px;">
                     <Table TItem="CodeLogToListDto"
                            DataSource="@_codeLogs"
                            RowKey="@(x => x.Id.ToString())">
@@ -149,6 +148,8 @@
                                 <LogLevelTag LogLevel="@context.LogLevel"></LogLevelTag>
                             </Template>
                         </PropertyColumn>
+                        <PropertyColumn Property="@(x => x.Id)" Hidden Sortable/>
+                        <PropertyColumn Property="@(x => x.TraceIdentifier)" Sortable/>
                         <PropertyColumn Property="@(x => x.Title)" Sortable/>
                         <PropertyColumn Property="@(x => x.Description)" Sortable/>
                         <PropertyColumn Property="@(x => x.CreatedAt)" Format="yyyy-MM-dd HH:mm:ss" Sortable/>
