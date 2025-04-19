@@ -1,41 +1,91 @@
 ﻿@namespace NummyUi
+@using NummyUi.Utils
+@using NummyUi.Components
+@using AntDesign.ProLayout
+@using Microsoft.AspNetCore.Components.Routing
 @inherits LayoutComponentBase
 
-<AntDesign.ProLayout.BasicLayout 
-    Logo="@("./pro_icon.svg")"
-    MenuData="_menuData">
-    @*<RightContentRender>
-        <NummyUi.Components.RightContent />
-    </RightContentRender>*@
-    <ChildContent>
-        @Body
-    </ChildContent>
-    <FooterRender>
-        <FooterView Copyright="2023 SolarVoyager" Links="Links"></FooterView>
-    </FooterRender>
-</AntDesign.ProLayout.BasicLayout>
-<SettingDrawer />
+<Layout>
+    <Sider Breakpoint="BreakpointType.Lg" CollapsedWidth="64" @bind-Collapsed=@collapsed>
+        <div class="logo">
+            <img src="./pro_icon.svg" alt="logo" style="height: 32px; margin: 16px;"/>
+        </div>
+        <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] { _selectedKey })
+              OnMenuItemClicked="@OnMenuItemSelected">
+            @foreach (var menuItem in _menuData)
+            {
+                <MenuItem Key="@menuItem.Key">
+                    <Icon Type="@menuItem.Icon"/>
+                    <span class="nav-text">@menuItem.Name</span>
+                </MenuItem>
+            }
+        </Menu>
+    </Sider>
+    <Layout>
+        <Header Class="site-layout-sub-header-background" Style="padding: 0;">
+            <RightContent/>
+        </Header>
+        <Content Style="margin: 24px 16px 0;">
+            <div class="site-layout-background" style="padding: 24px; min-height: 360px">
+                @Body
+            </div>
+        </Content>
+        <Footer Style="text-align: center;">
+            <FooterView Copyright="2023 SolarVoyager" Links="Links"></FooterView>
+        </Footer>
+    </Layout>
+</Layout>
+<SettingDrawer/>
 
 @code
 {
-    private MenuDataItem[] _menuData = { };
+    private MenuDataItem[] _menuData = [];
+    private bool collapsed;
+    private string _selectedKey = "1";
 
     [Inject] public HttpClient HttpClient { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _menuData = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
+        SetSelectedKey();
     }
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        SetSelectedKey();
+    }
+
+    private void SetSelectedKey()
+    {
+        var currentPath = NavigationManager.Uri.Replace(NavigationManager.BaseUri, "/");
+        var selectedMenu = _menuData.FirstOrDefault(m => m.Path == currentPath);
+        if (selectedMenu != null)
+        {
+            _selectedKey = selectedMenu.Key;
+        }
+    }
+
+    private void OnMenuItemSelected(MenuItem menuItem)
+    {
+        var selectedMenu = _menuData.FirstOrDefault(m => m.Key == menuItem.Key);
+        if (selectedMenu != null)
+        {
+            NavigationManager.NavigateTo(selectedMenu.Path);
+            _selectedKey = menuItem.Key;
+        }
+    }
 
     public LinkItem[] Links { get; set; } =
     {
         new LinkItem
         {
             Key = "github",
-            Title = (RenderFragment)(@<Icon Type="github" />),
-            Href = "https://github.com/orgs/solarvoyager",
+            Title = (RenderFragment)(@<Icon Type="github"/>),
+            Href = NummyContants.GitHubUrl,
             BlankTarget = true,
         }
     };
