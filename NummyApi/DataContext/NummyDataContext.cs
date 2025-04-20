@@ -4,19 +4,19 @@ using NummyApi.Entitites.Generic;
 
 namespace NummyApi.DataContext;
 
-public class NummyDataContext : DbContext
+public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbContext(options)
 {
-    public NummyDataContext(DbContextOptions<NummyDataContext> options) : base(options)
-    {
-    }
-
     // Nummy.HttpLogger
     public DbSet<RequestLog> RequestLogs { get; set; }
-
     public DbSet<ResponseLog> ResponseLogs { get; set; }
 
     // Nummy.CodeLogger & Nummy.ExceptionHandler
     public DbSet<CodeLog> CodeLogs { get; set; }
+    
+    // NummyUi
+    public DbSet<User> Users { get; set; }
+    public DbSet<Team> Teams { get; set; }
+    public DbSet<TeamUser> TeamUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -32,14 +32,15 @@ public class NummyDataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.AddGlobalFilter(nameof(Auditable.IsDeleted), false);
+        // remove unused auditable properties
+        //modelBuilder.AddGlobalFilter(nameof(Auditable.IsDeleted), false);
     }
 
     private void SetAuditProperties()
     {
         var entries = ChangeTracker
             .Entries()
-            .Where(e => e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
+            .Where(e => e is { Entity: Auditable, State: EntityState.Added or EntityState.Modified });
 
         foreach (var entityEntry in entries)
             switch (entityEntry.State)
@@ -55,10 +56,10 @@ public class NummyDataContext : DbContext
                 {
                     Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified =
                         false;
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedById).IsModified =
-                        false;
+                    // remove unused auditable properties
+                    //Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedById).IsModified = false;
 
-                    if (((Auditable)entityEntry.Entity).IsDeleted)
+                    /*if (((Auditable)entityEntry.Entity).IsDeleted)
                     {
                         Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedBy)
                             .IsModified = false;
@@ -67,21 +68,19 @@ public class NummyDataContext : DbContext
 
                         ((Auditable)entityEntry.Entity).DeletedAt = DateTime.Now;
                         /*((Auditable)entityEntry.Entity).DeletedBy =
-                            utilService.GetUserIdFromToken();*/
+                            utilService.GetUserIdFromToken();#1#
                     }
                     else
                     {
                         ((Auditable)entityEntry.Entity).ModifiedAt = DateTime.Now;
                         /*((Auditable)entityEntry.Entity).ModifiedBy =
-                            utilService.GetUserIdFromToken();*/
-                    }
+                            utilService.GetUserIdFromToken();#1#
+                    }*/
 
                     break;
                 }
                 case EntityState.Detached:
-                    break;
                 case EntityState.Unchanged:
-                    break;
                 case EntityState.Deleted:
                     break;
                 default:

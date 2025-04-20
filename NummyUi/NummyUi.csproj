@@ -62,6 +62,13 @@
     <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\PhoneView.razor" />
     <_ContentIncludedByDefault Remove="Pages\Account\Profile\Components\SecurityView.razor" />
     <_ContentIncludedByDefault Remove="Pages\Account\Profile\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\BaseView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\BindingView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\GeographicView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\NotificationView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\PhoneView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Components\SecurityView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Account\Index.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +84,16 @@
       <Link>.dockerignore</Link>
       <DependentUpon>Dockerfile</DependentUpon>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\Applications\Applications.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\ArticleListContent\ArticleListContent.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\Articles\Articles.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\AvatarList\AvatarList.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\AvatarList\AvatarListItem.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Components\Projects\Projects.razor" />
+    <UpToDateCheckInput Remove="Pages\Account\Center\Index.razor" />
   </ItemGroup>
   
 </Project>

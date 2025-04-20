@@ -36,13 +36,13 @@ namespace NummyUi.Components
             }
         };
 
-        public AvatarMenuItem[] AvatarMenuItems { get; set; } = new AvatarMenuItem[]
-        {
-            new() { Key = "center", IconType = "user", Option = "个人中心"},
-            new() { Key = "setting", IconType = "setting", Option = "个人设置"},
+        private AvatarMenuItem[] AvatarMenuItems { get; set; } =
+        [
+            //new() { Key = "center", IconType = "setting", Option = "个人中心"},
+            new() { Key = "account", IconType = "user", Option = "Account"},
             new() { IsDivider = true },
-            new() { Key = "logout", IconType = "logout", Option = "退出登录"}
-        };
+            new() { Key = "logout", IconType = "logout", Option = "Log out"}
+        ];
 
         [Inject] protected NavigationManager NavigationManager { get; set; }
 
@@ -54,7 +54,12 @@ namespace NummyUi.Components
         {
             await base.OnInitializedAsync();
             SetClassMap();
-            _currentUser = await UserService.GetCurrentUserAsync();
+            _currentUser = new CurrentUser
+            {
+                Name = "John Doe",
+                Avatar = "https://example.com/avatar.jpg",
+                Email = "johndoe@example.com",
+            };
             var notices = await ProjectService.GetNoticesAsync();
             _notifications = notices.Where(x => x.Type == "notification").Cast<NoticeIconData>().ToArray();
             _messages = notices.Where(x => x.Type == "message").Cast<NoticeIconData>().ToArray();
@@ -73,11 +78,11 @@ namespace NummyUi.Components
         {
             switch (item.Key)
             {
-                case "center":
+                /*case "center":
                     NavigationManager.NavigateTo("/account/center");
-                    break;
-                case "setting":
-                    NavigationManager.NavigateTo("/account/settings");
+                    break;*/
+                case "account":
+                    NavigationManager.NavigateTo("/user/account");
                     break;
                 case "logout":
                     NavigationManager.NavigateTo("/user/login");

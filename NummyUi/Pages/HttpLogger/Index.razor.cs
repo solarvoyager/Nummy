@@ -7,7 +7,7 @@ using NummyShared.Dtos.Enums;
 
 namespace NummyUi.Pages.HttpLogger;
 
-public partial class HttpLogger : ComponentBase
+public partial class Index : ComponentBase
 {
     private Table<RequestLogToListDto>? _table;
     private IEnumerable<RequestLogToListDto> _requestLogs = new List<RequestLogToListDto>();

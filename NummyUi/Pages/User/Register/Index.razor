@@ -1,0 +1,78 @@
+﻿@namespace NummyUi.Pages.User.Register
+@layout BasicLayout
+@page "/user/register"
+@using BasicLayout = NummyUi.BasicLayout
+
+<div class="main__b__1">
+    <div class="register">
+        <h3>Registeristration</h3>
+        <Form Model="@_model" OnFinish="Register">
+            
+            <FormItem>
+                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+                    <Input Placeholder="Name" Style="width: 50%;" @bind-Value="@context.Name"></Input>
+                    <Input Placeholder="Surname" Style="width: 50%;" @bind-Value="@context.Surname"></Input>
+                </InputGroup>
+            </FormItem>
+            
+            <FormItem>
+                <Input Placeholder="Email" @bind-Value="@context.Email" Size="@InputSize.Large"></Input>
+            </FormItem>
+
+            <FormItem>
+                <Input Placeholder="At Least 6-Digit Password, Case Sensitive" @bind-Value="@context.Password" Size="@InputSize.Large" Type="password"></Input>
+            </FormItem>
+
+            <FormItem>
+                <Input Placeholder="Confirm Password" @bind-Value="@context.ConfirmPassword" Size="@InputSize.Large" Type="password"></Input>
+            </FormItem>
+
+            <FormItem>
+                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+                    <Select TItem="string"
+                            TItemValue="string"
+                            DefaultValue=@("+994")
+                            Style="width: 25%"
+                            Size="large">
+                        <SelectOptions>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
+                        </SelectOptions>
+                    </Select>
+                    <Select TItem="string"
+                            TItemValue="string"
+                            DefaultValue=@("50")
+                            Style="width: 20%"
+                            Size="large">
+                        <SelectOptions>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
+                        </SelectOptions>
+                    </Select>
+                    <Input Placeholder="Phone Number" Style="width: 55%;" @bind-Value="@context.Phone"></Input>
+                </InputGroup>
+            </FormItem>
+
+            <FormItem>
+                <FormItem>
+                    <Row Gutter="8">
+                        <AntDesign.Col Span="16">
+                            <AntDesign.Input Placeholder="Verification Code" @bind-Value="@context.Captcha" Size="@InputSize.Large"></AntDesign.Input>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="8">
+                            <Button Size="large" Block>Get Code</Button>
+                        </AntDesign.Col>
+                    </Row>
+                </FormItem>
+            </FormItem>
+
+            <FormItem>
+                <Button Type="primary" Size="large" HtmlType="submit" Class="submit">Register</Button>
+                <a class="login" href="/user/login">Log in with an existing account</a>
+            </FormItem>
+        </Form>
+    </div>
+</div>

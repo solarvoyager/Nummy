@@ -38,6 +38,7 @@ builder.Services.AddScoped<ICodeLogService, CodeLogService>();
 builder.Services.AddScoped<IRequestLogService, RequestLogService>();
 builder.Services.AddScoped<IResponseLogService, ResponseLogService>();
 builder.Services.AddScoped<IStatisticalService, StatisticalService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

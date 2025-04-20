@@ -22,8 +22,6 @@ builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSet
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IStatisticalService, StatisticalService>();

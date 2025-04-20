@@ -27,13 +27,3 @@ public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseServic
         return response.IsSuccessStatusCode;
     }
 }
-
-/*if (response.IsSuccessStatusCode)
-{
-    await using var contentStream =
-        await response.Content.ReadAsStreamAsync();
-
-    var result = await JsonSerializer.DeserializeAsync<IEnumerable<string>>(contentStream);
-
-    return result!;
-}*/

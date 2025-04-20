@@ -1,0 +1,66 @@
+@namespace NummyUi.Pages.User.Account
+@page "/user/account"
+@using NummyUi.Pages.User.Account.Components
+
+<GridContent>
+    <div class="main" style="background-color: white; padding: 24px;">
+        <div class="leftMenu" style="width: 224px; border-right: 1px solid #f0f0f0;">
+            <Menu 
+                Mode="MenuMode.Inline" 
+                SelectedKeys="new[] { _selectKey }" 
+                OnMenuItemClicked="SelectKey">
+                @foreach (var item in _menuMap)
+                {
+                    <MenuItem Key="@item.Key">@item.Value</MenuItem>
+                }
+            </Menu>
+        </div>
+        <div class="right" style="flex: 1; padding: 8px 40px;">
+            <div class="title" style="margin-bottom: 12px; color: rgba(0,0,0,.85); font-weight: 500; font-size: 20px;">
+                @_menuMap[_selectKey]
+            </div>
+            @switch (_selectKey)
+            {
+                case "base":
+                    <BaseView />
+                    break;
+                case "security":
+                    <SecurityView />
+                    break;
+                case "binding":
+                    <BindingView />
+                    break;
+                case "notification":
+                    <NotificationView />
+                    break;
+            }
+        </div>
+    </div>
+</GridContent>
+
+<style>
+    .main {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        padding: 24px;
+    }
+    
+    .leftMenu {
+        width: 224px;
+        border-right: 1px solid #f0f0f0;
+    }
+    
+    .right {
+        flex: 1;
+        padding: 8px 40px;
+    }
+    
+    .title {
+        margin-bottom: 12px;
+        color: rgba(0,0,0,.85);
+        font-weight: 500;
+        font-size: 20px;
+    }
+</style>

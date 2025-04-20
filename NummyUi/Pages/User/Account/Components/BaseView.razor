@@ -1,0 +1,53 @@
+﻿@namespace NummyUi.Pages.User.Account.Components
+
+<div class="baseView" style="display: flex; padding-top: 12px;">
+    <div class="left" style="min-width: 310px; max-width: 448px;">
+        <Form 
+            Layout="@FormLayout.Vertical"
+            OnFinish="HandleFinish"
+            Model="@_currentUser">
+            <FormItem Label="Email">
+                <AntDesign.Input @bind-Value="@context.Email" />
+            </FormItem>
+            <FormItem Label="Nickname">
+                <AntDesign.Input @bind-Value="@context.Name" />
+            </FormItem>
+            <FormItem Label="Personal profile">
+                <AntDesign.TextArea @bind-Value="@context.Signature" />
+            </FormItem>
+            <FormItem Label="Country/Region">
+                <Select
+                    TItem="string"
+                    TItemValue="string"
+                    Style="max-width: 220px;"
+                    @bind-Value="@context.Country">
+                    <SelectOptions>
+                        <SelectOption TItem="string" TItemValue="string" Value="@("China")" Label="中国"/>
+                    </SelectOptions>
+                </Select>
+            </FormItem>
+            <FormItem Label="Province or city">
+                <GeographicView />
+            </FormItem>
+            <FormItem Label="Street Address">
+                <AntDesign.Input @bind-Value="@context.Address" />
+            </FormItem>
+            <FormItem>
+                <Button HtmlType="submit" Type="@ButtonType.Primary">
+                    Update Information
+                </Button>
+            </FormItem>
+        </Form>
+    </div>
+    <div class="right" style="flex: 1; padding-left: 104px;">
+        <div style="margin-bottom: 8px; color: rgba(0,0,0,.85); font-size: 14px;">Avatar</div>
+        <div style="width: 144px; height: 144px; margin-bottom: 12px; overflow: hidden;">
+            <img src="@_currentUser.Avatar" alt="avatar" style="width: 100%;" />
+        </div>
+        <Upload>
+            <Button>
+                <Icon Type="upload" /> Change avatar
+            </Button>
+        </Upload>
+    </div>
+</div>

@@ -7,7 +7,7 @@ using NummyUi.Services;
 
 namespace NummyUi.Pages.CodeLogger;
 
-public partial class CodeLogger
+public partial class Index
 {
     [Inject] private ILogService LogService { get; set; }
     [Inject] private ModalService ModalService { get; set; }
