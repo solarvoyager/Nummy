@@ -1,51 +1,50 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
+using NummyShared.Dtos;
 using NummyUi.Models;
 using NummyUi.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace NummyUi.Components
+namespace NummyUi.Components.GlobalHeader
 {
     public partial class RightContent
     {
-        private CurrentUser _currentUser = new CurrentUser();
-        private NoticeIconData[] _notifications = { };
-        private NoticeIconData[] _messages = { };
-        private NoticeIconData[] _events = { };
+        private UserToListDto? _user;
+        private NoticeIconData[] _notifications = [];
+        private NoticeIconData[] _messages = [];
+        private NoticeIconData[] _events = [];
         private int _count = 0;
 
-        private List<AutoCompleteDataItem<string>> DefaultOptions { get; set; } = new List<AutoCompleteDataItem<string>>
-        {
-            new AutoCompleteDataItem<string>
+        private List<AutoCompleteDataItem<string>> DefaultOptions { get; set; } =
+        [
+            new()
             {
                 Label = "umi ui",
                 Value = "umi ui"
             },
-            new AutoCompleteDataItem<string>
+
+            new()
             {
                 Label = "Pro Table",
                 Value = "Pro Table"
             },
-            new AutoCompleteDataItem<string>
+
+            new()
             {
                 Label = "Pro Layout",
                 Value = "Pro Layout"
             }
-        };
+        ];
 
         private AvatarMenuItem[] AvatarMenuItems { get; set; } =
         [
             //new() { Key = "center", IconType = "setting", Option = "个人中心"},
             new() { Key = "account", IconType = "user", Option = "Account"},
-            new() { IsDivider = true },
+            //new() { IsDivider = true },
             new() { Key = "logout", IconType = "logout", Option = "Log out"}
         ];
 
         [Inject] protected NavigationManager NavigationManager { get; set; }
-
         [Inject] protected IUserService UserService { get; set; }
         [Inject] protected IProjectService ProjectService { get; set; }
         [Inject] protected MessageService MessageService { get; set; }
@@ -54,12 +53,9 @@ namespace NummyUi.Components
         {
             await base.OnInitializedAsync();
             SetClassMap();
-            _currentUser = new CurrentUser
-            {
-                Name = "John Doe",
-                Avatar = "https://example.com/avatar.jpg",
-                Email = "johndoe@example.com",
-            };
+            
+            _user = await UserService.Get()
+            
             var notices = await ProjectService.GetNoticesAsync();
             _notifications = notices.Where(x => x.Type == "notification").Cast<NoticeIconData>().ToArray();
             _messages = notices.Where(x => x.Type == "message").Cast<NoticeIconData>().ToArray();

@@ -16,13 +16,13 @@ public class UserService(NummyDataContext context) : IUserService
 
         if (user == null || !SecurityHelper.ValidatePassword(request.Password, user.PasswordHash, user.PasswordSalt))
         {
-            return new LoginResponseDto(false, "Invalid email or password");
+            return new LoginResponseDto(false, "Invalid email or password", null);
         }
 
         user.LastLoginDate = DateTimeOffset.Now;
         await context.SaveChangesAsync();
 
-        return new LoginResponseDto(true, "Login successful");
+        return new LoginResponseDto(true, "Login successful", user.Id);
     }
 
     public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto request)
@@ -61,6 +61,7 @@ public class UserService(NummyDataContext context) : IUserService
             return null;
 
         return new UserToListDto(
+            user.Id,
             user.Name,
             user.Surname,
             user.Email,

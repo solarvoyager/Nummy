@@ -5,7 +5,7 @@
         <Form 
             Layout="@FormLayout.Vertical"
             OnFinish="HandleFinish"
-            Model="@_currentUser">
+            Model="@_user">
             <FormItem Label="Email">
                 <AntDesign.Input @bind-Value="@context.Email" />
             </FormItem>

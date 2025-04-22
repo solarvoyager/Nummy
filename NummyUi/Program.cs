@@ -2,6 +2,7 @@ using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
 using NummyUi;
 using NummyUi.Services;
+using NummyUi.Session;
 using NummyUi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,12 @@ builder.Services.AddScoped(sp => new HttpClient
 });
 
 builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSettings"));
+
+// Sessions
+
+builder.Services.AddScoped<UserSession>();
+
+// Services
 
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();

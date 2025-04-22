@@ -9,7 +9,8 @@ public record LoginRequestDto
 public record LoginResponseDto
 (
     bool Success,
-    string? Message
+    string? Message,
+    Guid? UserId
 );
 
 public record RegisterRequestDto
@@ -29,6 +30,7 @@ public record RegisterResponseDto
 
 public record UserToListDto
 (
+    Guid Id,
     string Name,
     string Surname,
     string Email,

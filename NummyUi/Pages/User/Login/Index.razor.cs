@@ -3,33 +3,18 @@ using AntDesign;
 using Microsoft.AspNetCore.Components;
 using NummyUi.Models;
 using NummyUi.Services;
+using NummyUi.Session;
 
 namespace NummyUi.Pages.User.Login
 {
-    public class LoginModel
-    {
-        [Required] public string Email { get; set; }
-
-        [Required] public string Password { get; set; }
-
-        public string Mobile { get; set; }
-
-        public string Captcha { get; set; }
-
-        public string LoginType { get; set; }
-
-        public bool AutoLogin { get; set; }
-    }
-    
     public partial class Index
     {
         private readonly LoginModel _model = new();
 
         [Inject] public NavigationManager NavigationManager { get; set; }
-
         [Inject] public MessageService Message { get; set; }
-        
         [Inject] public IUserService UserService { get; set; }
+        [Inject] public UserSession UserSession { get; set; }
 
         public async Task Login()
         {
@@ -37,6 +22,7 @@ namespace NummyUi.Pages.User.Login
             
             if (loginResult.Success)
             {
+                UserSession.UserId = loginResult.UserId;
                 NavigationManager.NavigateTo("/");
             }
             else

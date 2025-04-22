@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NummyShared.Dtos;
 using NummyUi.Models;
 using NummyUi.Services;
 
@@ -6,15 +7,7 @@ namespace NummyUi.Pages.User.Account.Components
 {
     public partial class BaseView
     {
-        private CurrentUser _currentUser = new()
-        {
-            Email = "antdesign@alipay.com",
-            Name = "Serati Ma",
-            Signature = "Be tolerant to diversity, tolerance is a virtue",
-            Country = "China",
-            Address = "",
-            Avatar = "/avatar.png"
-        };
+        private UserToListDto _user;
 
         [Inject] protected IUserService UserService { get; set; }
 
