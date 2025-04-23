@@ -1,7 +1,9 @@
 ﻿@namespace NummyUi.Components
 @inherits AntDomComponentBase
 
-<Space Size="@("24")">
+<Space Size="@("24")"
+       Class="header-content"
+       Style="width: 100%; height: 58px; display: flex; align-items: center; justify-content: flex-end;">
     <SpaceItem>
         <HeaderSearch Class="action search" Placeholder="Site Search" DefaultValue="umi ui"
                       Options="DefaultOptions"/>
@@ -27,7 +29,9 @@
         </NoticeIcon>
     </SpaceItem>
     <SpaceItem>
-        <AvatarDropdown Name="@_user.Name" Avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIK57MZRfv5EA3K1qBxMrUQ0Mc9RtVAvXR4pigpbojuQ&s&ec=72940544" MenuItems="@AvatarMenuItems"
+        <AvatarDropdown Name="@($"{_user!.Name} {_user.Surname}")"
+                        Avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIK57MZRfv5EA3K1qBxMrUQ0Mc9RtVAvXR4pigpbojuQ&s&ec=72940544"
+                        MenuItems="@AvatarMenuItems"
                         OnItemSelected="HandleSelectUser"/>
     </SpaceItem>
     <SpaceItem>

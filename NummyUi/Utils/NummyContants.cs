@@ -23,7 +23,7 @@ public static class NummyContants
 
     public static readonly int[] PageSizes = [5, 10, 20, 50, 100, 1000];
 
-    public static MenuDataItem[] MenuDataItems =
+    public static readonly MenuDataItem[] MenuDataItems =
     [
         new()
         {
@@ -59,10 +59,17 @@ public static class NummyContants
             Name = "Teams (in dev)",
             Key = "team",
             Icon = "team"
-        }
+        },
+        new()
+        {
+            Path = "/configuration",
+            Name = "Configuration (in dev)",
+            Key = "configuration",
+            Icon = "setting"
+        },
     ];
     
-    public static Dictionary<string, string> AccountMenuItems = new()
+    public static readonly Dictionary<string, string> AccountMenuItems = new()
     {
         {"account", "Account Settings"},
         {"security", "Security Settings"},
@@ -70,5 +77,5 @@ public static class NummyContants
         {"notification", "New Message Notification"},
     };
     
-    public static string AccountMenuDefaultItemKey = "account";
+    public static readonly string AccountMenuDefaultItemKey = "account";
 }

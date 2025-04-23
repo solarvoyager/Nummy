@@ -95,9 +95,5 @@
     <UpToDateCheckInput Remove="Pages\Account\Center\Components\Projects\Projects.razor" />
     <UpToDateCheckInput Remove="Pages\Account\Center\Index.razor" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Components\GlobalHeader\" />
-  </ItemGroup>
   
 </Project>
