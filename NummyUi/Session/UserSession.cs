@@ -2,8 +2,23 @@
 
 namespace NummyUi.Session;
 
-public class UserSession
+public interface IUserSession
 {
-    public Guid? UserId { get; set; }
-    public UserToListDto? User { get; set; }
+    void SetUser(UserToListDto user);
+    UserToListDto? GetUser();
+}
+
+public class UserSession : IUserSession
+{
+    private UserToListDto? User { get; set; }
+    
+    public void SetUser(UserToListDto user)
+    {
+        User = user;
+    }
+
+    public UserToListDto? GetUser()
+    {
+        return User;
+    }
 }

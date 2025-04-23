@@ -2,8 +2,8 @@
 using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
 using NummyShared.Dtos;
-using NummyUi.Models;
 using NummyUi.Services;
+using NummyUi.Session;
 
 namespace NummyUi.Components.GlobalHeader
 {
@@ -45,16 +45,16 @@ namespace NummyUi.Components.GlobalHeader
         ];
 
         [Inject] protected NavigationManager NavigationManager { get; set; }
-        [Inject] protected IUserService UserService { get; set; }
         [Inject] protected IProjectService ProjectService { get; set; }
-        [Inject] protected MessageService MessageService { get; set; }
+        [Inject] protected IMessageService MessageService { get; set; }
+        [Inject] protected IUserSession UserSession { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             SetClassMap();
-            
-            _user = await UserService.Get()
+
+            _user = UserSession.GetUser();
             
             var notices = await ProjectService.GetNoticesAsync();
             _notifications = notices.Where(x => x.Type == "notification").Cast<NoticeIconData>().ToArray();

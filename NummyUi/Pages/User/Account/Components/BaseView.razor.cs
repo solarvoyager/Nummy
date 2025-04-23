@@ -2,14 +2,15 @@ using Microsoft.AspNetCore.Components;
 using NummyShared.Dtos;
 using NummyUi.Models;
 using NummyUi.Services;
+using NummyUi.Session;
 
 namespace NummyUi.Pages.User.Account.Components
 {
     public partial class BaseView
     {
-        private UserToListDto _user;
+        private BaseViewModel _model;
 
-        [Inject] protected IUserService UserService { get; set; }
+        [Inject] protected IUserSession UserSession { get; set; }
 
         private void HandleFinish()
         {
@@ -18,7 +19,16 @@ namespace NummyUi.Pages.User.Account.Components
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            //_currentUser = await UserService.GetCurrentUserAsync();
+            var user = UserSession.GetUser();
+
+            _model = new BaseViewModel
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                Phone = user.Phone
+                //Avatar = user.Avatar
+            };
         }
     }
 }

@@ -5,32 +5,43 @@
         <Form 
             Layout="@FormLayout.Vertical"
             OnFinish="HandleFinish"
-            Model="@_user">
+            Model="@_model">
             <FormItem Label="Email">
                 <AntDesign.Input @bind-Value="@context.Email" />
             </FormItem>
-            <FormItem Label="Nickname">
+            <FormItem Label="Name">
                 <AntDesign.Input @bind-Value="@context.Name" />
             </FormItem>
-            <FormItem Label="Personal profile">
-                <AntDesign.TextArea @bind-Value="@context.Signature" />
+            <FormItem Label="Surname">
+                <AntDesign.Input @bind-Value="@context.Surname" />
             </FormItem>
-            <FormItem Label="Country/Region">
-                <Select
-                    TItem="string"
-                    TItemValue="string"
-                    Style="max-width: 220px;"
-                    @bind-Value="@context.Country">
-                    <SelectOptions>
-                        <SelectOption TItem="string" TItemValue="string" Value="@("China")" Label="中国"/>
-                    </SelectOptions>
-                </Select>
-            </FormItem>
-            <FormItem Label="Province or city">
-                <GeographicView />
-            </FormItem>
-            <FormItem Label="Street Address">
-                <AntDesign.Input @bind-Value="@context.Address" />
+            <FormItem>
+                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+                    <Select TItem="string"
+                            TItemValue="string"
+                            DefaultValue=@("+994")
+                            Style="width: 25%"
+                            Size="large">
+                        <SelectOptions>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
+                        </SelectOptions>
+                    </Select>
+                    <Select TItem="string"
+                            TItemValue="string"
+                            DefaultValue=@("50")
+                            Style="width: 20%"
+                            Size="large">
+                        <SelectOptions>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
+                            <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
+                        </SelectOptions>
+                    </Select>
+                    <Input Placeholder="Phone Number" Style="width: 55%;" @bind-Value="@context.Phone"></Input>
+                </InputGroup>
             </FormItem>
             <FormItem>
                 <Button HtmlType="submit" Type="@ButtonType.Primary">
@@ -42,7 +53,7 @@
     <div class="right" style="flex: 1; padding-left: 104px;">
         <div style="margin-bottom: 8px; color: rgba(0,0,0,.85); font-size: 14px;">Avatar</div>
         <div style="width: 144px; height: 144px; margin-bottom: 12px; overflow: hidden;">
-            <img src="@_currentUser.Avatar" alt="avatar" style="width: 100%;" />
+            <img src="@_model.Avatar" alt="avatar" style="width: 100%;" />
         </div>
         <Upload>
             <Button>

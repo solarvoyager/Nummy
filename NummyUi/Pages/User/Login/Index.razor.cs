@@ -12,9 +12,9 @@ namespace NummyUi.Pages.User.Login
         private readonly LoginModel _model = new();
 
         [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public MessageService Message { get; set; }
+        [Inject] public IMessageService Message { get; set; }
         [Inject] public IUserService UserService { get; set; }
-        [Inject] public UserSession UserSession { get; set; }
+        [Inject] public IUserSession UserSession { get; set; }
 
         public async Task Login()
         {
@@ -22,7 +22,9 @@ namespace NummyUi.Pages.User.Login
             
             if (loginResult.Success)
             {
-                UserSession.UserId = loginResult.UserId;
+                var user = await UserService.Get(loginResult.UserId!.Value);
+                UserSession.SetUser(user);
+                
                 NavigationManager.NavigateTo("/");
             }
             else

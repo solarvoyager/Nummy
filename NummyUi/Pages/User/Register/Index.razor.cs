@@ -11,7 +11,7 @@ namespace NummyUi.Pages.User.Register
         private readonly RegisterModel _model = new();
         
         [Inject] public NavigationManager NavigationManager { get; set; }
-        [Inject] public MessageService Message { get; set; }
+        [Inject] public IMessageService Message { get; set; }
         [Inject] public IUserService UserService { get; set; }
 
         public async Task Register()

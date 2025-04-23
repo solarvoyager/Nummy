@@ -22,7 +22,7 @@ builder.Services.Configure<ProSettings>(builder.Configuration.GetSection("ProSet
 
 // Sessions
 
-builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<IUserSession, UserSession>();
 
 // Services
 
