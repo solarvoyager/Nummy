@@ -1,17 +1,33 @@
+@using NummyUi.Session
+@inject IUserSession UserSession
+@inject NavigationManager NavigationManager
+@using BasicLayout = NummyUi.Layouts.BasicLayout
+
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <CascadingValue Value="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)" />
-        </CascadingValue>
+        @{
+            var isLoggedIn = UserSession.IsLoggedIn();
+            var isLoginPage = routeData.PageType?.FullName?.Contains("User.Login") ?? false;
+            var isRegisterPage = routeData.PageType?.FullName?.Contains("User.Register") ?? false;
+
+            if (!isLoggedIn && !isLoginPage && !isRegisterPage)
+            {
+                NavigationManager.NavigateTo("/user/login");
+            }
+            else
+            {
+                <CascadingValue Value="routeData">
+                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(BasicLayout)"/>
+                </CascadingValue>
+            }
+        }
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(BasicLayout)">
-            @*
-            <p>Sorry, there's nothing at this address.</p>
-        *@
-            <Icon Type="@IconType.Outline.Sync" Spin />
-            <p>Under construction. Plase be patient. I am working on this project.. If you want to help clone repo from <a href="https://github.com/solarvoyager">SolarVoyager</a> and do it. "Please"</p>
+            <Icon Type="@IconType.Outline.Sync" Spin/>
+            <p>Under construction. Plase be patient. I am working on this project.. If you want to help clone repo from
+                <a href="https://github.com/solarvoyager">SolarVoyager</a> and do it. "Please"</p>
         </LayoutView>
     </NotFound>
 </Router>
-<AntContainer />
+<AntContainer/>

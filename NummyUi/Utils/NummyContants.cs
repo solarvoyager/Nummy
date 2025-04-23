@@ -1,4 +1,6 @@
-﻿namespace NummyUi.Utils;
+﻿using AntDesign.ProLayout;
+
+namespace NummyUi.Utils;
 
 public static class NummyContants
 {
@@ -20,4 +22,43 @@ public static class NummyContants
     public const string RegisterUrl = "api/user/register";
 
     public static readonly int[] PageSizes = [5, 10, 20, 50, 100, 1000];
+
+    public static MenuDataItem[] MenuDataItems =
+    [
+        new()
+        {
+            Path = "/",
+            Name = "Dashboard",
+            Key = "dashboard",
+            Icon = "dashboard"
+        },
+        new()
+        {
+            Path = "/http",
+            Name = "Http Logs",
+            Key = "http",
+            Icon = "swap"
+        },
+        new()
+        {
+            Path = "/code",
+            Name = "Code Logs",
+            Key = "code",
+            Icon = "node-index"
+        },
+        new()
+        {
+            Path = "/application",
+            Name = "Applications (in dev)",
+            Key = "application",
+            Icon = "appstore"
+        },
+        new()
+        {
+            Path = "/team",
+            Name = "Teams (in dev)",
+            Key = "team",
+            Icon = "team"
+        }
+    ];
 }

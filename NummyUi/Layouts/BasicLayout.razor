@@ -1,95 +1,63 @@
-﻿@namespace NummyUi
-@using NummyUi.Utils
-@using NummyUi.Components
-@using AntDesign.ProLayout
-@using Microsoft.AspNetCore.Components.Routing
+﻿@namespace NummyUi.Layouts
 @using NummyUi.Components.GlobalHeader
+@using NummyUi.Utils
 @inherits LayoutComponentBase
 
-<Layout>
-    <Sider Breakpoint="BreakpointType.Lg" CollapsedWidth="64" @bind-Collapsed=@collapsed>
-        <div class="logo" style="display: flex; align-items: center;">
-            <img src="./pro_icon.svg" alt="logo" style="height: 32px; margin: 16px;" />
-            <span style="color: white; font-size: 18px; font-weight: 600;">Nummy</span>
-        </div>
-        <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] { _selectedKey })
-            OnMenuItemClicked="@OnMenuItemSelected">
-            @foreach (var menuItem in _menuData)
-            {
-                <MenuItem Key="@menuItem.Key">
-                <Icon Type="@menuItem.Icon" />
-                <span class="nav-text">@menuItem.Name</span>
-                </MenuItem>
-            }
-        </Menu>
-    </Sider>
+@{
+    var currentPath = NavigationManager.Uri.Replace(NavigationManager.BaseUri, "/");
+    var isLoginPage = currentPath.Contains("/user/login");
+    var isRegisterPage = currentPath.Contains("/user/register");
+    var isAuthPage = isLoginPage || isRegisterPage;
+}
+
+@if (isAuthPage)
+{
+    <div class="auth-page-layout">
+        @Body
+    </div>
+}
+else
+{
     <Layout>
-        <Header Class="site-layout-sub-header-background"
-            Style="color: grey; background-color: white; height: 64px; padding: 0 24px;">
-            <RightContent />
-        </Header>
-        <Content Style="margin: 32px 26px 0;">
-            <div class="site-layout-background" style="min-height: 360px">
-                @Body
+        <Sider Breakpoint="BreakpointType.Lg" CollapsedWidth="64" @bind-Collapsed=@collapsed>
+            <div class="logo" style="display: flex; align-items: center;">
+                <img src="./pro_icon.svg" alt="logo" style="height: 32px; margin: 16px;" />
+                <span style="color: white; font-size: 18px; font-weight: 600;">Nummy</span>
             </div>
-        </Content>
-        <Footer Style="text-align: center;">
-            <FooterView Copyright="2023 SolarVoyager" Links="Links"></FooterView>
-        </Footer>
+            <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] { _selectedKey })
+                OnMenuItemClicked="@OnMenuItemSelected">
+                @foreach (var menuItem in NummyContants.MenuDataItems)
+                {
+                    <MenuItem Key="@menuItem.Key">
+                    <Icon Type="@menuItem.Icon" />
+                    <span class="nav-text">@menuItem.Name</span>
+                    </MenuItem>
+                }
+            </Menu>
+        </Sider>
+        <Layout>
+            <Header Class="site-layout-sub-header-background"
+                Style="color: grey; background-color: white; height: 64px; padding: 0 24px;">
+                <RightContent />
+            </Header>
+            <Content Style="margin: 32px 26px 0;">
+                <div class="site-layout-background" style="min-height: 360px">
+                    @Body
+                </div>
+            </Content>
+            <Footer Style="text-align: center;">
+                <FooterView Copyright="2023 SolarVoyager" Links="Links"></FooterView>
+            </Footer>
+        </Layout>
     </Layout>
-</Layout>
-<SettingDrawer />
-
-@code
-{
-    private MenuDataItem[] _menuData = [];
-    private bool collapsed;
-    private string _selectedKey = "1";
-
-    [Inject] public HttpClient HttpClient { get; set; }
-    [Inject] public NavigationManager NavigationManager { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        _menuData = await HttpClient.GetFromJsonAsync<MenuDataItem[]>("data/menu.json");
-        SetSelectedKey();
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        SetSelectedKey();
-    }
-
-    private void SetSelectedKey()
-    {
-        var currentPath = NavigationManager.Uri.Replace(NavigationManager.BaseUri, "/");
-        var selectedMenu = _menuData.FirstOrDefault(m => m.Path == currentPath);
-        if (selectedMenu != null)
-        {
-            _selectedKey = selectedMenu.Key;
-        }
-    }
-
-    private void OnMenuItemSelected(MenuItem menuItem)
-    {
-        var selectedMenu = _menuData.FirstOrDefault(m => m.Key == menuItem.Key);
-        if (selectedMenu != null)
-        {
-            NavigationManager.NavigateTo(selectedMenu.Path);
-            _selectedKey = menuItem.Key;
-        }
-    }
-
-    public LinkItem[] Links { get; set; } =
-    {
-new LinkItem
-{
-Key = "github",
-Title = (RenderFragment)(@<Icon Type="github" />),
-Href = NummyContants.GitHubUrl,
-BlankTarget = true,
+    <SettingDrawer />
 }
-};
-}
+<style>
+    .auth-page-layout {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f2f5;
+    }
+</style>

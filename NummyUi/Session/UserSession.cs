@@ -6,6 +6,8 @@ public interface IUserSession
 {
     void SetUser(UserToListDto user);
     UserToListDto? GetUser();
+    bool IsLoggedIn();
+    void Logout();
 }
 
 public class UserSession : IUserSession
@@ -20,5 +22,15 @@ public class UserSession : IUserSession
     public UserToListDto? GetUser()
     {
         return User;
+    }
+
+    public bool IsLoggedIn()
+    {
+        return User != null;
+    }
+
+    public void Logout()
+    {
+        User = null;
     }
 }
