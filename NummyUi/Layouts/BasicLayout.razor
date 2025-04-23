@@ -12,33 +12,31 @@
 
 @if (isAuthPage)
 {
-    <div class="auth-page-layout">
-        @Body
-    </div>
+    @Body
 }
 else
 {
     <Layout>
         <Sider Breakpoint="BreakpointType.Lg" CollapsedWidth="64" @bind-Collapsed=@collapsed>
             <div class="logo" style="display: flex; align-items: center;">
-                <img src="./pro_icon.svg" alt="logo" style="height: 32px; margin: 16px;" />
+                <img src="./pro_icon.svg" alt="logo" style="height: 32px; margin: 16px;"/>
                 <span style="color: white; font-size: 18px; font-weight: 600;">Nummy</span>
             </div>
             <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] { _selectedKey })
-                OnMenuItemClicked="@OnMenuItemSelected">
+                  OnMenuItemClicked="@OnMenuItemSelected">
                 @foreach (var menuItem in NummyContants.MenuDataItems)
                 {
                     <MenuItem Key="@menuItem.Key">
-                    <Icon Type="@menuItem.Icon" />
-                    <span class="nav-text">@menuItem.Name</span>
+                        <Icon Type="@menuItem.Icon"/>
+                        <span class="nav-text">@menuItem.Name</span>
                     </MenuItem>
                 }
             </Menu>
         </Sider>
         <Layout>
             <Header Class="site-layout-sub-header-background"
-                Style="color: grey; background-color: white; height: 64px; padding: 0 24px;">
-                <RightContent />
+                    Style="color: grey; background-color: white; height: 64px; padding: 0 24px;">
+                <RightContent/>
             </Header>
             <Content Style="margin: 32px 26px 0;">
                 <div class="site-layout-background" style="min-height: 360px">
@@ -50,14 +48,5 @@ else
             </Footer>
         </Layout>
     </Layout>
-    <SettingDrawer />
+    <SettingDrawer/>
 }
-<style>
-    .auth-page-layout {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f2f5;
-    }
-</style>

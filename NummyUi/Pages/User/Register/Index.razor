@@ -2,76 +2,163 @@
 @layout NummyUi.Layouts.BasicLayout
 @page "/user/register"
 
-<div class="main__b__1">
-    <div class="register">
-        <h3>Registeristration</h3>
-        <Form Model="@_model" OnFinish="Register">
-            
-            <FormItem>
-                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
-                    <Input Placeholder="Name" Style="width: 50%;" @bind-Value="@context.Name"></Input>
-                    <Input Placeholder="Surname" Style="width: 50%;" @bind-Value="@context.Surname"></Input>
-                </InputGroup>
-            </FormItem>
-            
-            <FormItem>
-                <Input Placeholder="Email" @bind-Value="@context.Email" Size="@InputSize.Large"></Input>
-            </FormItem>
+<div class="auth-page-layout">
+    <div class="card-container">
+        <div class="brand">
+            <Icon Type="box-plot" Style="font-size: 24px; color: #4096ff; margin-right: 8px;" />
+            <span class="brand-text">Nummy</span>
+        </div>
+        
+        <div class="register-card">
+            <p class="subtitle">Please enter your details</p>
+            <h2 class="title">Create an account</h2>
 
-            <FormItem>
-                <Input Placeholder="At Least 6-Digit Password, Case Sensitive" @bind-Value="@context.Password" Size="@InputSize.Large" Type="password"></Input>
-            </FormItem>
+            <Form Model="@_model" OnFinish="Register">
+                <FormItem>
+                    <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+                        <Input Placeholder="Name" Style="width: 50%;" @bind-Value="@context.Name"></Input>
+                        <Input Placeholder="Surname" Style="width: 50%;" @bind-Value="@context.Surname"></Input>
+                    </InputGroup>
+                </FormItem>
 
-            <FormItem>
-                <Input Placeholder="Confirm Password" @bind-Value="@context.ConfirmPassword" Size="@InputSize.Large" Type="password"></Input>
-            </FormItem>
+                <FormItem>
+                    <Input Placeholder="Email address" @bind-Value="@context.Email" Size="@InputSize.Large"></Input>
+                </FormItem>
 
-            <FormItem>
-                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
-                    <Select TItem="string"
-                            TItemValue="string"
-                            DefaultValue=@("+994")
-                            Style="width: 25%"
-                            Size="large">
-                        <SelectOptions>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
-                        </SelectOptions>
-                    </Select>
-                    <Select TItem="string"
-                            TItemValue="string"
-                            DefaultValue=@("50")
-                            Style="width: 20%"
-                            Size="large">
-                        <SelectOptions>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
-                        </SelectOptions>
-                    </Select>
-                    <Input Placeholder="Phone Number" Style="width: 55%;" @bind-Value="@context.Phone"></Input>
-                </InputGroup>
-            </FormItem>
+                <FormItem>
+                    <Input Placeholder="Password" @bind-Value="@context.Password"
+                           Size="@InputSize.Large" Type="password"></Input>
+                </FormItem>
 
-            <FormItem>
+                <FormItem>
+                    <Input Placeholder="Confirm Password" @bind-Value="@context.ConfirmPassword" Size="@InputSize.Large"
+                           Type="password"></Input>
+                </FormItem>
+
+                <FormItem>
+                    <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+                        <Select TItem="string"
+                                TItemValue="string"
+                                DefaultValue=@("+994")
+                                Style="width: 25%"
+                                Size="large">
+                            <SelectOptions>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
+                            </SelectOptions>
+                        </Select>
+                        <Select TItem="string"
+                                TItemValue="string"
+                                DefaultValue=@("50")
+                                Style="width: 20%"
+                                Size="large">
+                            <SelectOptions>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
+                            </SelectOptions>
+                        </Select>
+                        <Input Placeholder="Phone Number" Style="width: 55%;" @bind-Value="@context.Phone" MaxLength="7"></Input>
+                    </InputGroup>
+                </FormItem>
+
                 <FormItem>
                     <Row Gutter="8">
                         <AntDesign.Col Span="16">
-                            <AntDesign.Input Placeholder="Verification Code" @bind-Value="@context.Captcha" Size="@InputSize.Large"></AntDesign.Input>
+                            <AntDesign.Input Placeholder="Verification Code" @bind-Value="@context.Captcha"
+                                             Size="@InputSize.Large"></AntDesign.Input>
                         </AntDesign.Col>
                         <AntDesign.Col Span="8">
                             <Button Size="large" Block>Get Code</Button>
                         </AntDesign.Col>
                     </Row>
                 </FormItem>
-            </FormItem>
 
-            <FormItem>
-                <Button Type="primary" Size="large" HtmlType="submit" Class="submit">Register</Button>
-                <a class="login" href="/user/login">Log in with an existing account</a>
-            </FormItem>
-        </Form>
+                <Button Type="primary" Size="large" HtmlType="submit" Class="submit" Block>Sign up</Button>
+                
+                <Button Class="google-button" Size="large" Block>
+                    <Space>
+                        <Icon Type="google" />
+                        <span>Sign up with Google</span>
+                    </Space>
+                </Button>
+
+                <div class="login-link">
+                    Already have an account? <a href="/user/login">Sign in</a>
+                </div>
+            </Form>
+        </div>
     </div>
 </div>
+
+<style>
+    .auth-page-layout {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f2f5;
+        padding: 24px;
+    }
+
+    .card-container {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .brand-text {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1f1f1f;
+    }
+
+    .register-card {
+        background: white;
+        padding: 32px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 32px;
+        color: #1f1f1f;
+    }
+
+    .submit {
+        margin-bottom: 16px;
+    }
+
+    .google-button {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-link {
+        text-align: center;
+    }
+
+    .login-link a {
+        color: #4096ff;
+    }
+
+    :global(.ant-form-item) {
+        margin-bottom: 16px;
+    }
+</style>

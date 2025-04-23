@@ -11,6 +11,7 @@ public class RegisterModel
     [Required] [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; }
     //[Required]
+    [MaxLength(7)]
     public string? Phone { get; set; }
     //[Required]
     public string Captcha { get; set; }

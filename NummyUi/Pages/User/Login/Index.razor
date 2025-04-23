@@ -2,58 +2,123 @@
 @layout NummyUi.Layouts.BasicLayout
 @page "/user/login"
 
-<div class="main__b__0">
-    <div class="login">
-        <Form Model="@_model" OnFinish="Login">
-            <Tabs ActiveKey="@context.LoginType">
-                <TabPane Key="1" Tab="Account Login">
-                    <FormItem>
-                        <AntDesign.Input Placeholder="Email" Size="large" @bind-Value="@context.Email">
-                            <Prefix><Icon Type="mail" /></Prefix>
-                        </AntDesign.Input>
-                    </FormItem>
-                    <FormItem>
-                        <AntDesign.Input Placeholder="Password" Size="large" @bind-Value="@context.Password" Type="password">
-                            <Prefix><Icon Type="lock" /></Prefix>
-                        </AntDesign.Input>
-                    </FormItem>
-                </TabPane>
-                @*<TabPane Key="2" Tab="Mobile Login">
-                    <FormItem>
-                        <AntDesign.Input Placeholder="Phone Number" Size="large" @bind-Value="@context.Mobile">
-                            <Prefix><Icon Type="mobile" /></Prefix>
-                        </AntDesign.Input>
-                    </FormItem>
-                    <FormItem>
-                        <Row Gutter="8">
-                            <AntDesign.Col Span="16">
-                                <AntDesign.Input Placeholder="Verification code" Size="large" @bind-Value="@context.Captcha">
-                                    <Prefix><Icon Type="mail" /></Prefix>
-                                </AntDesign.Input>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="8">
-                                <Button Size="large" Block OnClick="GetCaptcha">Verify</Button>
-                            </AntDesign.Col>
-                        </Row>
-                    </FormItem>
-                </TabPane>*@
-            </Tabs>
-            <div>
-                <Checkbox Checked="@context.AutoLogin">
-                    Auto Login
-                </Checkbox>
-                <a style="float: right;">
-                    Forgot Password
-                </a>
-            </div>
-            <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>Log in</Button>
-            <div class="other">
-                @*Other Login Methods
-                <Icon Class="icon" Type="alipay-circle" />
-                <Icon Class="icon" Type="taobao-circle" />
-                <Icon Class="icon" Type="weibo-circle" />*@
-                <a class="register" href="/user/register">Register Account</a>
-            </div>
-        </Form>
+<div class="auth-page-layout">
+    <div class="card-container">
+        <div class="brand">
+            <Icon Type="box-plot" Style="font-size: 24px; color: #4096ff; margin-right: 8px;" />
+            <span class="brand-text">Nummy</span>
+        </div>
+
+        <div class="login-card">
+            <p class="subtitle">Please enter your details</p>
+            <h2 class="title">Welcome back</h2>
+
+            <Form Model="@_model" OnFinish="Login">
+                <FormItem>
+                    <AntDesign.Input Placeholder="Email address" Size="large" @bind-Value="@context.Email">
+                    </AntDesign.Input>
+                </FormItem>
+                <FormItem>
+                    <AntDesign.Input Placeholder="Password" Size="large" @bind-Value="@context.Password"
+                                     Type="password">
+                    </AntDesign.Input>
+                </FormItem>
+                <div class="remember-forgot">
+                    <Checkbox Checked="@context.AutoLogin">
+                        Remember for 30 days
+                    </Checkbox>
+                    <a class="forgot-link">Forgot password</a>
+                </div>
+                <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>Sign in</Button>
+
+                <Button Class="google-button" Size="large" Block>
+                    <Space>
+                        <Icon Type="google" />
+                        <span>Sign in with Google</span>
+                    </Space>
+                </Button>
+
+                <div class="register-link">
+                    Don't have an account? <a href="/user/register">Sign up</a>
+                </div>
+            </Form>
+        </div>
     </div>
 </div>
+
+<style>
+    .auth-page-layout {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f2f5;
+        padding: 24px;
+    }
+
+    .card-container {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .brand-text {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1f1f1f;
+    }
+
+    .login-card {
+        background: white;
+        padding: 32px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 32px;
+        color: #1f1f1f;
+    }
+
+    .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .forgot-link {
+        color: #4096ff;
+    }
+
+    .submit {
+        margin-bottom: 16px;
+    }
+
+    .google-button {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-link {
+        text-align: center;
+    }
+
+    .register-link a {
+        color: #4096ff;
+    }
+</style>
