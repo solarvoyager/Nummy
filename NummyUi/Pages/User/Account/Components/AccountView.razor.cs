@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using NummyShared.Dtos;
 using NummyUi.Models;
+using NummyUi.Models.Account;
 using NummyUi.Services;
 using NummyUi.Session;
 
 namespace NummyUi.Pages.User.Account.Components
 {
-    public partial class BaseView
+    public partial class AccountView
     {
         private BaseViewModel _model;
 

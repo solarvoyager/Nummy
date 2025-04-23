@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NummyUi.Models;
+namespace NummyUi.Models.Account;
 
 public class RegisterModel
 {

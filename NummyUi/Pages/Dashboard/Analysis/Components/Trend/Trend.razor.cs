@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace NummyUi.Pages.Dashboard.Analysis
+namespace NummyUi.Pages.Dashboard.Analysis.Components.Trend
 {
     public partial class Trend
     {

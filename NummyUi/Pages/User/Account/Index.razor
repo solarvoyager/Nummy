@@ -1,6 +1,7 @@
 @namespace NummyUi.Pages.User.Account
 @page "/user/account"
 @using NummyUi.Pages.User.Account.Components
+@using NummyUi.Utils
 
 <GridContent>
     <div class="main" style="background-color: white; padding: 24px;">
@@ -9,7 +10,7 @@
                 Mode="MenuMode.Inline" 
                 SelectedKeys="new[] { _selectKey }" 
                 OnMenuItemClicked="SelectKey">
-                @foreach (var item in _menuMap)
+                @foreach (var item in NummyContants.AccountMenuItems)
                 {
                     <MenuItem Key="@item.Key">@item.Value</MenuItem>
                 }
@@ -17,12 +18,12 @@
         </div>
         <div class="right" style="flex: 1; padding: 8px 40px;">
             <div class="title" style="margin-bottom: 12px; color: rgba(0,0,0,.85); font-weight: 500; font-size: 20px;">
-                @_menuMap[_selectKey]
+                @NummyContants.AccountMenuItems[_selectKey]
             </div>
             @switch (_selectKey)
             {
-                case "base":
-                    <BaseView />
+                case "account":
+                    <AccountView />
                     break;
                 case "security":
                     <SecurityView />

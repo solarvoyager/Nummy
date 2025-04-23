@@ -61,4 +61,14 @@ public static class NummyContants
             Icon = "team"
         }
     ];
+    
+    public static Dictionary<string, string> AccountMenuItems = new()
+    {
+        {"account", "Account Settings"},
+        {"security", "Security Settings"},
+        {"binding", "Account Binding"},
+        {"notification", "New Message Notification"},
+    };
+    
+    public static string AccountMenuDefaultItemKey = "account";
 }

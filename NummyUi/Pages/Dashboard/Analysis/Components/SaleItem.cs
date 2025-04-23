@@ -1,4 +1,4 @@
-namespace NummyUi.Pages.Dashboard.Analysis
+namespace NummyUi.Pages.Dashboard.Analysis.Components
 {
     public partial class SalesCard
     {

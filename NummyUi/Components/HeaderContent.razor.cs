@@ -5,9 +5,9 @@ using NummyShared.Dtos;
 using NummyUi.Services;
 using NummyUi.Session;
 
-namespace NummyUi.Components.GlobalHeader
+namespace NummyUi.Components
 {
-    public partial class RightContent
+    public partial class HeaderContent
     {
         private UserToListDto? _user;
         private NoticeIconData[] _notifications = [];

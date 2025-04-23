@@ -1,9 +1,8 @@
 using AntDesign.Charts;
 using Microsoft.AspNetCore.Components;
 using NummyUi.Services;
-using System.Threading.Tasks;
 
-namespace NummyUi.Pages.Dashboard.Analysis
+namespace NummyUi.Pages.Dashboard.Analysis.Components
 {
     public partial class SalesCard
     {

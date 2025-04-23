@@ -3,6 +3,7 @@
 @using NummyUi.Components
 @using NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
 @using NummyUi.Pages.Dashboard.Analysis.Components.Charts.Field
+@using NummyUi.Pages.Dashboard.Analysis.Components.Charts.ChartCard
 @attribute [ReuseTabsPage(Title = "Dashboard", Pin = true, Closable = false, Order = 0)]
 
 <GridContent>
@@ -23,16 +24,16 @@
                                Value="@_totalCounts?.TotalErrorAndFatals.ToString()"/>
                     </ChildContent>
                     <Footer>
-                        <Trend Flag="up">
+                        <trend Flag="up">
                             Today Errors
                             <span class="trendText">@_totalCounts?.TodayErrorAndFatals</span>
-                        </Trend>
+                        </trend>
                     </Footer>
                 </ChartCard>
             </AntDesign.Col>
             <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
                 <ChartCard Title="Requests Total/Today"
-                           Total="@(_totalCounts?.TotalRequests.ToString() + " / " + _totalCounts?.RequestsToday.ToString())"
+                           Total="@(_totalCounts?.TotalRequests+ " / " + _totalCounts?.RequestsToday)"
                            ContentHeight="46">
                     <ChildContent>
                         <WeeklyRequests WeeklyCounts="@_totalCounts?.WeeklyRequests"/>

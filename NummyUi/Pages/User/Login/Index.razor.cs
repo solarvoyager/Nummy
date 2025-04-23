@@ -2,6 +2,7 @@
 using AntDesign;
 using Microsoft.AspNetCore.Components;
 using NummyUi.Models;
+using NummyUi.Models.Account;
 using NummyUi.Services;
 using NummyUi.Session;
 
@@ -16,8 +17,12 @@ namespace NummyUi.Pages.User.Login
         [Inject] public IUserService UserService { get; set; }
         [Inject] public IUserSession UserSession { get; set; }
 
+        private bool _isLoading = false;
+
         public async Task Login()
         {
+            _isLoading = true;
+            
             var loginResult = await UserService.Login(_model.Email, _model.Password);
             
             if (loginResult.Success)
@@ -29,8 +34,10 @@ namespace NummyUi.Pages.User.Login
             }
             else
             {
-                await Message.Error($"Login failed: {loginResult.Message}");
+                Message.Error($"Sign In failed: {loginResult.Message}");
             }
+            
+            _isLoading = false;
         }
 
         /*public async Task GetCaptcha()

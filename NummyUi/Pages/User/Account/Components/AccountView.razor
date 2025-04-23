@@ -1,6 +1,6 @@
 ﻿@namespace NummyUi.Pages.User.Account.Components
 
-<div class="baseView" style="display: flex; padding-top: 12px;">
+<div class="accountView" style="display: flex; padding-top: 12px;">
     <div class="left" style="min-width: 310px; max-width: 448px;">
         <Form 
             Layout="@FormLayout.Vertical"
@@ -9,19 +9,20 @@
             <FormItem Label="Email">
                 <AntDesign.Input @bind-Value="@context.Email" />
             </FormItem>
-            <FormItem Label="Name">
-                <AntDesign.Input @bind-Value="@context.Name" />
-            </FormItem>
-            <FormItem Label="Surname">
-                <AntDesign.Input @bind-Value="@context.Surname" />
-            </FormItem>
-            <FormItem>
-                <InputGroup Compact Size="@InputSize.Large" Style="display: table">
+            <div style="display: flex; gap: 16px;">
+                <FormItem Label="Name">
+                    <AntDesign.Input @bind-Value="@context.Name" />
+                </FormItem>
+                <FormItem Label="Surname">
+                    <AntDesign.Input @bind-Value="@context.Surname" />
+                </FormItem>
+            </div>
+            <FormItem Label="Phone Number">
+                <InputGroup Compact Size="@InputSize.Default" Style="display: table">
                     <Select TItem="string"
                             TItemValue="string"
                             DefaultValue=@("+994")
-                            Style="width: 25%"
-                            Size="large">
+                            Style="width: 25%">
                         <SelectOptions>
                             <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
                         </SelectOptions>
@@ -29,8 +30,7 @@
                     <Select TItem="string"
                             TItemValue="string"
                             DefaultValue=@("50")
-                            Style="width: 20%"
-                            Size="large">
+                            Style="width: 20%">
                         <SelectOptions>
                             <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
                             <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
@@ -40,7 +40,7 @@
                             <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
                         </SelectOptions>
                     </Select>
-                    <Input Placeholder="Phone Number" Style="width: 55%;" @bind-Value="@context.Phone" MaxLength="7"></Input>
+                    <Input Style="width: 55%;" @bind-Value="@context.Phone" MaxLength="7"></Input>
                 </InputGroup>
             </FormItem>
             <FormItem>

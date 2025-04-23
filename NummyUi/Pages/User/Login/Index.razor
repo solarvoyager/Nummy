@@ -2,10 +2,13 @@
 @layout NummyUi.Layouts.BasicLayout
 @page "/user/login"
 
+@using AntDesign
+@using Microsoft.AspNetCore.Components
+
 <div class="auth-page-layout">
     <div class="card-container">
         <div class="brand">
-            <Icon Type="box-plot" Style="font-size: 24px; color: #4096ff; margin-right: 8px;" />
+            <img src="pro_icon.svg" alt="Nummy Logo" style="width: 26px; height: 26px; margin-right: 8px;" />
             <span class="brand-text">Nummy</span>
         </div>
 
@@ -25,11 +28,12 @@
                 </FormItem>
                 <div class="remember-forgot">
                     <Checkbox Checked="@context.AutoLogin">
-                        Remember for 30 days
+                        Remember me
                     </Checkbox>
                     <a class="forgot-link">Forgot password</a>
                 </div>
-                <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block>Sign in</Button>
+
+                <Button Type="primary" HtmlType="submit" Class="submit" Size="large" Block Loading="@_isLoading">Sign in</Button>
 
                 <Button Class="google-button" Size="large" Block>
                     <Space>

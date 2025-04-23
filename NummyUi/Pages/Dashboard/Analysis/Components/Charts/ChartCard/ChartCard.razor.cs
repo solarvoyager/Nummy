@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace NummyUi.Pages.Dashboard.Analysis
+namespace NummyUi.Pages.Dashboard.Analysis.Components.Charts.ChartCard
 {
     public partial class ChartCard
     {

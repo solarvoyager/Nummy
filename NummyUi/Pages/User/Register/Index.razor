@@ -2,10 +2,13 @@
 @layout NummyUi.Layouts.BasicLayout
 @page "/user/register"
 
+@using AntDesign
+@using Microsoft.AspNetCore.Components
+
 <div class="auth-page-layout">
     <div class="card-container">
         <div class="brand">
-            <Icon Type="box-plot" Style="font-size: 24px; color: #4096ff; margin-right: 8px;" />
+            <img src="pro_icon.svg" alt="Nummy Logo" style="width: 26px; height: 26px; margin-right: 8px;" />
             <span class="brand-text">Nummy</span>
         </div>
         
@@ -75,8 +78,8 @@
                         </AntDesign.Col>
                     </Row>
                 </FormItem>
-
-                <Button Type="primary" Size="large" HtmlType="submit" Class="submit" Block>Sign up</Button>
+                
+                <Button Type="primary" Size="large" HtmlType="submit" Class="submit" Block Loading="@_isLoading" >Sign up</Button> 
                 
                 <Button Class="google-button" Size="large" Block>
                     <Space>

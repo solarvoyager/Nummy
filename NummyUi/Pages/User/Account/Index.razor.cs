@@ -1,18 +1,11 @@
 using AntDesign;
+using NummyUi.Utils;
 
 namespace NummyUi.Pages.User.Account
 {
     public partial class Index
     {
-        private readonly Dictionary<string, string> _menuMap = new Dictionary<string, string>
-        {
-            {"base", "Basic Settings"},
-            {"security", "Security Settings"},
-            {"binding", "Account Binding"},
-            {"notification", "New Message Notification"},
-        };
-
-        private string _selectKey = "base";
+        private string _selectKey = NummyContants.AccountMenuDefaultItemKey;
 
         private void SelectKey(MenuItem item)
         {
