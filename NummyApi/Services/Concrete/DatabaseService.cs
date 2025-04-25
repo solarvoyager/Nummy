@@ -5,7 +5,7 @@ using NummyApi.Services.Abstract;
 
 namespace NummyApi.Services.Concrete;
 
-public class DatabaseService(NummyDataContext dataContext, IMapper mapper) : IDatabaseService
+public class DatabaseService(NummyDataContext dataContext) : IDatabaseService
 {
     public async Task EnsureCreated()
     {

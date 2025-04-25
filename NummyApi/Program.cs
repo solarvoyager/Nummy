@@ -39,6 +39,7 @@ builder.Services.AddScoped<IRequestLogService, RequestLogService>();
 builder.Services.AddScoped<IResponseLogService, ResponseLogService>();
 builder.Services.AddScoped<IStatisticalService, StatisticalService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 var app = builder.Build();
 

@@ -65,8 +65,22 @@ public class UserService(NummyDataContext context) : IUserService
             user.Name,
             user.Surname,
             user.Email,
-            user.Phone,
-            user.LastLoginDate
+            user.Phone
         );
+    }
+
+    public async Task<IEnumerable<UserToListDto>> GetAsync()
+    {
+        var users = await context.Users.ToListAsync();
+        
+        var mappeds = users.Select(u => new UserToListDto(
+            u.Id,
+            u.Name,
+            u.Surname,
+            u.Email,
+            u.Phone
+        )).ToList();
+
+        return mappeds;
     }
 }

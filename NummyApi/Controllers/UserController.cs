@@ -31,4 +31,11 @@ public class UserController(IUserService userService) : ControllerBase
 
         return result == null ? NotFound("User not found") : Ok(result);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var users = await userService.GetAsync();
+        return Ok(users);
+    }
 }

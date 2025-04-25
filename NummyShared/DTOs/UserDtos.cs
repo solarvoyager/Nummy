@@ -34,6 +34,5 @@ public record UserToListDto
     string Name,
     string Surname,
     string Email,
-    string? Phone,
-    DateTimeOffset LastLoginDate
+    string? Phone
 );
