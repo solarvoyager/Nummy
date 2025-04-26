@@ -19,7 +19,7 @@ namespace NummyUi.Pages.User.Login
 
         private bool _isLoading = false;
 
-        public async Task Login()
+        public async Task OnLogin()
         {
             _isLoading = true;
             

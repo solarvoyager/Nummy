@@ -16,7 +16,7 @@
             <p class="subtitle">Please enter your details</p>
             <h2 class="title">Create an account</h2>
 
-            <Form Model="@_model" OnFinish="Register">
+            <Form Model="@_model" OnFinish="OnRegister">
                 <FormItem>
                     <InputGroup Compact Size="@InputSize.Large" Style="display: table">
                         <Input Placeholder="Name" Style="width: 50%;" @bind-Value="@context.Name"></Input>

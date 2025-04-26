@@ -1,0 +1,107 @@
+﻿@namespace NummyUi.Pages.Team
+@page "/team"
+@using NummyShared.DTOs
+
+<Spin Spinning="_loading">
+    <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_listGridType" DataSource="_teams">
+        <ListItem NoFlex>
+            <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
+                <CardMeta>
+                    <AvatarTemplate>
+                        <Avatar Shape="AvatarShape.Square"
+                                Size="@("3.5rem")"
+                                Style="color: #f56a00; background-color: #fde3cf; vertical-align: middle;">
+                            @context.Name[0].ToString().ToUpper()
+                        </Avatar>
+                    </AvatarTemplate>
+                    <TitleTemplate>@context.Name</TitleTemplate>
+                    <DescriptionTemplate>
+                        <Text Type="TextElementType.Secondary">@context.Description</Text>
+                    </DescriptionTemplate>
+                </CardMeta>
+                <Divider/>
+                <GridRow>
+                    <GridCol Span="11">
+                        <GridRow Style="margin-bottom: 12px">
+                            <Text Strong>Users</Text>
+                        </GridRow>
+                        <GridRow Style="margin-bottom: 28px">
+                            <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
+                                <Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
+                                <Avatar Style="background-color: #f56a00">K</Avatar>
+                                <Tooltip Title="Ant User" Placement="Placement.Top">
+                                    <Avatar Style="background-color: #87d068;" Icon="user"/> @*RefBack="@context"*@
+                                </Tooltip>
+                                <Avatar Style="background-color: #1890ff;" Icon="ant-design"/>
+                            </AvatarGroup>
+                        </GridRow>
+                    </GridCol>
+                    <GridCol Span="2">
+                        <Divider Type="DirectionVHType.Vertical" Style="height: 100%"/>
+                    </GridCol>
+                    <GridCol Span="11">
+                        <GridRow Style="margin-bottom: 12px">
+                            <Text Strong>Applications</Text>
+                        </GridRow>
+                        <GridRow Style="margin-bottom: 28px">
+                            <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
+                                <Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
+                                <Avatar Style="background-color: #00abf5">K</Avatar>
+                                <Tooltip Title="Ant User" Placement="Placement.Top">
+                                    <Avatar Style="background-color: #cd68d0;" Icon="user"/> @*RefBack="@context"*@
+                                </Tooltip>
+                                <Avatar Style="background-color: #18ffdc;" Icon="ant-design"/>
+                            </AvatarGroup>
+                        </GridRow>
+                    </GridCol>
+                </GridRow>
+                
+                <GridRow Style="margin-bottom: 6px">
+                    <Text Strong>Created at</Text>
+                </GridRow>
+                <GridRow Style="margin-bottom: 0">
+                    @context.CreatedAt.ToString("dd MMMM, yyyy")
+                </GridRow>
+            </Card>
+        </ListItem>
+    </AntList>
+</Spin>
+
+@code
+{
+    private RenderFragment<TeamToListDto> Edit => ctx => @<AntDesign.Tooltip Title="Edit">
+                                                             <Icon Type="edit" Theme="@IconThemeType.Outline"
+                                                                   OnClick="@(() => OnEdit(ctx))"/>
+                                                         </AntDesign.Tooltip>;
+
+    private RenderFragment<TeamToListDto> Share => ctx => @<AntDesign.Tooltip Title="Share">
+                                                              <Icon Type="share-alt" Theme="@IconThemeType.Outline"
+                                                                    OnClick="@(() => OnShare(ctx))"/>
+                                                          </AntDesign.Tooltip>;
+
+    private RenderFragment<TeamToListDto> Delete => ctx => @<AntDesign.Tooltip Title="Delete">
+                                                               <Popconfirm Title="Are you sure delete this team?"
+                                                                           OkText="Yes"
+                                                                           CancelText="No"
+                                                                           OnConfirm="@(() => OnDelete(ctx))">
+                                                                   <Icon Type="delete" Style="color: red"
+                                                                         Theme="@IconThemeType.Outline"/>
+                                                               </Popconfirm>
+                                                           </AntDesign.Tooltip>;
+
+    private RenderFragment<TeamToListDto> More => ctx => @<AntDesign.Tooltip Title="More">
+                                                             <Icon Type="more" Theme="@IconThemeType.Outline"
+                                                                   OnClick="@(() => { })"/>
+                                                         </AntDesign.Tooltip>;
+
+    private IList<RenderFragment> GetActions(TeamToListDto context)
+    {
+        return new List<RenderFragment>
+        {
+            Edit(context),
+            Share(context),
+            Delete(context),
+            More(context)
+        };
+    }
+}

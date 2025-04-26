@@ -26,6 +26,7 @@ public static class NummyContants
     public const string UpdateTeamUrl = "api/team";
     public const string DeleteTeamUrl = "api/team";
     public const string AddUserToTeamUrl = "api/team";
+    public const string TeamShareUrl = "/team";
 
     public static readonly int[] PageSizes = [5, 10, 20, 50, 100, 1000];
 
@@ -82,6 +83,6 @@ public static class NummyContants
         {"binding", "Account Binding"},
         {"notification", "New Message Notification"},
     };
-    
-    public static readonly string AccountMenuDefaultItemKey = "account";
+
+    public const string AccountMenuDefaultItemKey = "account";
 }

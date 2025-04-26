@@ -5,7 +5,7 @@ using NummyShared.Dtos.Domain;
 using NummyShared.Dtos.Enums;
 using NummyUi.Services;
 
-namespace NummyUi.Pages.CodeLogger;
+namespace NummyUi.Pages.Code;
 
 public partial class Index
 {

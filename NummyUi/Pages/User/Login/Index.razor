@@ -16,7 +16,7 @@
             <p class="subtitle">Please enter your details</p>
             <h2 class="title">Welcome back</h2>
 
-            <Form Model="@_model" OnFinish="Login">
+            <Form Model="@_model" OnFinish="OnLogin">
                 <FormItem>
                     <AntDesign.Input Placeholder="Email address" Size="large" @bind-Value="@context.Email">
                     </AntDesign.Input>

@@ -17,7 +17,7 @@ namespace NummyUi.Pages.User.Register
         
         private bool _isLoading = false;
 
-        public async Task Register()
+        public async Task OnRegister()
         {
             _isLoading = true;
             
