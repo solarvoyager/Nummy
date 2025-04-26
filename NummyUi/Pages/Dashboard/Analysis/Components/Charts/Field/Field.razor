@@ -4,10 +4,10 @@
 <div class="field">
     <span class="label">@Label</span>
     <span class="number">@Value</span>
-
+    <br/>
     @if(!string.IsNullOrWhiteSpace(Description))
     {
-        <p class="description">@Description</p>
+        <AntDesign.Text Disabled Style="font-size: 10px">@Description</AntDesign.Text>
     }
 </div>
 
@@ -27,9 +27,5 @@
     .field .number {
         margin-left: 8px;
         color: rgba(0, 0, 0, 0.85);
-    }
-    .field .description {
-        font-size: 10px;
-        color: rgba(0, 0, 0, 0.4);
     }
 </style>

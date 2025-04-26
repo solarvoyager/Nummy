@@ -7,7 +7,7 @@ using NummyShared.Dtos.Enums;
 
 namespace NummyApi.Services.Concrete;
 
-public class StatisticalService(NummyDataContext dataContext, IMapper mapper) : IStatisticalService
+public class StatisticalService(NummyDataContext dataContext) : IStatisticalService
 {
     public async Task<TotalCountsResponseDto> GetTotalCountsAsync()
     {
@@ -20,6 +20,7 @@ public class StatisticalService(NummyDataContext dataContext, IMapper mapper) : 
             RequestsThisWeek: await CountRequestsByWeekAsync(now),
             WeeklyRequests: await CountRequestsGroupedByDayOfWeekAsync(now),
             TotalCodeLogs: await dataContext.CodeLogs.CountAsync(),
+            TodayCodeLogs: await CountCodeLogsByDate(now),
             TodayErrorAndFatals: await CountErrorAndFatalLogsByDateAsync(now),
             TotalErrorAndFatals: await CountErrorAndFatalLogsAsync()
         );
@@ -112,6 +113,15 @@ public class StatisticalService(NummyDataContext dataContext, IMapper mapper) : 
     {
         return await dataContext.CodeLogs
             .Where(l => l.LogLevel == CodeLogLevel.Error || l.LogLevel == CodeLogLevel.Fatal)
+            .CountAsync();
+    }
+    
+    private async Task<int> CountCodeLogsByDate(DateTimeOffset date)
+    {
+        return await dataContext.CodeLogs
+            .Where(l => l.CreatedAt.Year == date.Year
+                        && l.CreatedAt.Month == date.Month
+                        && l.CreatedAt.Day == date.Day)
             .CountAsync();
     }
 }

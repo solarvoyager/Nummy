@@ -8,6 +8,7 @@ public record TotalCountsResponseDto(
     int RequestsThisHour,
     List<HourlyRequestDto> HourlyRequests,
     int TotalCodeLogs,
+    int TodayCodeLogs,
     int TodayErrorAndFatals,
     int TotalErrorAndFatals
 );

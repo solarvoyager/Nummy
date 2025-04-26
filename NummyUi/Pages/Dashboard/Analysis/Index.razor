@@ -16,30 +16,30 @@
     {
         <Row Type="flex" Gutter="24">
             <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Code Logs Total/Today"
-                           Total="@(_totalCounts?.TotalCodeLogs.ToString() + " / 12")"
+                <ChartCard Title="Logs Today"
+                           Total="@(_totalCounts?.TodayCodeLogs.ToString())"
                            ContentHeight="46">
                     <ChildContent>
-                        <Field Label="Errors" Description="* Including Fatal"
-                               Value="@_totalCounts?.TotalErrorAndFatals.ToString()"/>
+                        <Field Label="Errors today" Description="* Including Fatal"
+                               Value="@_totalCounts?.TodayErrorAndFatals.ToString()"/>
                     </ChildContent>
                     <Footer>
                         <trend Flag="up">
-                            Today Errors
-                            <span class="trendText">@_totalCounts?.TodayErrorAndFatals</span>
+                            Total log/errors
+                            <span class="trendText">@($"{_totalCounts?.TotalCodeLogs}/{_totalCounts?.TotalErrorAndFatals}")</span>
                         </trend>
                     </Footer>
                 </ChartCard>
             </AntDesign.Col>
             <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Requests Total/Today"
-                           Total="@(_totalCounts?.TotalRequests+ " / " + _totalCounts?.RequestsToday)"
+                <ChartCard Title="Requests Today"
+                           Total="@_totalCounts?.RequestsToday.ToString()"
                            ContentHeight="46">
                     <ChildContent>
                         <WeeklyRequests WeeklyCounts="@_totalCounts?.WeeklyRequests"/>
                     </ChildContent>
                     <Footer>
-                        <Field Label="Weekly" Value="@_totalCounts?.RequestsThisWeek.ToString()"/>
+                            <Field Label="Total/this week" Value="@($"{_totalCounts?.TotalRequests}/{_totalCounts?.RequestsThisWeek}")"/>
                     </Footer>
                 </ChartCard>
             </AntDesign.Col>

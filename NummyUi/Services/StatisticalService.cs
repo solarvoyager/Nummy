@@ -26,7 +26,7 @@ public class StatisticalService(IHttpClientFactory clientFactory) : IStatistical
         // show message to user
         if (!response.IsSuccessStatusCode)
         {
-            return new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0);
+            return new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0, 0);
         }
 
         var result = await response.Content.ReadFromJsonAsync<TotalCountsResponseDto>();
