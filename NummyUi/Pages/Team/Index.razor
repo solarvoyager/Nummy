@@ -27,12 +27,16 @@
                         </GridRow>
                         <GridRow Style="margin-bottom: 28px">
                             <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
-                                <Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
-                                <Avatar Style="background-color: #f56a00">K</Avatar>
-                                <Tooltip Title="Ant User" Placement="Placement.Top">
-                                    <Avatar Style="background-color: #87d068;" Icon="user"/> @*RefBack="@context"*@
-                                </Tooltip>
-                                <Avatar Style="background-color: #1890ff;" Icon="ant-design"/>
+                                @foreach(var user in context.Users)
+                                {
+                                    <Tooltip Title="@($"{user.Name} {user.Surname}")" Placement="Placement.Top">
+                                        <Unbound Context="avatarContext">
+                                            <Avatar Style="@($"background-color: {user.AvatarColorHex};")" RefBack="@avatarContext">
+                                                @(user.Name[0].ToString().ToUpper() + user.Surname[0].ToString().ToUpper())
+                                            </Avatar>
+                                        </Unbound>
+                                    </Tooltip>
+                                }
                             </AvatarGroup>
                         </GridRow>
                     </GridCol>
@@ -46,11 +50,11 @@
                         <GridRow Style="margin-bottom: 28px">
                             <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
                                 <Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
-                                <Avatar Style="background-color: #00abf5">K</Avatar>
+                                <Avatar Style="background-color: #f56a00">K</Avatar>
                                 <Tooltip Title="Ant User" Placement="Placement.Top">
-                                    <Avatar Style="background-color: #cd68d0;" Icon="user"/> @*RefBack="@context"*@
+                                    <Avatar Style="background-color: #87d068;" Icon="user"/> @*RefBack="@context"*@
                                 </Tooltip>
-                                <Avatar Style="background-color: #18ffdc;" Icon="ant-design"/>
+                                <Avatar Style="background-color: #1890ff;" Icon="ant-design"/>
                             </AvatarGroup>
                         </GridRow>
                     </GridCol>

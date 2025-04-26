@@ -29,5 +29,6 @@ public record UserToListDto(
     string Name,
     string Surname,
     string Email,
-    string? Phone
+    string? Phone,
+    string AvatarColorHex
 );

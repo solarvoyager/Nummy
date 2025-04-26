@@ -12,6 +12,20 @@ namespace NummyApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CodeLogs",
                 columns: table => new
                 {
@@ -89,6 +103,7 @@ namespace NummyApi.Migrations
                     PasswordSalt = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     LastLoginDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    AvatarColorHex = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -97,12 +112,38 @@ namespace NummyApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TeamApplications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ApplicationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamApplications_Applications_ApplicationId",
+                        column: x => x.ApplicationId,
+                        principalTable: "Applications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamApplications_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TeamUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     TeamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -121,6 +162,16 @@ namespace NummyApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamApplications_ApplicationId",
+                table: "TeamApplications",
+                column: "ApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamApplications_TeamId",
+                table: "TeamApplications",
+                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamUsers_TeamId",
@@ -146,7 +197,13 @@ namespace NummyApi.Migrations
                 name: "ResponseLogs");
 
             migrationBuilder.DropTable(
+                name: "TeamApplications");
+
+            migrationBuilder.DropTable(
                 name: "TeamUsers");
+
+            migrationBuilder.DropTable(
+                name: "Applications");
 
             migrationBuilder.DropTable(
                 name: "Teams");

@@ -32,12 +32,16 @@ public class UserService(NummyDataContext context, IMapper mapper) : IUserServic
 
         // Generate password hash and salt
         var (hash, salt) = SecurityHelper.GeneratePasswordHash(request.Password);
+        
+        // Generate a random color for the avatar
+        var avatarColorHex = UtilHelper.GenerateRandomColorHex();
 
         var user = new User
         {
             Name = request.Name,
             Surname = request.Surname,
             Email = request.Email,
+            AvatarColorHex = avatarColorHex,
             PasswordHash = hash,
             PasswordSalt = salt,
             LastLoginDate = DateTimeOffset.Now

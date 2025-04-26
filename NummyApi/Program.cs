@@ -19,6 +19,7 @@ var pass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 
 var connectionString =
     $"Host={host};Port=5432;Database={db};Username={user};Password={pass};IncludeErrorDetail=true;";
+    //$"Host=localhost;Port=5432;Database=nummydatabase;Username=nummyuser;Password=nummypassword;IncludeErrorDetail=true;";
 
 // example for testing:
 // docker run --name postgres-container -e POSTGRES_PASSWORD=nummypassword -e POSTGRES_USER=nummyuser -p 5432:5432 -d postgres:latest

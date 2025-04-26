@@ -52,7 +52,7 @@
     </div>
     <div class="right" style="flex: 1; padding-left: 104px;">
         <div style="margin-bottom: 8px; color: rgba(0,0,0,.85); font-size: 14px;">Avatar</div>
-        <Avatar Style="color: #f56a00; background-color: #fde3cf; ">@_model.Name[0]</Avatar>
+        <Avatar Style="color: #f56a00; background-color: #fde3cf; ">@(_model.Name[0].ToString().ToUpper() + _model.Surname[0].ToString().ToUpper())</Avatar>
         <Upload>
             <Button>
                 <Icon Type="upload" /> Change avatar

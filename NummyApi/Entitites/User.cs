@@ -11,5 +11,6 @@ public class User : Auditable
     public required string PasswordSalt { get; set; }
     public string? Phone { get; set; }
     public DateTimeOffset LastLoginDate { get; set; }
+    public required string AvatarColorHex { get; set; }
     public virtual ICollection<TeamUser> TeamUsers { get; set; } = [];
 }
