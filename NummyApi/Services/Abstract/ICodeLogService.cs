@@ -1,6 +1,6 @@
-﻿using NummyShared.Dtos;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Generic;
+﻿using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Generic;
 
 namespace NummyApi.Services.Abstract;
 

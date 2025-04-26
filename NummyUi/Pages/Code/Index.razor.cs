@@ -1,8 +1,8 @@
 ﻿using AntDesign;
 using Microsoft.AspNetCore.Components;
-using NummyShared.Dtos;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Enums;
+using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Enums;
 using NummyUi.Services;
 
 namespace NummyUi.Pages.Code;

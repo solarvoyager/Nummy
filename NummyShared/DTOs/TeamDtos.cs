@@ -4,7 +4,9 @@ public record TeamToListDto(
     Guid Id,
     string Name,
     string Description,
-    DateTimeOffset CreatedAt
+    DateTimeOffset CreatedAt,
+    List<UserToListDto> Users,
+    List<ApplicationToListDto> Applications
 );
 
 public record TeamToAddDto(

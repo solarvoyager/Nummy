@@ -3,14 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
-using NummyShared.Dtos;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Generic;
+using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
 
 namespace NummyApi.Services.Concrete;
 
 public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : IResponseLogService
 {
+    public async Task<bool> Delete(DeleteResponseLogsDto dto)
+    {
+        await dataContext.ResponseLogs
+            .Where(l => dto.Ids.Contains(l.Id))
+            .ExecuteDeleteAsync();
+
+        return true;
+    }
+
     public async Task Add(ResponseLogToAddDto dto)
     {
         var mapped = mapper.Map<ResponseLog>(dto);
@@ -54,7 +62,7 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
 
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
     }*/
-    
+
     public async Task<ResponseLogDto> Get(Guid httpLogId)
     {
         var query =
@@ -66,14 +74,14 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
             select new
             {
                 Id = responseLog != null ? responseLog.Id : Guid.Empty, // or whatever default you want
-                HttpLogId = requestLog.HttpLogId,
+                requestLog.HttpLogId,
                 RequestBody = requestLog.Body,
                 ResponseBody = responseLog != null ? responseLog.Body : null,
                 StatusCode = responseLog != null ? responseLog.StatusCode : 0,
                 CreatedAt = responseLog != null ? responseLog.CreatedAt : DateTimeOffset.Now,
                 Duration = responseLog != null ? responseLog.CreatedAt - requestLog.CreatedAt : TimeSpan.Zero
             };
-        
+
         var data = await query.FirstOrDefaultAsync();
 
         var mapped = new ResponseLogDto
@@ -86,14 +94,7 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
             CreatedAt: data.CreatedAt,
             Duration: data.Duration
         );
-            
+
         return mapped;
-    }
-
-    public async Task<bool> Delete(DeleteResponseLogsDto dto)
-    {
-        await dataContext.ResponseLogs.Where(l => dto.Ids.Contains(l.Id)).ExecuteDeleteAsync();
-
-        return true;
     }
 }

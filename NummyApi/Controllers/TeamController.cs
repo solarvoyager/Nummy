@@ -8,48 +8,53 @@ namespace NummyApi.Controllers;
 [Route("api/[controller]")]
 public class TeamController(ITeamService teamService) : ControllerBase
 {
-    private readonly ITeamService _teamService = teamService;
-
     [HttpGet]
     public async Task<ActionResult<List<TeamToListDto>>> Get()
     {
-        var teams = await _teamService.GetAsync();
+        var teams = await teamService.GetAsync();
         return Ok(teams);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TeamToListDto>> Get(Guid id)
     {
-        var team = await _teamService.GetAsync(id);
+        var team = await teamService.GetAsync(id);
         return team == null ? NotFound() : Ok(team);
     }
 
     [HttpPost]
     public async Task<ActionResult<TeamToListDto>> Add(TeamToAddDto request)
     {
-        var team = await _teamService.AddAsync(request);
+        var team = await teamService.AddAsync(request);
         return Ok(team);
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<TeamToListDto>> Update(Guid id, TeamToUpdateDto request)
     {
-        var team = await _teamService.UpdateAsync(id, request);
+        var team = await teamService.UpdateAsync(id, request);
         return team == null ? NotFound() : Ok(team);
-
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTeam(Guid id)
     {
-        await _teamService.DeleteAsync(id);
+        await teamService.DeleteAsync(id);
         return Ok();
     }
 
     [HttpPost("{teamId}/users/{userId}")]
     public async Task<IActionResult> AddUserToTeam(Guid teamId, Guid userId)
     {
-        await _teamService.AddUserToTeamAsync(teamId, userId);
+        await teamService.AddUserToTeamAsync(teamId, userId);
+        return Ok();
+    }
+
+
+    [HttpPost("{teamId}/applications/{applicationId}")]
+    public async Task<IActionResult> AddApplicationToTeam(Guid teamId, Guid applicationId)
+    {
+        await teamService.AddApplicationToTeamAsync(teamId, applicationId);
         return Ok();
     }
 }

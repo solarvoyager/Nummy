@@ -23,14 +23,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NummyShared\NummyShared.csproj" />
+        <ProjectReference Include="..\NummyShared\NummyShared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-        <DependentUpon>Dockerfile</DependentUpon>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+            <DependentUpon>Dockerfile</DependentUpon>
+        </Content>
     </ItemGroup>
 
 </Project>

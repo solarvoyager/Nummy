@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using NummyApi.Entitites;
-using NummyShared.Dtos;
+using NummyShared.DTOs;
 
 namespace NummyApi.Mappers;
 

@@ -3,14 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
 using NummyApi.Services.Abstract;
-using NummyShared.Dtos;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Generic;
+using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Generic;
 
 namespace NummyApi.Services.Concrete;
 
 public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : IRequestLogService
 {
+    public async Task<bool> Delete(DeleteRequestLogsDto dto)
+    {
+        await dataContext.RequestLogs
+            .Where(l => dto.Ids.Contains(l.Id))
+            .ExecuteDeleteAsync();
+
+        return true;
+    }
+
     public async Task Add(RequestLogToAddDto dto)
     {
         var mapped = mapper.Map<RequestLog>(dto);
@@ -77,12 +86,5 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
             .ToListAsync();
 
         return new PaginatedListDto<RequestLogToListDto>(totalCount, result);
-    }
-
-    public async Task<bool> Delete(DeleteRequestLogsDto dto)
-    {
-        await dataContext.RequestLogs.Where(l => dto.Ids.Contains(l.Id)).ExecuteDeleteAsync();
-
-        return true;
     }
 }

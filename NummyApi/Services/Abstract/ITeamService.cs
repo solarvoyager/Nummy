@@ -10,4 +10,5 @@ public interface ITeamService
     Task<TeamToListDto?> UpdateAsync(Guid id, TeamToUpdateDto dto);
     Task DeleteAsync(Guid id);
     Task AddUserToTeamAsync(Guid teamId, Guid userId);
+    Task AddApplicationToTeamAsync(Guid teamId, Guid applicationId);
 }

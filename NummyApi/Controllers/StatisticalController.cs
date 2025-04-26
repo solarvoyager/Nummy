@@ -11,9 +11,7 @@ public class StatisticalController(
     public async Task<IActionResult> GetTotalCounts()
     {
         var response = await statisticalService.GetTotalCountsAsync();
-        
+
         return Ok(response);
     }
-
-    
 }

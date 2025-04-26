@@ -1,9 +1,8 @@
 ﻿using AntDesign;
 using AntDesign.TableModels;
 using Microsoft.AspNetCore.Components;
-using NummyShared.Dtos;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Enums;
+using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
 
 namespace NummyUi.Pages.Http;
 

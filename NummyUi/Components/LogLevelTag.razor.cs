@@ -1,6 +1,6 @@
 ﻿using AntDesign;
 using Microsoft.AspNetCore.Components;
-using NummyShared.Dtos.Enums;
+using NummyShared.DTOs.Enums;
 
 namespace NummyUi.Components;
 

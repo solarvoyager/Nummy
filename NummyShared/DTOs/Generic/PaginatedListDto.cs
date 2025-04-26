@@ -1,4 +1,4 @@
-﻿namespace NummyShared.Dtos.Generic;
+﻿namespace NummyShared.DTOs.Generic;
 
 public record PaginatedListDto<T>(
     int TotalCount,

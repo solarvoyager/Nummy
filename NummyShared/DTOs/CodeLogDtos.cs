@@ -1,6 +1,6 @@
-﻿using NummyShared.Dtos.Enums;
+﻿using NummyShared.DTOs.Enums;
 
-namespace NummyShared.Dtos;
+namespace NummyShared.DTOs;
 
 public record CodeLogToAddDto(
     string? TraceIdentifier,

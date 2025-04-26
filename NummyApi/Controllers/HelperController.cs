@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NummyShared.Dtos.Domain;
+using NummyShared.DTOs.Domain;
 
 namespace NummyApi.Controllers;
 

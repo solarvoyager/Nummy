@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using NummyShared.Dtos.Domain;
+using NummyShared.DTOs.Domain;
 using NummyUi.Services;
 
 namespace NummyUi.Pages.Dashboard.Analysis;

@@ -1,7 +1,7 @@
 ﻿using AntDesign;
 using AntDesign.ProLayout;
 using Microsoft.AspNetCore.Components;
-using NummyShared.Dtos;
+using NummyShared.DTOs;
 using NummyUi.Services;
 using NummyUi.Session;
 

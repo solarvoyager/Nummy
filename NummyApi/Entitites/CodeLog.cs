@@ -1,5 +1,5 @@
 ﻿using NummyApi.Entitites.Generic;
-using NummyShared.Dtos.Enums;
+using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Entitites;
 

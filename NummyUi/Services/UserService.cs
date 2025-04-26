@@ -1,4 +1,4 @@
-﻿using NummyShared.Dtos;
+﻿using NummyShared.DTOs;
 using NummyUi.Utils;
 
 namespace NummyUi.Services

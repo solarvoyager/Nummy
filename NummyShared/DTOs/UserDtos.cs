@@ -1,20 +1,17 @@
-﻿namespace NummyShared.Dtos;
+﻿namespace NummyShared.DTOs;
 
-public record LoginRequestDto
-(
+public record LoginRequestDto(
     string Email,
     string Password
 );
 
-public record LoginResponseDto
-(
+public record LoginResponseDto(
     bool Success,
     string? Message,
     Guid? UserId
 );
 
-public record RegisterRequestDto
-(
+public record RegisterRequestDto(
     string Name,
     string Surname,
     string Email,
@@ -22,14 +19,12 @@ public record RegisterRequestDto
     string Password
 );
 
-public record RegisterResponseDto
-(
+public record RegisterResponseDto(
     bool Success,
     string? Message
 );
 
-public record UserToListDto
-(
+public record UserToListDto(
     Guid Id,
     string Name,
     string Surname,

@@ -1,13 +1,14 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
 using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
-using NummyShared.Dtos;
+using NummyShared.DTOs;
 
 namespace NummyApi.Services.Concrete;
 
-public class UserService(NummyDataContext context) : IUserService
+public class UserService(NummyDataContext context, IMapper mapper) : IUserService
 {
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
     {
@@ -15,9 +16,7 @@ public class UserService(NummyDataContext context) : IUserService
             .FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user == null || !SecurityHelper.ValidatePassword(request.Password, user.PasswordHash, user.PasswordSalt))
-        {
             return new LoginResponseDto(false, "Invalid email or password", null);
-        }
 
         user.LastLoginDate = DateTimeOffset.Now;
         await context.SaveChangesAsync();
@@ -29,9 +28,7 @@ public class UserService(NummyDataContext context) : IUserService
     {
         // Check if email already exists
         if (await context.Users.AnyAsync(u => u.Email == request.Email))
-        {
             return new RegisterResponseDto(false, "Email already exists");
-        }
 
         // Generate password hash and salt
         var (hash, salt) = SecurityHelper.GeneratePasswordHash(request.Password);
@@ -60,26 +57,16 @@ public class UserService(NummyDataContext context) : IUserService
         if (user == null)
             return null;
 
-        return new UserToListDto(
-            user.Id,
-            user.Name,
-            user.Surname,
-            user.Email,
-            user.Phone
-        );
+        var mapped = mapper.Map<UserToListDto>(user);
+
+        return mapped;
     }
 
     public async Task<IEnumerable<UserToListDto>> GetAsync()
     {
         var users = await context.Users.ToListAsync();
-        
-        var mappeds = users.Select(u => new UserToListDto(
-            u.Id,
-            u.Name,
-            u.Surname,
-            u.Email,
-            u.Phone
-        )).ToList();
+
+        var mappeds = mapper.Map<List<UserToListDto>>(users);
 
         return mappeds;
     }

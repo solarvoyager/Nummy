@@ -12,11 +12,13 @@ public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbCo
 
     // Nummy.CodeLogger & Nummy.ExceptionHandler
     public DbSet<CodeLog> CodeLogs { get; set; }
-    
+
     // NummyUi
     public DbSet<User> Users { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamUser> TeamUsers { get; set; }
+    public DbSet<Application> Applications { get; set; }
+    public DbSet<TeamApplication> TeamApplications { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

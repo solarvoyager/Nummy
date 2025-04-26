@@ -1,4 +1,4 @@
-﻿namespace NummyShared.Dtos;
+﻿namespace NummyShared.DTOs;
 
 public record ResponseLogToAddDto(
     Guid HttpLogId,

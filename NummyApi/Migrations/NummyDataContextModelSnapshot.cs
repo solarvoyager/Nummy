@@ -25,6 +25,28 @@ namespace NummyApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("NummyApi.Entitites.Application", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Applications");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.CodeLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -143,6 +165,30 @@ namespace NummyApi.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("NummyApi.Entitites.TeamApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamApplications");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.TeamUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -207,16 +253,35 @@ namespace NummyApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("NummyApi.Entitites.TeamApplication", b =>
+                {
+                    b.HasOne("NummyApi.Entitites.Application", "Application")
+                        .WithMany("TeamApplications")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NummyApi.Entitites.Team", "Team")
+                        .WithMany("TeamApplications")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.TeamUser", b =>
                 {
                     b.HasOne("NummyApi.Entitites.Team", "Team")
-                        .WithMany("Users")
+                        .WithMany("TeamUsers")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NummyApi.Entitites.User", "User")
-                        .WithMany("Teams")
+                        .WithMany("TeamUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -226,14 +291,21 @@ namespace NummyApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NummyApi.Entitites.Application", b =>
+                {
+                    b.Navigation("TeamApplications");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.Team", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("TeamApplications");
+
+                    b.Navigation("TeamUsers");
                 });
 
             modelBuilder.Entity("NummyApi.Entitites.User", b =>
                 {
-                    b.Navigation("Teams");
+                    b.Navigation("TeamUsers");
                 });
 #pragma warning restore 612, 618
         }

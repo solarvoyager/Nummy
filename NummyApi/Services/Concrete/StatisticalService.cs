@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Services.Abstract;
-using NummyShared.Dtos.Domain;
-using NummyShared.Dtos.Enums;
+using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Services.Concrete;
 
@@ -57,13 +56,9 @@ public class StatisticalService(NummyDataContext dataContext) : IStatisticalServ
             ))
             .ToListAsync();
 
-        for (int hour = 0; hour < 24; hour++)
-        {
+        for (var hour = 0; hour < 24; hour++)
             if (result.All(r => r.Hour != $"{hour:00}:00"))
-            {
                 result.Add(new HourlyRequestDto($"{hour:00}:00", 0));
-            }
-        }
 
         return result.OrderBy(r => r.Hour).ToList();
     }
@@ -89,12 +84,8 @@ public class StatisticalService(NummyDataContext dataContext) : IStatisticalServ
 
         var allDays = Enum.GetValues<DayOfWeek>().Cast<DayOfWeek>();
         foreach (var day in allDays)
-        {
             if (result.All(r => r.Day != day.ToString()))
-            {
                 result.Add(new WeeklyRequestDto(day.ToString(), 0));
-            }
-        }
 
         return result.OrderBy(r => (int)Enum.Parse<DayOfWeek>(r.Day)).ToList();
     }
@@ -115,7 +106,7 @@ public class StatisticalService(NummyDataContext dataContext) : IStatisticalServ
             .Where(l => l.LogLevel == CodeLogLevel.Error || l.LogLevel == CodeLogLevel.Fatal)
             .CountAsync();
     }
-    
+
     private async Task<int> CountCodeLogsByDate(DateTimeOffset date)
     {
         return await dataContext.CodeLogs

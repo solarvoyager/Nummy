@@ -11,7 +11,13 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
 {
     public async Task<TeamToListDto?> GetAsync(Guid id)
     {
-        var team = await dataContext.Teams.FindAsync(id);
+        var team = await dataContext.Teams
+            .Include(t => t.TeamUsers)
+            .ThenInclude(tu => tu.User)
+            .Include(t => t.TeamApplications)
+            .ThenInclude(ta => ta.Application)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
         if (team == null)
             return null;
 
@@ -22,7 +28,12 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
 
     public async Task<IEnumerable<TeamToListDto>> GetAsync()
     {
-        var teams = await dataContext.Teams.ToListAsync();
+        var teams = await dataContext.Teams
+            .Include(t => t.TeamUsers)
+            .ThenInclude(tu => tu.User!)
+            .Include(t => t.TeamApplications)
+            .ThenInclude(ta => ta.Application!)
+            .ToListAsync();
 
         var mappeds = mapper.Map<List<TeamToListDto>>(teams);
 
@@ -67,7 +78,7 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
     }
 
     public async Task AddUserToTeamAsync(Guid teamId, Guid userId)
-    {        
+    {
         var teamUser = new TeamUser
         {
             TeamId = teamId,
@@ -75,6 +86,18 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
         };
 
         dataContext.TeamUsers.Add(teamUser);
+        await dataContext.SaveChangesAsync();
+    }
+
+    public async Task AddApplicationToTeamAsync(Guid teamId, Guid applicationId)
+    {
+        var teamApplication = new TeamApplication
+        {
+            TeamId = teamId,
+            ApplicationId = applicationId
+        };
+
+        dataContext.TeamApplications.Add(teamApplication);
         await dataContext.SaveChangesAsync();
     }
 }

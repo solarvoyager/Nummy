@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NummyApi.Services.Abstract;
-using NummyShared.Dtos;
+using NummyShared.DTOs;
 
 namespace NummyApi.Controllers;
 

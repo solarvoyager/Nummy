@@ -1,4 +1,4 @@
-﻿namespace NummyShared.Dtos.Domain;
+﻿namespace NummyShared.DTOs.Domain;
 
 public enum SortOrder
 {

@@ -12,12 +12,12 @@ public static class ContextExtensions
             if (typeof(Auditable).IsAssignableFrom(entityType.ClrType))
             {
                 var parameter = Expression.Parameter(entityType.ClrType, "p");
-                var deletedCheck = Expression.Lambda(
+                var check = Expression.Lambda(
                     Expression.Equal(
                         Expression.Property(parameter, property),
                         Expression.Constant(value)
                     ), parameter);
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedCheck);
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(check);
             }
     }
 }

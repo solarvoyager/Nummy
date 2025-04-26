@@ -3,6 +3,7 @@
 public class Auditable
 {
     public Guid Id { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
     // remove unused auditable properties
     //public Guid? CreatedById { get; set; }
