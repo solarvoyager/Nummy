@@ -1,0 +1,59 @@
+﻿@namespace NummyUi.Pages.Teams
+@page "/team"
+@using NummyShared.DTOs
+
+<Spin Spinning="_loading">
+    <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_listGridType" DataSource="_teams">
+        <ListItem NoFlex>
+            <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
+                <CardMeta>
+                    <AvatarTemplate>
+                        <Avatar Size="Small" Src="@context.Name"/>
+                    </AvatarTemplate>
+                    <TitleTemplate>@context.Name</TitleTemplate>
+                    <DescriptionTemplate>@context.Description</DescriptionTemplate>
+                </CardMeta>
+                <div class="cardItemContent">
+                    <div class="cardInfo">
+                        <div>
+                            <p>Description</p>
+                            <p>@context.Description</p>
+                        </div>
+                        <div>
+                            <p>Created At</p>
+                            <p>@context.CreatedAt.ToString("MMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        </ListItem>
+    </AntList>
+</Spin>
+
+@code
+{
+    private RenderFragment<TeamToListDto> Edit => context => @<AntDesign.Tooltip Title="Edit">
+                                                                 <Icon Type="edit" Theme="@IconThemeType.Outline"
+                                                                       OnClick="@(() => HandleEdit(context))"/>
+                                                             </AntDesign.Tooltip>;
+
+    private RenderFragment<TeamToListDto> Share => context => @<AntDesign.Tooltip Title="Share">
+                                                                  <Icon Type="share-alt" Theme="@IconThemeType.Outline"
+                                                                        OnClick="@(() => HandleShare(context))"/>
+                                                              </AntDesign.Tooltip>;
+
+    private RenderFragment<TeamToListDto> Delete => context => @<AntDesign.Tooltip Title="Delete">
+                                                                   <Icon Type="delete" Theme="@IconThemeType.Outline"
+                                                                         OnClick="@(() => HandleDelete(context))"/>
+                                                               </AntDesign.Tooltip>;
+
+    private IList<RenderFragment> GetActions(TeamToListDto context)
+    {
+        return new List<RenderFragment>
+        {
+            Edit(context),
+            Share(context),
+            Delete(context)
+        };
+    }
+}

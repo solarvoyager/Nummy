@@ -69,6 +69,10 @@
     <_ContentIncludedByDefault Remove="Pages\Account\Components\PhoneView.razor" />
     <_ContentIncludedByDefault Remove="Pages\Account\Components\SecurityView.razor" />
     <_ContentIncludedByDefault Remove="Pages\Account\Index.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Teams\Components\ArticleListContent\ArticleListContent.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Teams\Components\Articles\Articles.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Teams\Components\AvatarList\AvatarList.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Teams\Components\AvatarList\AvatarListItem.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +98,8 @@
     <UpToDateCheckInput Remove="Pages\Account\Center\Components\AvatarList\AvatarListItem.razor" />
     <UpToDateCheckInput Remove="Pages\Account\Center\Components\Projects\Projects.razor" />
     <UpToDateCheckInput Remove="Pages\Account\Center\Index.razor" />
+    <UpToDateCheckInput Remove="Pages\Teams\Components\AvatarList\AvatarList.razor" />
+    <UpToDateCheckInput Remove="Pages\Teams\Components\AvatarList\AvatarListItem.razor" />
   </ItemGroup>
   
 </Project>

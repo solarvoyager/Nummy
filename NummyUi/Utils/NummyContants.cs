@@ -21,6 +21,12 @@ public static class NummyContants
     public const string LoginUrl = "api/user/login";
     public const string RegisterUrl = "api/user/register";
 
+    public const string GetTeamsUrl = "api/team";
+    public const string AddTeamUrl = "api/team";
+    public const string UpdateTeamUrl = "api/team";
+    public const string DeleteTeamUrl = "api/team";
+    public const string AddUserToTeamUrl = "api/team";
+
     public static readonly int[] PageSizes = [5, 10, 20, 50, 100, 1000];
 
     public static readonly MenuDataItem[] MenuDataItems =
