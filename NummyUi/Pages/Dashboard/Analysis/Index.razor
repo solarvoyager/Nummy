@@ -26,7 +26,8 @@
                     <Footer>
                         <trend Flag="up">
                             Total log/errors
-                            <span class="trendText">@($"{_totalCounts?.TotalCodeLogs}/{_totalCounts?.TotalErrorAndFatals}")</span>
+                            <span
+                                class="trendText">@($"{_totalCounts?.TotalCodeLogs}/{_totalCounts?.TotalErrorAndFatals}")</span>
                         </trend>
                     </Footer>
                 </ChartCard>
@@ -39,7 +40,8 @@
                         <WeeklyRequests WeeklyCounts="@_totalCounts?.WeeklyRequests"/>
                     </ChildContent>
                     <Footer>
-                            <Field Label="Total/this week" Value="@($"{_totalCounts?.TotalRequests}/{_totalCounts?.RequestsThisWeek}")"/>
+                        <Field Label="Total/this week"
+                               Value="@($"{_totalCounts?.TotalRequests}/{_totalCounts?.RequestsThisWeek}")"/>
                     </Footer>
                 </ChartCard>
             </AntDesign.Col>
