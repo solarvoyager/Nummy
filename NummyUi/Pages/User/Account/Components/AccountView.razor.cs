@@ -26,8 +26,8 @@ namespace NummyUi.Pages.User.Account.Components
                 Name = user.Name,
                 Surname = user.Surname,
                 Email = user.Email,
-                Phone = user.Phone
-                //Avatar = user.Avatar
+                Phone = user.Phone,
+                AvatarColorHex = user.AvatarColorHex,
             };
         }
     }

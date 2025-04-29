@@ -1,62 +1,67 @@
 ﻿@namespace NummyUi.Pages.User.Account.Components
 
 <div class="accountView" style="display: flex; padding-top: 12px;">
-    <div class="left" style="min-width: 310px; max-width: 448px;">
-        <Form 
-            Layout="@FormLayout.Vertical"
-            OnFinish="HandleFinish"
-            Model="@_model">
-            <FormItem Label="Email">
-                <AntDesign.Input @bind-Value="@context.Email" />
-            </FormItem>
-            <div style="display: flex; gap: 16px;">
-                <FormItem Label="Name">
-                    <AntDesign.Input @bind-Value="@context.Name" />
+    <GridRow Gutter="(24,24)">
+        <GridCol>
+            <Form
+                Layout="@FormLayout.Vertical"
+                OnFinish="HandleFinish"
+                Model="@_model">
+                <FormItem Label="Email">
+                    <AntDesign.Input @bind-Value="@context.Email"/>
                 </FormItem>
-                <FormItem Label="Surname">
-                    <AntDesign.Input @bind-Value="@context.Surname" />
+                <div style="display: flex; gap: 16px;">
+                    <FormItem Label="Name">
+                        <AntDesign.Input @bind-Value="@context.Name"/>
+                    </FormItem>
+                    <FormItem Label="Surname">
+                        <AntDesign.Input @bind-Value="@context.Surname"/>
+                    </FormItem>
+                </div>
+                <FormItem Label="Phone Number">
+                    <InputGroup Compact Size="@InputSize.Default" Style="display: table">
+                        <Select TItem="string"
+                                TItemValue="string"
+                                DefaultValue=@("+994")
+                                Style="width: 25%">
+                            <SelectOptions>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
+                            </SelectOptions>
+                        </Select>
+                        <Select TItem="string"
+                                TItemValue="string"
+                                DefaultValue=@("50")
+                                Style="width: 20%">
+                            <SelectOptions>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
+                                <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
+                            </SelectOptions>
+                        </Select>
+                        <Input Style="width: 55%;" @bind-Value="@context.Phone" MaxLength="7"></Input>
+                    </InputGroup>
                 </FormItem>
-            </div>
-            <FormItem Label="Phone Number">
-                <InputGroup Compact Size="@InputSize.Default" Style="display: table">
-                    <Select TItem="string"
-                            TItemValue="string"
-                            DefaultValue=@("+994")
-                            Style="width: 25%">
-                        <SelectOptions>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("+994")" Label="+994"/>
-                        </SelectOptions>
-                    </Select>
-                    <Select TItem="string"
-                            TItemValue="string"
-                            DefaultValue=@("50")
-                            Style="width: 20%">
-                        <SelectOptions>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("10")" Label="10"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("50")" Label="50"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("51")" Label="51"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("55")" Label="55"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("70")" Label="70"/>
-                            <SelectOption TItem="string" TItemValue="string" Value="@("77")" Label="77"/>
-                        </SelectOptions>
-                    </Select>
-                    <Input Style="width: 55%;" @bind-Value="@context.Phone" MaxLength="7"></Input>
-                </InputGroup>
-            </FormItem>
-            <FormItem>
-                <Button HtmlType="submit" Type="@ButtonType.Primary">
-                    Update Information
+                <FormItem>
+                    <Button HtmlType="submit" Type="@ButtonType.Primary">
+                        Update Information
+                    </Button>
+                </FormItem>
+            </Form>
+        </GridCol>
+        <GridCol>
+            <div style="margin-bottom: 8px; color: rgba(0,0,0,.85); font-size: 14px;">Avatar</div>
+            <Avatar Size="@("5rem")" Style="@($"background-color: {_model.AvatarColorHex};")">
+                @(_model.Name[0].ToString().ToUpper() + _model.Surname[0].ToString().ToUpper())
+            </Avatar>
+            <Upload Style="margin: 20px">
+                <Button>
+                    <Icon Type="upload"/>
+                    Change avatar
                 </Button>
-            </FormItem>
-        </Form>
-    </div>
-    <div class="right" style="flex: 1; padding-left: 104px;">
-        <div style="margin-bottom: 8px; color: rgba(0,0,0,.85); font-size: 14px;">Avatar</div>
-        <Avatar Style="color: #f56a00; background-color: #fde3cf; ">@(_model.Name[0].ToString().ToUpper() + _model.Surname[0].ToString().ToUpper())</Avatar>
-        <Upload>
-            <Button>
-                <Icon Type="upload" /> Change avatar
-            </Button>
-        </Upload>
-    </div>
+            </Upload>
+        </GridCol>
+    </GridRow>
 </div>
