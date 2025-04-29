@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NummyApi.DataContext;
@@ -11,9 +12,11 @@ using NummyApi.DataContext;
 namespace NummyApi.Migrations
 {
     [DbContext(typeof(NummyDataContext))]
-    partial class NummyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250429211212_team_avatarcolorhex")]
+    partial class team_avatarcolorhex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

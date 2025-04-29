@@ -69,7 +69,39 @@
             </Card>
         </ListItem>
     </AntList>
+
+    <div @onclick="@(()=>_isAddTeamModalVisible = true)">
+        <Card Bordered Hoverable Style="margin-bottom: 24px; cursor: pointer;">
+            <CardMeta>
+                <AvatarTemplate>
+                    <Avatar Shape="AvatarShape.Square"
+                            Size="@("3.5rem")"
+                            Style="color: #52c41a; background-color: #f6ffed; vertical-align: middle; border-radius: 4px">
+                        <Icon Type="plus" Theme="@IconThemeType.Outline"/>
+                    </Avatar>
+                </AvatarTemplate>
+                <TitleTemplate>Create Team</TitleTemplate>
+                <DescriptionTemplate>
+                    <Text Type="TextElementType.Secondary">Click to create a new team</Text>
+                </DescriptionTemplate>
+            </CardMeta>
+        </Card>
+    </div>
 </Spin>
+
+<Modal @bind-Visible="_isAddTeamModalVisible"
+       Title="Create New Team"
+       OnOk="@HandleAddTeam"
+       OnCancel="@(() => _isAddTeamModalVisible = false)">
+    <Form @ref="@_addTeamForm" Model="@_teamAddModel" Layout="vertical">
+        <FormItem Label="Team Name" Required>
+            <Input @bind-Value="@_teamAddModel.Name" Placeholder="Enter team name"/>
+        </FormItem>
+        <FormItem Label="Description">
+            <TextArea @bind-Value="@_teamAddModel.Description" Placeholder="Enter team description"/>
+        </FormItem>
+    </Form>
+</Modal>
 
 @code
 {

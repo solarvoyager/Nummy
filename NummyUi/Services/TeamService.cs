@@ -7,8 +7,8 @@ namespace NummyUi.Services
     {
         Task<TeamToListDto?> Get(Guid id);
         Task<IEnumerable<TeamToListDto>> Get();
-        Task<TeamToListDto> Add(TeamToAddDto dto);
-        Task<TeamToListDto?> Update(Guid id, TeamToUpdateDto dto);
+        Task<TeamToListDto> Add(string name, string description);
+        Task<TeamToListDto?> Update(Guid id, string name, string description);
         Task Delete(Guid id);
         Task AddUserToTeam(Guid teamId, Guid userId);
     }
@@ -49,11 +49,11 @@ namespace NummyUi.Services
             return result!;
         }
 
-        public async Task<TeamToListDto> Add(TeamToAddDto dto)
+        public async Task<TeamToListDto> Add(string name, string description)
         {
             var request = new HttpRequestMessage
             {
-                Content = JsonContent.Create(dto),
+                Content = JsonContent.Create(new TeamToAddDto(name, description)),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(NummyContants.AddTeamUrl, UriKind.Relative)
             };
@@ -66,11 +66,11 @@ namespace NummyUi.Services
             return result!;
         }
 
-        public async Task<TeamToListDto?> Update(Guid id, TeamToUpdateDto dto)
+        public async Task<TeamToListDto?> Update(Guid id, string name, string description)
         {
             var request = new HttpRequestMessage
             {
-                Content = JsonContent.Create(dto),
+                Content = JsonContent.Create(new TeamToUpdateDto(name, description)),
                 Method = HttpMethod.Put,
                 RequestUri = new Uri(NummyContants.UpdateTeamUrl + $"/{id}", UriKind.Relative)
             };

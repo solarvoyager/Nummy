@@ -2,6 +2,7 @@ using AntDesign;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using NummyShared.DTOs;
+using NummyUi.Models.Team;
 using NummyUi.Services;
 using NummyUi.Utils;
 
@@ -13,7 +14,7 @@ public partial class Index
     [Inject] private IMessageService MessageService { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
     
-    private readonly ListGridType _listGridType = new ListGridType
+    private readonly ListGridType _listGridType = new()
     {
         Gutter = 24,
         Column = 4
@@ -21,6 +22,10 @@ public partial class Index
 
     private IEnumerable<TeamToListDto> _teams = new List<TeamToListDto>();
     private bool _loading = true;
+    
+    private bool _isAddTeamModalVisible;
+    private readonly TeamAddModel _teamAddModel = new();
+    private Form<TeamAddModel> _addTeamForm = null!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,6 +69,7 @@ public partial class Index
         {
             await TeamService.Delete(team.Id);
             await LoadTeams();
+            
             await MessageService.Success("Team deleted successfully!");
         }
         catch (System.Exception ex)
@@ -82,6 +88,31 @@ public partial class Index
         catch (System.Exception ex)
         {
             await MessageService.Error("Failed to share team. Please try again later.");
+        }
+    }
+
+    private async Task HandleAddTeam()
+    {
+        try
+        {
+            if (!_addTeamForm.Validate())
+            {
+                return;
+            }
+
+            await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description);
+            await LoadTeams();
+            
+            _teamAddModel.Name = string.Empty;
+            _teamAddModel.Description = string.Empty;
+            
+            _isAddTeamModalVisible = false;
+            
+            await MessageService.Success("Team created successfully!");
+        }
+        catch (System.Exception ex)
+        {
+            await MessageService.Error("Failed to create team. Please try again later.");
         }
     }
 }

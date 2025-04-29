@@ -4,6 +4,7 @@ public record TeamToListDto(
     Guid Id,
     string Name,
     string Description,
+    string AvatarColorHex,
     DateTimeOffset CreatedAt,
     List<UserToListDto> Users,
     List<ApplicationToListDto> Applications

@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
+using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
 
@@ -43,6 +44,8 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
     public async Task<TeamToListDto> AddAsync(TeamToAddDto dto)
     {
         var team = mapper.Map<Team>(dto);
+
+        team.AvatarColorHex = UtilHelper.GenerateRandomColorHex();
 
         await dataContext.Teams.AddAsync(team);
         await dataContext.SaveChangesAsync();

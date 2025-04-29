@@ -11,12 +11,13 @@ public class TeamMapper : Profile
         CreateMap<TeamToAddDto, Team>();
         CreateMap<Team, TeamToListDto>()
             .ConstructUsing((src, ctx) => new TeamToListDto(
-                src.Id,
-                src.Name,
-                src.Description,
-                src.CreatedAt,
-                ctx.Mapper.Map<List<UserToListDto>>(src.TeamUsers.Select(tu => tu.User)),
-                ctx.Mapper.Map<List<ApplicationToListDto>>(src.TeamApplications.Select(ta => ta.Application))
+                Id: src.Id,
+                Name: src.Name,
+                Description: src.Description,
+                AvatarColorHex: src.AvatarColorHex,
+                CreatedAt: src.CreatedAt,
+                Users: ctx.Mapper.Map<List<UserToListDto>>(src.TeamUsers.Select(tu => tu.User)),
+                Applications: ctx.Mapper.Map<List<ApplicationToListDto>>(src.TeamApplications.Select(ta => ta.Application))
             ));
 
         // CreateMap<TeamApplication, ApplicationToListDto>()
