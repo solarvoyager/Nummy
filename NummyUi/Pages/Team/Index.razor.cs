@@ -11,6 +11,7 @@ namespace NummyUi.Pages.Team;
 public partial class Index
 {
     [Inject] private ITeamService TeamService { get; set; } = null!;
+    [Inject] private IUserService UserService { get; set; } = null!;
     [Inject] private IMessageService MessageService { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
     
@@ -21,7 +22,10 @@ public partial class Index
     };
 
     private IEnumerable<TeamToListDto> _teams = new List<TeamToListDto>();
-    private bool _loading = true;
+    private bool _teamsLoading = true;
+
+    private IEnumerable<UserToListDto> _allUsers = new List<UserToListDto>();
+    private bool _usersLoading = true;
     
     private bool _isAddTeamModalVisible;
     private readonly TeamAddModel _teamAddModel = new();
@@ -30,11 +34,12 @@ public partial class Index
     protected override async Task OnInitializedAsync()
     {
         await LoadTeams();
+        await LoadUsers();
     }
 
     private async Task LoadTeams()
     {
-        _loading = true;
+        _teamsLoading = true;
         try
         {
             _teams = await TeamService.Get();
@@ -45,7 +50,25 @@ public partial class Index
         }
         finally
         {
-            _loading = false;
+            _teamsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadUsers()
+    {
+        _usersLoading = true;
+        try
+        {
+            _allUsers = await UserService.Get();
+        }
+        catch (System.Exception ex)
+        {
+            await MessageService.Error("Failed to load users. Please try again later.");
+        }
+        finally
+        {
+            _usersLoading = false;
             StateHasChanged();
         }
     }
@@ -99,12 +122,13 @@ public partial class Index
             {
                 return;
             }
-
-            await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description);
+            
+            await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description, _teamAddModel.SelectedUserIds);
             await LoadTeams();
             
             _teamAddModel.Name = string.Empty;
             _teamAddModel.Description = string.Empty;
+            _teamAddModel.SelectedUserIds = [];
             
             _isAddTeamModalVisible = false;
             
@@ -114,5 +138,10 @@ public partial class Index
         {
             await MessageService.Error("Failed to create team. Please try again later.");
         }
+    }
+
+    private void RemoveUser(Guid userId)
+    {
+        //_teamAddModel.SelectedUserIds.Remove(userId);
     }
 }

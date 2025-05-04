@@ -2,7 +2,7 @@
 @page "/team"
 @using NummyShared.DTOs
 
-<Spin Spinning="_loading">
+<Spin Spinning="@_teamsLoading">
     <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_listGridType" DataSource="_teams">
         <ListItem NoFlex>
             <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
@@ -23,15 +23,16 @@
                 <GridRow>
                     <GridCol Span="11">
                         <GridRow Style="margin-bottom: 12px">
-                            <Text Strong>Users</Text>
+                            <Text Strong>Members</Text>
                         </GridRow>
                         <GridRow Style="margin-bottom: 28px">
                             <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
-                                @foreach(var user in context.Users)
+                                @foreach (var user in context.Users)
                                 {
                                     <Tooltip Title="@($"{user.Name} {user.Surname}")" Placement="Placement.Top">
                                         <Unbound Context="avatarContext">
-                                            <Avatar Style="@($"background-color: {user.AvatarColorHex};")" RefBack="@avatarContext">
+                                            <Avatar Style="@($"background-color: {user.AvatarColorHex};")"
+                                                    RefBack="@avatarContext">
                                                 @(user.Name[0].ToString().ToUpper() + user.Surname[0].ToString().ToUpper())
                                             </Avatar>
                                         </Unbound>
@@ -59,7 +60,7 @@
                         </GridRow>
                     </GridCol>
                 </GridRow>
-                
+
                 <GridRow Style="margin-bottom: 6px">
                     <Text Strong>Created at</Text>
                 </GridRow>
@@ -70,7 +71,7 @@
         </ListItem>
     </AntList>
 
-    <div @onclick="@(()=>_isAddTeamModalVisible = true)">
+    <div @onclick="@(() => _isAddTeamModalVisible = true)">
         <Card Bordered Hoverable Style="margin-bottom: 24px; cursor: pointer;">
             <CardMeta>
                 <AvatarTemplate>
@@ -98,7 +99,42 @@
             <Input @bind-Value="@_teamAddModel.Name" Placeholder="Enter team name"/>
         </FormItem>
         <FormItem Label="Description">
-            <TextArea @bind-Value="@_teamAddModel.Description" Placeholder="Enter team description"/>
+            <TextArea @bind-Value="@_teamAddModel.Description" Placeholder="Enter team description"></TextArea>
+        </FormItem>
+        <FormItem Label="Team Members">
+            <Select @bind-Values="@_teamAddModel.SelectedUserIds"
+                    TItem="Guid"
+                    TItemValue="Guid"
+                    Mode="SelectMode.Multiple"
+                    Placeholder="Select team members"
+                    EnableSearch
+                    AllowClear
+                    Loading="@_usersLoading"
+                    Style="width: 100%;">
+                <SelectOptions>
+                    @foreach (var user in _allUsers)
+                    {
+                        <SelectOption TItemValue="Guid"
+                                      TItem="Guid"
+                                      Value=@user.Id
+                                      Label="@($"{user.Name} {user.Surname}")"/>
+                    }
+                </SelectOptions>
+            </Select>
+        </FormItem>
+        <FormItem>
+            <div style="margin-bottom: 10px;">
+                @*<AntDesign.Flex Wrap="FlexWrap.Wrap" Gap="FlexGap.Small">*@
+                @foreach (var userId in _teamAddModel.SelectedUserIds)
+                {
+                    var user = _allUsers.First(u => u.Id == userId);
+
+                    <Tag Closable="true" OnClose="() => RemoveUser(userId)">
+                        @($"{user.Name} {user.Surname}")
+                    </Tag>
+                }
+                @*</AntDesign.Flex>*@
+            </div>
         </FormItem>
     </Form>
 </Modal>

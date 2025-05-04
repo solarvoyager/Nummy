@@ -15,6 +15,7 @@ namespace NummyUi.Services
             string password);
 
         Task<UserToListDto> Get(Guid id);
+        Task<IEnumerable<UserToListDto>> Get();
     }
 
     public class UserService(IHttpClientFactory clientFactory) : IUserService
@@ -75,6 +76,21 @@ namespace NummyUi.Services
             var response = await _client.SendAsync(request);
 
             var result = await response.Content.ReadFromJsonAsync<UserToListDto>();
+
+            return result!;
+        }
+        
+        public async Task<IEnumerable<UserToListDto>> Get()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(NummyContants.GetUserUrl, UriKind.Relative)
+            };
+
+            var response = await _client.SendAsync(request);
+
+            var result = await response.Content.ReadFromJsonAsync<IEnumerable<UserToListDto>>();
 
             return result!;
         }

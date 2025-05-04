@@ -12,7 +12,8 @@ public record TeamToListDto(
 
 public record TeamToAddDto(
     string Name,
-    string Description
+    string Description,
+    IEnumerable<Guid> UserIds
 );
 
 public record TeamToUpdateDto(
