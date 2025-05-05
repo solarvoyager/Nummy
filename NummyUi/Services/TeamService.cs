@@ -10,7 +10,6 @@ namespace NummyUi.Services
         Task<TeamToListDto> Add(string name, string description, IEnumerable<Guid> userIds);
         Task<TeamToListDto?> Update(Guid id, string name, string description);
         Task Delete(Guid id);
-        Task AddUserToTeam(Guid teamId, Guid userId);
     }
 
     public class TeamService(IHttpClientFactory clientFactory) : ITeamService
@@ -53,7 +52,7 @@ namespace NummyUi.Services
         {
             var request = new HttpRequestMessage
             {
-                Content = JsonContent.Create(new TeamToAddDto(name, description, userIds)),
+                Content = JsonContent.Create(new TeamToAddDto(name, description, userIds, [])),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(NummyContants.AddTeamUrl, UriKind.Relative)
             };
@@ -89,18 +88,6 @@ namespace NummyUi.Services
             {
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(NummyContants.DeleteTeamUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-        }
-
-        public async Task AddUserToTeam(Guid teamId, Guid userId)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyContants.AddUserToTeamUrl + $"/{teamId}/users/{userId}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);

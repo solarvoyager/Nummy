@@ -13,7 +13,8 @@ public record TeamToListDto(
 public record TeamToAddDto(
     string Name,
     string Description,
-    IEnumerable<Guid> UserIds
+    IEnumerable<Guid> UserIds,
+    IEnumerable<Guid> ApplicationIds
 );
 
 public record TeamToUpdateDto(

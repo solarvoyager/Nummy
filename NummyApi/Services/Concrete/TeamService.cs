@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
 using NummyApi.Helpers;
@@ -34,6 +35,7 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
             .ThenInclude(tu => tu.User!)
             .Include(t => t.TeamApplications)
             .ThenInclude(ta => ta.Application!)
+            .OrderByDescending(t=> t.CreatedAt)
             .ToListAsync();
 
         var mappeds = mapper.Map<List<TeamToListDto>>(teams);
@@ -44,16 +46,21 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
     public async Task<TeamToListDto> AddAsync(TeamToAddDto dto)
     {
         var team = mapper.Map<Team>(dto);
-
         team.AvatarColorHex = UtilHelper.GenerateRandomColorHex();
 
-        await dataContext.Teams.AddAsync(team);
+        var added = await dataContext.Teams.AddAsync(team);
         await dataContext.SaveChangesAsync();
-
-        var mapped = mapper.Map<TeamToListDto>(team);
+        
+        await AddUsersToTeam(added.Entity.Id, dto.UserIds);
+        await AddApplicationsToTeam(added.Entity.Id, dto.ApplicationIds);
+        
+        await dataContext.SaveChangesAsync();
+        var mapped = mapper.Map<TeamToListDto>(added.Entity);
 
         return mapped;
     }
+
+    
 
     public async Task<TeamToListDto?> UpdateAsync(Guid id, TeamToUpdateDto dto)
     {
@@ -82,25 +89,41 @@ public class TeamService(NummyDataContext dataContext, IMapper mapper) : ITeamSe
 
     public async Task AddUserToTeamAsync(Guid teamId, Guid userId)
     {
-        var teamUser = new TeamUser
-        {
-            TeamId = teamId,
-            UserId = userId
-        };
-
-        dataContext.TeamUsers.Add(teamUser);
+        await AddUsersToTeam(teamId, [userId]);
         await dataContext.SaveChangesAsync();
     }
 
     public async Task AddApplicationToTeamAsync(Guid teamId, Guid applicationId)
     {
-        var teamApplication = new TeamApplication
-        {
-            TeamId = teamId,
-            ApplicationId = applicationId
-        };
-
-        dataContext.TeamApplications.Add(teamApplication);
+        await AddApplicationsToTeam(teamId, [applicationId]);
         await dataContext.SaveChangesAsync();
+    }
+    
+    private async Task AddUsersToTeam(Guid teamId, IEnumerable<Guid> userIds)
+    {
+        foreach (var userId in userIds)
+        {
+            var teamUser = new TeamUser
+            {
+                TeamId = teamId,
+                UserId = userId
+            };
+
+            await dataContext.TeamUsers.AddAsync(teamUser);
+        }
+    }
+    
+    private async Task AddApplicationsToTeam(Guid teamId, IEnumerable<Guid> applicationIds)
+    {
+        foreach (var applicationId in applicationIds)
+        {
+            var teamApplication = new TeamApplication
+            {
+                TeamId = teamId,
+                ApplicationId = applicationId
+            };
+
+            await dataContext.TeamApplications.AddAsync(teamApplication);
+        }
     }
 }
