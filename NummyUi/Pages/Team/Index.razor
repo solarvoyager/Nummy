@@ -1,8 +1,26 @@
 ﻿@namespace NummyUi.Pages.Team
 @page "/team"
+@using AntDesign.Select.Internal
 @using NummyShared.DTOs
 
 <Spin Spinning="@_teamsLoading">
+    <div @onclick="@(() => _isAddTeamModalVisible = true)">
+        <Card Bordered Hoverable Style="margin-bottom: 24px; cursor: pointer;">
+            <CardMeta>
+                <AvatarTemplate>
+                    <Avatar Shape="AvatarShape.Square"
+                            Size="@("3.5rem")"
+                            Style="color: #52c41a; background-color: #f6ffed; vertical-align: middle; border-radius: 4px">
+                        <Icon Type="plus" Theme="@IconThemeType.Outline"/>
+                    </Avatar>
+                </AvatarTemplate>
+                <TitleTemplate>Create Team</TitleTemplate>
+                <DescriptionTemplate>
+                    <Text Type="TextElementType.Secondary">Click to create a new team</Text>
+                </DescriptionTemplate>
+            </CardMeta>
+        </Card>
+    </div>
     <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_listGridType" DataSource="_teams">
         <ListItem NoFlex>
             <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
@@ -70,24 +88,6 @@
             </Card>
         </ListItem>
     </AntList>
-
-    <div @onclick="@(() => _isAddTeamModalVisible = true)">
-        <Card Bordered Hoverable Style="margin-bottom: 24px; cursor: pointer;">
-            <CardMeta>
-                <AvatarTemplate>
-                    <Avatar Shape="AvatarShape.Square"
-                            Size="@("3.5rem")"
-                            Style="color: #52c41a; background-color: #f6ffed; vertical-align: middle; border-radius: 4px">
-                        <Icon Type="plus" Theme="@IconThemeType.Outline"/>
-                    </Avatar>
-                </AvatarTemplate>
-                <TitleTemplate>Create Team</TitleTemplate>
-                <DescriptionTemplate>
-                    <Text Type="TextElementType.Secondary">Click to create a new team</Text>
-                </DescriptionTemplate>
-            </CardMeta>
-        </Card>
-    </div>
 </Spin>
 
 <Modal @bind-Visible="_isAddTeamModalVisible"
@@ -102,15 +102,14 @@
             <TextArea @bind-Value="@_teamAddModel.Description" Placeholder="Enter team description"></TextArea>
         </FormItem>
         <FormItem Label="Team Members">
-            <Select @bind-Values="@_teamAddModel.SelectedUserIds"
-                    TItem="Guid"
-                    TItemValue="Guid"
-                    Mode="SelectMode.Multiple"
+            <Select Mode="Multiple"
                     Placeholder="Select team members"
+                    @bind-Values="@_teamAddModel.SelectedUserIds"
+                    TItemValue="Guid"
+                    TItem="Guid"
+                    Style="width: 100%; margin-bottom: 8px;"
                     EnableSearch
-                    AllowClear
-                    Loading="@_usersLoading"
-                    Style="width: 100%;">
+                    AllowClear>
                 <SelectOptions>
                     @foreach (var user in _allUsers)
                     {
@@ -128,9 +127,14 @@
                 @foreach (var userId in _teamAddModel.SelectedUserIds)
                 {
                     var user = _allUsers.First(u => u.Id == userId);
-
-                    <Tag Closable="true" OnClose="() => RemoveUser(userId)">
-                        @($"{user.Name} {user.Surname}")
+                    
+                    <Tag Closable Style="padding: 6px 10px"
+                         OnClose="@(() => RemoveUser(userId))">
+                        <Avatar Size="@("1.7rem")"
+                                Style="@($"background-color: {user.AvatarColorHex}; margin-right: 8px; ")">
+                            @($"{user.Name[0]}{user.Surname[0]}".ToUpper())
+                        </Avatar>
+                        <Text Strong Style="font-size: 13px">@($"{user.Name} {user.Surname}")</Text>
                     </Tag>
                 }
                 @*</AntDesign.Flex>*@

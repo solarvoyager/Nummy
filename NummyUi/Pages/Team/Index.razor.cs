@@ -14,7 +14,7 @@ public partial class Index
     [Inject] private IUserService UserService { get; set; } = null!;
     [Inject] private IMessageService MessageService { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
-    
+
     private readonly ListGridType _listGridType = new()
     {
         Gutter = 24,
@@ -26,7 +26,7 @@ public partial class Index
 
     private IEnumerable<UserToListDto> _allUsers = new List<UserToListDto>();
     private bool _usersLoading = true;
-    
+
     private bool _isAddTeamModalVisible;
     private readonly TeamAddModel _teamAddModel = new();
     private Form<TeamAddModel> _addTeamForm = null!;
@@ -92,7 +92,7 @@ public partial class Index
         {
             await TeamService.Delete(team.Id);
             await LoadTeams();
-            
+
             await MessageService.Success("Team deleted successfully!");
         }
         catch (System.Exception ex)
@@ -105,7 +105,8 @@ public partial class Index
     {
         try
         {
-            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", NummyContants.TeamShareUrl + $"/{team.Id}");
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText",
+                NummyContants.TeamShareUrl + $"/{team.Id}");
             await MessageService.Info("Team sharing url copied to clipboard!");
         }
         catch (System.Exception ex)
@@ -118,21 +119,19 @@ public partial class Index
     {
         try
         {
-            if (!_addTeamForm.Validate())
+            if (_addTeamForm.Validate() && _teamAddModel.SelectedUserIds.Any())
             {
-                return;
+                await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description, _teamAddModel.SelectedUserIds);
+                await LoadTeams();
+
+                _teamAddModel.Name = string.Empty;
+                _teamAddModel.Description = string.Empty;
+                _teamAddModel.SelectedUserIds = [];
+
+                _isAddTeamModalVisible = false;
+
+                await MessageService.Success("Team created successfully!");
             }
-            
-            await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description, _teamAddModel.SelectedUserIds);
-            await LoadTeams();
-            
-            _teamAddModel.Name = string.Empty;
-            _teamAddModel.Description = string.Empty;
-            _teamAddModel.SelectedUserIds = [];
-            
-            _isAddTeamModalVisible = false;
-            
-            await MessageService.Success("Team created successfully!");
         }
         catch (System.Exception ex)
         {
@@ -142,6 +141,9 @@ public partial class Index
 
     private void RemoveUser(Guid userId)
     {
-        //_teamAddModel.SelectedUserIds.Remove(userId);
+        _teamAddModel.SelectedUserIds = _allUsers
+            .Where(u => u.Id != userId)
+            .Select(u => u.Id)
+            .ToList();
     }
 }
