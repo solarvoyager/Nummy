@@ -12,6 +12,7 @@ public partial class Index
 {
     [Inject] private ITeamService TeamService { get; set; } = null!;
     [Inject] private IUserService UserService { get; set; } = null!;
+    [Inject] private IApplicationService ApplicationService { get; set; } = null!;
     [Inject] private IMessageService MessageService { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
@@ -24,17 +25,26 @@ public partial class Index
     private IEnumerable<TeamToListDto> _teams = new List<TeamToListDto>();
     private bool _teamsLoading = true;
 
+    #region AddTeamModal
+
     private IEnumerable<UserToListDto> _allUsers = new List<UserToListDto>();
-    private bool _usersLoading = true;
+    private bool _allUsersLoading = true;
+
+    private IEnumerable<ApplicationToListDto> _allApplications = new List<ApplicationToListDto>();
+    private bool _allApplicationsLoading = true;
 
     private bool _isAddTeamModalVisible;
+    
     private readonly TeamAddModel _teamAddModel = new();
     private Form<TeamAddModel> _addTeamForm = null!;
+
+    #endregion
 
     protected override async Task OnInitializedAsync()
     {
         await LoadTeams();
         await LoadUsers();
+        await LoadApplications();
     }
 
     private async Task LoadTeams()
@@ -57,7 +67,7 @@ public partial class Index
 
     private async Task LoadUsers()
     {
-        _usersLoading = true;
+        _allUsersLoading = true;
         try
         {
             _allUsers = await UserService.Get();
@@ -68,7 +78,25 @@ public partial class Index
         }
         finally
         {
-            _usersLoading = false;
+            _allUsersLoading = false;
+            StateHasChanged();
+        }
+    }
+    
+    private async Task LoadApplications()
+    {
+        _allApplicationsLoading = true;
+        try
+        {
+            _allApplications = await ApplicationService.Get();
+        }
+        catch (System.Exception ex)
+        {
+            await MessageService.Error("Failed to load applications. Please try again later.");
+        }
+        finally
+        {
+            _allApplicationsLoading = false;
             StateHasChanged();
         }
     }
@@ -127,6 +155,7 @@ public partial class Index
                 _teamAddModel.Name = string.Empty;
                 _teamAddModel.Description = string.Empty;
                 _teamAddModel.SelectedUserIds = [];
+                _teamAddModel.SelectedApplicationIds = [];
 
                 _isAddTeamModalVisible = false;
 
@@ -144,6 +173,14 @@ public partial class Index
         _teamAddModel.SelectedUserIds = _allUsers
             .Where(u => u.Id != userId)
             .Select(u => u.Id)
+            .ToList();
+    }
+    
+    private void RemoveApplication(Guid applicationId)
+    {
+        _teamAddModel.SelectedApplicationIds = _allApplications
+            .Where(a => a.Id != applicationId)
+            .Select(a => a.Id)
             .ToList();
     }
 }

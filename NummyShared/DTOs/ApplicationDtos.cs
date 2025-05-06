@@ -14,5 +14,6 @@ public record ApplicationToListDto(
     Guid Id,
     string Name,
     string Description,
-    DateTimeOffset CreatedAt
+    DateTimeOffset CreatedAt,
+    string AvatarColorHex
 );

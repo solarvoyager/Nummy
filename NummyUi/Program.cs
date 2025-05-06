@@ -29,6 +29,7 @@ builder.Services.AddScoped<IUserSession, UserSession>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IStatisticalService, StatisticalService>();

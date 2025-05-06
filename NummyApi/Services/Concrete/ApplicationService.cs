@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
+using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
 
@@ -32,6 +33,11 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
     public async Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto)
     {
         var application = mapper.Map<Application>(dto);
+        
+        // Generate a random color for the avatar
+        var avatarColorHex = UtilHelper.GenerateRandomColorHex();
+
+        application.AvatarColorHex = avatarColorHex;
 
         await dataContext.Applications.AddAsync(application);
         await dataContext.SaveChangesAsync();

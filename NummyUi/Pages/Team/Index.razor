@@ -107,9 +107,9 @@
                     @bind-Values="@_teamAddModel.SelectedUserIds"
                     TItemValue="Guid"
                     TItem="Guid"
-                    Style="width: 100%; margin-bottom: 8px;"
+                    Style="width: 100%"
                     EnableSearch
-                    Loading="@_usersLoading"
+                    Loading="@_allUsersLoading"
                     AllowClear>
                 <SelectOptions>
                     @foreach (var user in _allUsers)
@@ -122,25 +122,65 @@
                 </SelectOptions>
             </Select>
         </FormItem>
-        <FormItem>
-            <div style="margin-bottom: 10px;">
+        @if (_teamAddModel.SelectedUserIds.Any())
+        {
+            <FormItem>
                 @*<AntDesign.Flex Wrap="FlexWrap.Wrap" Gap="FlexGap.Small">*@
                 @foreach (var userId in _teamAddModel.SelectedUserIds)
                 {
                     var user = _allUsers.First(u => u.Id == userId);
-                    
-                    <Tag Closable Style="padding: 6px 10px"
+
+                    <Tag Closable Style="padding: 6px 10px; margin-top: 6px;"
                          OnClose="@(() => RemoveUser(userId))">
                         <Avatar Size="@("1.7rem")"
-                                Style="@($"background-color: {user.AvatarColorHex}; margin-right: 8px; ")">
+                                Style="@($"background-color: {user.AvatarColorHex}; margin-right: 8px;")">
                             @($"{user.Name[0]}{user.Surname[0]}".ToUpper())
                         </Avatar>
                         <Text Strong Style="font-size: 13px">@($"{user.Name} {user.Surname}")</Text>
                     </Tag>
                 }
                 @*</AntDesign.Flex>*@
-            </div>
+            </FormItem>
+        }
+        <FormItem Label="Team Applications">
+            <Select Mode="Multiple"
+                    Placeholder="Select team applications"
+                    @bind-Values="@_teamAddModel.SelectedApplicationIds"
+                    TItemValue="Guid"
+                    TItem="Guid"
+                    Style="width: 100%"
+                    EnableSearch
+                    Loading="@_allApplicationsLoading"
+                    AllowClear>
+                <SelectOptions>
+                    @foreach (var application in _allApplications)
+                    {
+                        <SelectOption TItemValue="Guid"
+                                      TItem="Guid"
+                                      Value=@application.Id
+                                      Label="@application.Name"/>
+                    }
+                </SelectOptions>
+            </Select>
         </FormItem>
+        @if (_teamAddModel.SelectedApplicationIds.Any())
+        {
+            <FormItem>
+                @foreach (var applicationId in _teamAddModel.SelectedApplicationIds)
+                {
+                    var application = _allApplications.First(a => a.Id == applicationId);
+
+                    <Tag Closable Style="padding: 6px 10px; margin-top: 6px;"
+                         OnClose="@(() => RemoveApplication(applicationId))">
+                        <Avatar Size="@("1.7rem")"
+                                Style="@($"background-color: {application.AvatarColorHex}; margin-right: 8px;")">
+                            @(application.Name[0].ToString().ToUpper())
+                        </Avatar>
+                        <Text Strong Style="font-size: 13px">@application.Name</Text>
+                    </Tag>
+                }
+            </FormItem>
+        }
     </Form>
 </Modal>
 
