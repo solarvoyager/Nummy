@@ -1,89 +1,108 @@
-﻿@namespace NummyUi.Pages.Applications
-@page "/applications"
+﻿@namespace NummyUi.Pages.Application
+@page "/application"
+@using NummyShared.DTOs
 
-<PageContainer Title="Index">
-    <Breadcrumb>
-        <Breadcrumb>
-            <BreadcrumbItem>Index</BreadcrumbItem>
-        </Breadcrumb>
-    </Breadcrumb>
+<Spin Spinning="@_applicationsLoading">
     <ChildContent>
-        <AntList Grid="grid" DataSource="@Data">
-            <ListItem>
-                <Card Bordered
-                      Hoverable
-                      BodyStyle="padding-bottom: 20px;"
-                      Actions="Actions">
-                    <CardMeta>
-                        <AvatarTemplate>
-                            <Avatar Size="small" Src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.klipartz.com%2Fen%2Fsticker-png-rbfna&psig=AOvVaw0odD9kM9ASWHJRQ63-uJ4N&ust=1705776656869000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCPiPzbCP6oMDFQAAAAAdAAAAABAD"/>
-                        </AvatarTemplate>
-                        <TitleTemplate>context.Title</TitleTemplate>
-                    </CardMeta>
-                    <div class="cardItemContent">
-                        <div class="cardInfo">
-                            <div>
-                                <p>Active User</p>
-                                <p>FormatWan(context.ActiveUser)</p>
+        <Space Direction="DirectionVHType.Vertical" Style="width: 100%">
+            <SpaceItem>
+                <Button Type="@ButtonType.Primary" OnClick="() => ShowModal()">
+                    <Icon Type="plus" Theme="outline"/>
+                    Add Application
+                </Button>
+            </SpaceItem>
+            <SpaceItem>
+                <AntList Grid="_grid" DataSource="@Applications">
+                    <ListItem>
+                        <Card Bordered
+                              Hoverable
+                              BodyStyle="padding-bottom: 20px;"
+                              Actions="GetActions(context)">
+                            <CardMeta>
+                                <AvatarTemplate>
+                                    <Avatar Size="small" Style="@($"background-color: {context.AvatarColorHex}")">
+                                        @context.Name[0].ToString().ToUpper()
+                                    </Avatar>
+                                </AvatarTemplate>
+                                <TitleTemplate>@context.Name</TitleTemplate>
+                                <DescriptionTemplate>@context.Description</DescriptionTemplate>
+                            </CardMeta>
+                            <div class="cardItemContent">
+                                <div class="cardInfo">
+                                    <div>
+                                        <p>Created At</p>
+                                        <p>@context.CreatedAt.ToString("g")</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p>New Users</p>
-                                <p>context.NewUser.ToString("0,0")</p>
-                            </div>
-                        </div>
-                    </div>
-                </Card>
-            </ListItem>
-        </AntList>
+                        </Card>
+                    </ListItem>
+                </AntList>
+            </SpaceItem>
+        </Space>
     </ChildContent>
-</PageContainer>
+</Spin>
 
-@code{
+<Modal Title="@(IsEdit ? "Edit Application" : "Add Application")"
+       Visible="@_isTeamEditOrAddModalVisible"
+       OnOk="@HandleOk"
+       OnCancel="@HandleCancel"
+       OkText="@(IsEdit ? "Update" : "Add")"
+       CancelText="@("Cancel")">
+    <Form Model="@Model" LabelCol="new ColLayoutParam { Span = 6 }"
+          WrapperCol="new ColLayoutParam { Span = 18 }">
+        <FormItem Label="Name">
+            <Input @bind-Value="@Model.Name" Placeholder="Enter application name"/>
+        </FormItem>
+        <FormItem Label="Description">
+            <TextArea @bind-Value="@Model.Description" Placeholder="Enter application description"></TextArea>
+        </FormItem>
+    </Form>
+</Modal>
 
-    public ListGridType grid = new() { Gutter = 16, Column = 4 };
+@code {
 
-    public List<BasicItem> Data = new()
+    private RenderFragment<ApplicationToListDto> Edit => ctx => @<AntDesign.Tooltip Title="Edit">
+                                                                    <Icon Type="edit" Theme="@IconThemeType.Outline"
+                                                                          OnClick="@(() => ShowModal(true, ctx))"/>
+                                                                </AntDesign.Tooltip>;
+
+    private RenderFragment<ApplicationToListDto> Delete => ctx => @<AntDesign.Tooltip Title="Delete">
+                                                                      <Popconfirm Title="Are you sure delete this application?"
+                                                                                  OkText="Yes"
+                                                                                  CancelText="No"
+                                                                                  OnConfirm="@(() => OnDelete(ctx.Id))">
+                                                                          <Icon Type="delete" Style="color: red"
+                                                                                Theme="@IconThemeType.Outline"/>
+                                                                      </Popconfirm>
+                                                                  </AntDesign.Tooltip>;
+
+    private IList<RenderFragment> GetActions(ApplicationToListDto context)
     {
-        new BasicItem { Title = "Title 1" },
-        new BasicItem { Title = "Title 2" },
-        new BasicItem { Title = "Title 3" },
-        new BasicItem { Title = "Title 4" },
-    };
-
-    public class BasicItem
-    {
-        public string Title { get; set; }
-    }
-
-    private static readonly RenderFragment Download = @<AntDesign.Tooltip Title="@("下载")">
-                                                          <Icon Type="download" Theme="outline"/>
-                                                      </AntDesign.Tooltip>;
-
-    private static readonly IList<RenderFragment> Actions = new List<RenderFragment>
-    {
-        Download,
-        @<AntDesign.Tooltip Title="@("Edit")">
-            <Icon Type="edit" Theme="outline"/>
-        </AntDesign.Tooltip>,
-        @<AntDesign.Tooltip Title="@("Share")">
-            <Icon Type="share-alt" Theme="outline"/>
-        </AntDesign.Tooltip>,
-        @<Dropdown>
-            <Icon Type="ellipsis" Theme="outline"/>
-        </Dropdown>
-    };
-
-    private static RenderFragment FormatWan(int val)
-    {
-        if (val > 10000)
+        return new List<RenderFragment>
         {
-            val = (int)Math.Floor((double)val / 10000);
-        }
-
-        return @<span>
-                   @val
-                   <span style="position: relative; top: -2px; font-size: 14px; font-style: normal; margin-left: 2px;">万</span>
-               </span>;
+            Edit(context),
+            Delete(context),
+        };
     }
 
 }
+
+<style>
+    .cardItemContent {
+        margin-top: 16px;
+    }
+
+    .cardInfo {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .cardInfo p {
+        margin: 0;
+    }
+
+    .cardInfo p:first-child {
+        color: rgba(0, 0, 0, 0.45);
+    }
+</style>

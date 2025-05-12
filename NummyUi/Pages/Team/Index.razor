@@ -1,6 +1,5 @@
 ﻿@namespace NummyUi.Pages.Team
 @page "/team"
-@using AntDesign.Select.Internal
 @using NummyShared.DTOs
 
 <Spin Spinning="@_teamsLoading">
@@ -21,7 +20,7 @@
             </CardMeta>
         </Card>
     </div>
-    <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_listGridType" DataSource="_teams">
+    <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_grid" DataSource="_teams">
         <ListItem NoFlex>
             <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
                 <CardMeta>
@@ -96,7 +95,7 @@
 </Spin>
 
 <Modal @bind-Visible="_isAddTeamModalVisible"
-       Title="Create New Team"
+       Title="Create a New Team"
        OnOk="@HandleAddTeam"
        OkText="@("Add")"
        CancelText="@("Cancel")"

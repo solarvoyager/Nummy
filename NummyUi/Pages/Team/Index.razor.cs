@@ -16,7 +16,7 @@ public partial class Index
     [Inject] private IMessageService MessageService { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
-    private readonly ListGridType _listGridType = new()
+    private readonly ListGridType _grid = new()
     {
         Gutter = 24,
         Column = 4

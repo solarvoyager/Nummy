@@ -23,7 +23,9 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
 
     public async Task<IEnumerable<ApplicationToListDto>> GetAsync()
     {
-        var applications = await dataContext.Applications.ToListAsync();
+        var applications = await dataContext.Applications
+            .OrderByDescending(t=> t.CreatedAt)
+            .ToListAsync();
 
         var mappeds = mapper.Map<List<ApplicationToListDto>>(applications);
 
