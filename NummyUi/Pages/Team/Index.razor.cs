@@ -149,7 +149,7 @@ public partial class Index
         {
             if (_addTeamForm.Validate() && _teamAddModel.SelectedUserIds.Any())
             {
-                await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description, _teamAddModel.SelectedUserIds);
+                await TeamService.Add(_teamAddModel.Name, _teamAddModel.Description, _teamAddModel.SelectedUserIds, _teamAddModel.SelectedApplicationIds);
                 await LoadTeams();
 
                 _teamAddModel.Name = string.Empty;

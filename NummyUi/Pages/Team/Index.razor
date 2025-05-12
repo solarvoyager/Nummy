@@ -48,9 +48,9 @@
                                 @foreach (var user in context.Users)
                                 {
                                     <Tooltip Title="@($"{user.Name} {user.Surname}")" Placement="Placement.Top">
-                                        <Unbound Context="avatarContext">
+                                        <Unbound Context="userAvatarContext">
                                             <Avatar Style="@($"background-color: {user.AvatarColorHex};")"
-                                                    RefBack="@avatarContext">
+                                                    RefBack="@userAvatarContext">
                                                 @(user.Name[0].ToString().ToUpper() + user.Surname[0].ToString().ToUpper())
                                             </Avatar>
                                         </Unbound>
@@ -68,12 +68,17 @@
                         </GridRow>
                         <GridRow Style="margin-bottom: 28px">
                             <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
-                                <Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
-                                <Avatar Style="background-color: #f56a00">K</Avatar>
-                                <Tooltip Title="Ant User" Placement="Placement.Top">
-                                    <Avatar Style="background-color: #87d068;" Icon="user"/> @*RefBack="@context"*@
-                                </Tooltip>
-                                <Avatar Style="background-color: #1890ff;" Icon="ant-design"/>
+                                @foreach (var application in context.Applications)
+                                {
+                                    <Tooltip Title="@($"{application.Name}")" Placement="Placement.Top">
+                                        <Unbound Context="appAvatarContext">
+                                            <Avatar Style="@($"background-color: {application.AvatarColorHex};")"
+                                                    RefBack="@appAvatarContext">
+                                                @(application.Name[0].ToString().ToUpper())
+                                            </Avatar>
+                                        </Unbound>
+                                    </Tooltip>
+                                }
                             </AvatarGroup>
                         </GridRow>
                     </GridCol>
@@ -93,6 +98,8 @@
 <Modal @bind-Visible="_isAddTeamModalVisible"
        Title="Create New Team"
        OnOk="@HandleAddTeam"
+       OkText="@("Add")"
+       CancelText="@("Cancel")"
        OnCancel="@(() => _isAddTeamModalVisible = false)">
     <Form @ref="@_addTeamForm" Model="@_teamAddModel" Layout="vertical">
         <FormItem Label="Team Name" Required>
