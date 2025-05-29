@@ -28,6 +28,7 @@ public static class NummyContants
     public const string TeamShareUrl = "/team";
     
     public const string GetApplicationsUrl = "api/application";
+    public const string GetApplicationStackTypesUrl = "api/application/stackType";
     public const string AddApplicationUrl = "api/application";
     public const string UpdateApplicationUrl = "api/application";
     public const string DeleteApplicationUrl = "api/application";

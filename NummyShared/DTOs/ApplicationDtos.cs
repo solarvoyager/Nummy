@@ -1,13 +1,17 @@
+using NummyShared.DTOs.Enums;
+
 namespace NummyShared.DTOs;
 
 public record ApplicationToAddDto(
     string Name,
-    string Description
+    string Description,
+    Guid StackId
 );
 
 public record ApplicationToUpdateDto(
     string Name,
-    string Description
+    string Description,
+    Guid StackId
 );
 
 public record ApplicationToListDto(
@@ -15,5 +19,5 @@ public record ApplicationToListDto(
     string Name,
     string Description,
     DateTimeOffset CreatedAt,
-    string AvatarColorHex
+    ApplicationStackToListDto Stack
 );

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NummyApi.DataContext;
@@ -11,9 +12,11 @@ using NummyApi.DataContext;
 namespace NummyApi.Migrations
 {
     [DbContext(typeof(NummyDataContext))]
-    partial class NummyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250529183432_application_stack")]
+    partial class application_stack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +87,7 @@ namespace NummyApi.Migrations
                         new
                         {
                             Id = new Guid("e089f7ee-7a8f-40f4-989e-316d00212d96"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 4, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IconSvg = "<svg><!-- CSharp Icon --></svg>",
                             Title = "C#",
                             Type = 0
@@ -92,7 +95,7 @@ namespace NummyApi.Migrations
                         new
                         {
                             Id = new Guid("85ef383f-1a89-4882-b59e-2db52bfedfe0"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 4, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IconSvg = "<svg><!-- Java Icon --></svg>",
                             Title = "Java",
                             Type = 1
@@ -100,7 +103,7 @@ namespace NummyApi.Migrations
                         new
                         {
                             Id = new Guid("60974335-6296-4596-9250-702824c3920f"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 4, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IconSvg = "<svg><!-- Flutter Icon --></svg>",
                             Title = "Flutter",
                             Type = 2
@@ -108,7 +111,7 @@ namespace NummyApi.Migrations
                         new
                         {
                             Id = new Guid("663e0065-ff2f-4dd6-9c9d-2e6c83595ada"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 4, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IconSvg = "<svg><!-- Javascript Icon --></svg>",
                             Title = "Javascript",
                             Type = 3

@@ -18,6 +18,7 @@ public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbCo
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamUser> TeamUsers { get; set; }
     public DbSet<Application> Applications { get; set; }
+    public DbSet<ApplicationStack> ApplicationStacks { get; set; }
     public DbSet<TeamApplication> TeamApplications { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,6 +35,7 @@ public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        DataSeed.SeedApplicationStacks(modelBuilder);
         // remove unused auditable properties
         //modelBuilder.AddGlobalFilter(nameof(Auditable.IsDeleted), false);
     }

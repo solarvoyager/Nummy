@@ -17,13 +17,21 @@ public partial class Index
         Column = 4
     };
 
-    private IEnumerable<ApplicationToListDto> Applications { get; set; } = [];
+    private IEnumerable<ApplicationToListDto> _applications = [];
     private bool _applicationsLoading = true;
 
-    private bool _isTeamEditOrAddModalVisible;
-    private bool IsEdit { get; set; }
-    private ApplicationAddModel Model { get; set; } = new();
-    private Guid? EditingId { get; set; }
+    #region ApplicationAddModel
+    
+    private IEnumerable<ApplicationStackToListDto> _stackTypes = [];
+    private bool _stackTypesLoading = false;
+    
+    private bool _isTeamEditOrAddModalVisible = false;
+    private bool _isEdit = false;
+    private ApplicationAddModel _applicationAddModel = new();
+    private Guid? _editingId;
+
+    #endregion
+    
     
     protected override async Task OnInitializedAsync()
     {
@@ -33,26 +41,35 @@ public partial class Index
     private async Task LoadApplications()
     {
         _applicationsLoading = true;
-        Applications = await ApplicationService.Get();
+        _applications = await ApplicationService.Get();
         _applicationsLoading = false;
     }
-
-    private void ShowModal(bool isEdit = false, ApplicationToListDto? application = null)
+    
+    private async Task LoadStackTypes()
     {
-        IsEdit = isEdit;
+        _stackTypesLoading = true;
+        _stackTypes = await ApplicationService.GetStackType();
+        _stackTypesLoading = false;
+    }
+
+    private async Task ShowModal(bool isEdit = false, ApplicationToListDto? application = null)
+    {
+        await LoadStackTypes();
+        
+        _isEdit = isEdit;
         if (isEdit && application != null)
         {
-            Model = new ApplicationAddModel
+            _applicationAddModel = new ApplicationAddModel
             {
                 Name = application.Name,
                 Description = application.Description
             };
-            EditingId = application.Id;
+            _editingId = application.Id;
         }
         else
         {
-            Model = new ApplicationAddModel();
-            EditingId = null;
+            _applicationAddModel = new ApplicationAddModel();
+            _editingId = null;
         }
 
         _isTeamEditOrAddModalVisible = true;
@@ -62,7 +79,7 @@ public partial class Index
     {
         try
         {
-            if (IsEdit && EditingId.HasValue)
+            if (_isEdit && _editingId.HasValue)
             {
                 await OnUpdate();
             }
@@ -79,7 +96,7 @@ public partial class Index
 
     private async Task OnAdd()
     {
-        await ApplicationService.Add(Model.Name, Model.Description);
+        await ApplicationService.Add(_applicationAddModel.Name, _applicationAddModel.Description, _applicationAddModel.StackTypeId);
         
         await LoadApplications();
         _isTeamEditOrAddModalVisible = false;
@@ -89,7 +106,7 @@ public partial class Index
 
     private async Task OnUpdate()
     {
-        await ApplicationService.Update(EditingId.Value, Model.Name, Model.Description);
+        await ApplicationService.Update(_editingId.Value, _applicationAddModel.Name, _applicationAddModel.Description, _applicationAddModel.StackTypeId);
         
         await LoadApplications();
         _isTeamEditOrAddModalVisible = false;

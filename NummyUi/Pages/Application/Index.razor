@@ -1,18 +1,20 @@
 ﻿@namespace NummyUi.Pages.Application
 @page "/application"
 @using NummyShared.DTOs
+@using NummyShared.DTOs.Enums
+@using NummyUi.Components
 
 <Spin Spinning="@_applicationsLoading">
     <ChildContent>
         <Space Direction="DirectionVHType.Vertical" Style="width: 100%">
             <SpaceItem>
-                <Button Type="@ButtonType.Primary" OnClick="() => ShowModal()">
-                    <Icon Type="plus" Theme="outline"/>
-                    Add Application
-                </Button>
+                <AddButton OnClick="@(() => ShowModal())"
+                           Title="Create Application"
+                           Description="Click to create a new application">
+                </AddButton>
             </SpaceItem>
             <SpaceItem>
-                <AntList Grid="_grid" DataSource="@Applications">
+                <AntList Grid="_grid" DataSource="@_applications">
                     <ListItem>
                         <Card Bordered
                               Hoverable
@@ -20,8 +22,9 @@
                               Actions="GetActions(context)">
                             <CardMeta>
                                 <AvatarTemplate>
-                                    <Avatar Size="small" Style="@($"background-color: {context.AvatarColorHex}")">
-                                        @context.Name[0].ToString().ToUpper()
+                                    <Avatar Shape="AvatarShape.Square"
+                                            Src="@context.Stack.IconSvg"
+                                            Style="width: 100px; height: 40px; border-radius: 4px">
                                     </Avatar>
                                 </AvatarTemplate>
                                 <TitleTemplate>@context.Name</TitleTemplate>
@@ -31,7 +34,11 @@
                                 <div class="cardInfo">
                                     <div>
                                         <p>Created At</p>
-                                        <p>@context.CreatedAt.ToString("g")</p>
+                                        <p>@context.CreatedAt.ToString("yyyy MMMM dd")</p>
+                                    </div>
+                                    <div>
+                                        <p>Stack</p>
+                                        <p>@context.Stack.Title</p>
                                     </div>
                                 </div>
                             </div>
@@ -43,19 +50,40 @@
     </ChildContent>
 </Spin>
 
-<Modal Title="@(IsEdit ? "Edit Application" : "Add Application")"
+<Modal Title="@(_isEdit ? "Edit Application" : "Add Application")"
        Visible="@_isTeamEditOrAddModalVisible"
        OnOk="@HandleOk"
        OnCancel="@HandleCancel"
-       OkText="@(IsEdit ? "Update" : "Add")"
+       OkText="@(_isEdit ? "Update" : "Add")"
        CancelText="@("Cancel")">
-    <Form Model="@Model" LabelCol="new ColLayoutParam { Span = 6 }"
+    <Form Model="@_applicationAddModel" LabelCol="new ColLayoutParam { Span = 6 }"
           WrapperCol="new ColLayoutParam { Span = 18 }">
         <FormItem Label="Name">
-            <Input @bind-Value="@Model.Name" Placeholder="Enter application name"/>
+            <Input @bind-Value="@_applicationAddModel.Name" Placeholder="Enter application name"/>
         </FormItem>
         <FormItem Label="Description">
-            <TextArea @bind-Value="@Model.Description" Placeholder="Enter application description"></TextArea>
+            <TextArea @bind-Value="@_applicationAddModel.Description" Placeholder="Enter application description"></TextArea>
+        </FormItem>
+        <FormItem Label="Stack">
+            <Select Mode="Single"
+                    Placeholder="Select application's stack"
+                    @bind-Value="@_applicationAddModel.StackTypeId"
+                    TItemValue="Guid"
+                    TItem="Guid"
+                    Style="width: 100%"
+                    EnableSearch
+                    Loading="@_stackTypesLoading"
+                    AllowClear>
+                <SelectOptions>
+                    @foreach (var stackType in _stackTypes)
+                    {
+                        <SelectOption TItemValue="Guid"
+                                      TItem="Guid"
+                                      Value=@stackType.Id
+                                      Label="@stackType.Title"/>
+                    }
+                </SelectOptions>
+            </Select>
         </FormItem>
     </Form>
 </Modal>

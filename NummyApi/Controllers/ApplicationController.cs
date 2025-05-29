@@ -14,6 +14,13 @@ public class ApplicationController(IApplicationService applicationService) : Con
         var applications = await applicationService.GetAsync();
         return Ok(applications);
     }
+    
+    [HttpGet("stackType")]
+    public async Task<ActionResult<List<ApplicationStackToListDto>>> GetStackType()
+    {
+        var stackTypes = await applicationService.GetStackTypeAsync();
+        return Ok(stackTypes);
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ApplicationToListDto>> Get(Guid id)

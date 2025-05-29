@@ -1,97 +1,97 @@
 ﻿@namespace NummyUi.Pages.Team
 @page "/team"
 @using NummyShared.DTOs
+@using NummyUi.Components
 
 <Spin Spinning="@_teamsLoading">
-    <div @onclick="@(() => _isAddTeamModalVisible = true)">
-        <Card Bordered Hoverable Style="margin-bottom: 24px; cursor: pointer;">
-            <CardMeta>
-                <AvatarTemplate>
-                    <Avatar Shape="AvatarShape.Square"
-                            Size="@("3.5rem")"
-                            Style="color: #52c41a; background-color: #f6ffed; vertical-align: middle; border-radius: 4px">
-                        <Icon Type="plus" Theme="@IconThemeType.Outline"/>
-                    </Avatar>
-                </AvatarTemplate>
-                <TitleTemplate>Create Team</TitleTemplate>
-                <DescriptionTemplate>
-                    <Text Type="TextElementType.Secondary">Click to create a new team</Text>
-                </DescriptionTemplate>
-            </CardMeta>
-        </Card>
-    </div>
-    <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_grid" DataSource="_teams">
-        <ListItem NoFlex>
-            <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
-                <CardMeta>
-                    <AvatarTemplate>
-                        <Avatar Shape="AvatarShape.Square"
-                                Size="@("3.5rem")"
-                                Style="color: #f56a00; background-color: #fde3cf; vertical-align: middle; border-radius: 4px">
-                            @context.Name[0].ToString().ToUpper()
-                        </Avatar>
-                    </AvatarTemplate>
-                    <TitleTemplate>@context.Name</TitleTemplate>
-                    <DescriptionTemplate>
-                        <Text Type="TextElementType.Secondary">@context.Description</Text>
-                    </DescriptionTemplate>
-                </CardMeta>
-                <Divider/>
-                <GridRow>
-                    <GridCol Span="11">
-                        <GridRow Style="margin-bottom: 12px">
-                            <Text Strong>Members</Text>
-                        </GridRow>
-                        <GridRow Style="margin-bottom: 28px">
-                            <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
-                                @foreach (var user in context.Users)
-                                {
-                                    <Tooltip Title="@($"{user.Name} {user.Surname}")" Placement="Placement.Top">
-                                        <Unbound Context="userAvatarContext">
-                                            <Avatar Style="@($"background-color: {user.AvatarColorHex};")"
-                                                    RefBack="@userAvatarContext">
-                                                @(user.Name[0].ToString().ToUpper() + user.Surname[0].ToString().ToUpper())
-                                            </Avatar>
-                                        </Unbound>
-                                    </Tooltip>
-                                }
-                            </AvatarGroup>
-                        </GridRow>
-                    </GridCol>
-                    <GridCol Span="2">
-                        <Divider Type="DirectionVHType.Vertical" Style="height: 100%"/>
-                    </GridCol>
-                    <GridCol Span="11">
-                        <GridRow Style="margin-bottom: 12px">
-                            <Text Strong>Applications</Text>
-                        </GridRow>
-                        <GridRow Style="margin-bottom: 28px">
-                            <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
-                                @foreach (var application in context.Applications)
-                                {
-                                    <Tooltip Title="@($"{application.Name}")" Placement="Placement.Top">
-                                        <Unbound Context="appAvatarContext">
-                                            <Avatar Style="@($"background-color: {application.AvatarColorHex};")"
-                                                    RefBack="@appAvatarContext">
-                                                @(application.Name[0].ToString().ToUpper())
-                                            </Avatar>
-                                        </Unbound>
-                                    </Tooltip>
-                                }
-                            </AvatarGroup>
-                        </GridRow>
-                    </GridCol>
-                </GridRow>
+    <ChildContent>
+        <Space Direction="DirectionVHType.Vertical" Style="width: 100%">
+            <SpaceItem>
+                <AddButton OnClick="@(() => _isAddTeamModalVisible = true)"
+                           Title="Create Team"
+                           Description="Click to create a new team">
+                </AddButton>
+            </SpaceItem>
+            <SpaceItem>
+                <AntList TItem="TeamToListDto" Class="filterCardList" Grid="_grid" DataSource="_teams">
+                    <ListItem NoFlex>
+                        <Card Bordered Hoverable BodyStyle="padding-bottom: 20px;" Actions="@GetActions(context)">
+                            <CardMeta>
+                                <AvatarTemplate>
+                                    <Avatar Shape="AvatarShape.Square"
+                                            Size="@("3.5rem")"
+                                            Style="color: #f56a00; background-color: #fde3cf; vertical-align: middle; border-radius: 4px">
+                                        @context.Name[0].ToString().ToUpper()
+                                    </Avatar>
+                                </AvatarTemplate>
+                                <TitleTemplate>@context.Name</TitleTemplate>
+                                <DescriptionTemplate>
+                                    <Text Type="TextElementType.Secondary">@context.Description</Text>
+                                </DescriptionTemplate>
+                            </CardMeta>
+                            <Divider/>
+                            <GridRow>
+                                <GridCol Span="11">
+                                    <GridRow Style="margin-bottom: 12px">
+                                        <Text Strong>Members</Text>
+                                    </GridRow>
+                                    <GridRow Style="margin-bottom: 28px">
+                                        <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
+                                            @foreach (var user in context.Users)
+                                            {
+                                                <Tooltip Title="@($"{user.Name} {user.Surname}")"
+                                                         Placement="Placement.Top">
+                                                    <Unbound Context="userAvatarContext">
+                                                        <Avatar Style="@($"background-color: {user.AvatarColorHex};")"
+                                                                RefBack="@userAvatarContext">
+                                                            @(user.Name[0].ToString().ToUpper() + user.Surname[0].ToString().ToUpper())
+                                                        </Avatar>
+                                                    </Unbound>
+                                                </Tooltip>
+                                            }
+                                        </AvatarGroup>
+                                    </GridRow>
+                                </GridCol>
+                                <GridCol Span="2">
+                                    <Divider Type="DirectionVHType.Vertical" Style="height: 100%"/>
+                                </GridCol>
+                                <GridCol Span="11">
+                                    <GridRow Style="margin-bottom: 12px">
+                                        <Text Strong>Applications</Text>
+                                    </GridRow>
+                                    <GridRow Style="margin-bottom: 28px">
+                                        <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
+                                            @foreach (var application in context.Applications)
+                                            {
+                                                //Todo: Uncomment when Tooltip is available
+                                                @*<Tooltip Title="@($"{application.Name}")" Placement="Placement.Top">
+                                                    <Unbound Context="appAvatarContext">
+                                                        <Avatar
+                                                            Style="@($"background-color: {application.AvatarColorHex};")"
+                                                            RefBack="@appAvatarContext">
+                                                            @(application.Name[0].ToString().ToUpper())
+                                                        </Avatar>
+                                                    </Unbound>
+                                                </Tooltip>*@
+                                            }
+                                        </AvatarGroup>
+                                    </GridRow>
+                                </GridCol>
+                            </GridRow>
 
-                <GridRow Style="margin-bottom: 6px">
-                    <Text Strong>Created at</Text>
-                </GridRow>
-                <GridRow Style="margin-bottom: 0">
-                    @context.CreatedAt.ToString("dd MMMM, yyyy")
-                </GridRow>
-            </Card>
-        </ListItem>
-    </AntList>
+                            <GridRow Style="margin-bottom: 6px">
+                                <Text Strong>Created at</Text>
+                            </GridRow>
+                            <GridRow Style="margin-bottom: 0">
+                                @context.CreatedAt.ToString("dd MMMM, yyyy")
+                            </GridRow>
+                        </Card>
+                    </ListItem>
+                </AntList>
+        
+            </SpaceItem>
+        </Space>
+    </ChildContent>
 </Spin>
 
 <Modal @bind-Visible="_isAddTeamModalVisible"
@@ -178,10 +178,11 @@
 
                     <Tag Closable Style="padding: 6px 10px; margin-top: 6px;"
                          OnClose="@(() => RemoveApplication(applicationId))">
-                        <Avatar Size="@("1.7rem")"
+                        //Todo: Uncomment when Tooltip is available
+                        @*<Avatar Size="@("1.7rem")"
                                 Style="@($"background-color: {application.AvatarColorHex}; margin-right: 8px;")">
                             @(application.Name[0].ToString().ToUpper())
-                        </Avatar>
+                        </Avatar>*@
                         <Text Strong Style="font-size: 13px">@application.Name</Text>
                     </Tag>
                 }

@@ -1,0 +1,27 @@
+﻿@namespace NummyUi.Components
+
+<div @onclick="@OnClick">
+    <Card Bordered 
+          Hoverable 
+          Size="CardSize.Small"
+          BodyStyle="padding: 15px" 
+          Style="margin-bottom: 24px; cursor: pointer; border-color: #00A0E9; padding: 0;">
+        <CardMeta>
+            <AvatarTemplate>
+                <Avatar Shape="AvatarShape.Square"
+                        Size="@("3.5rem")"
+                        Style="color: #00A0E9; background-color: #cdefff; vertical-align: middle; border-radius: 4px">
+                    <Icon Type="plus" Theme="@IconThemeType.Outline"/>
+                </Avatar>
+            </AvatarTemplate>
+            <TitleTemplate>
+                <Text Style="color: #00A0E9;">@Title</Text>
+            </TitleTemplate>
+            <DescriptionTemplate>
+                <Text Type="TextElementType.Secondary">
+                    <Text Style="color: #a3a3a3;">@Description</Text>
+                </Text>
+            </DescriptionTemplate>
+        </CardMeta>
+    </Card>
+</div>

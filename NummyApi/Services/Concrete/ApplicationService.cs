@@ -5,6 +5,7 @@ using NummyApi.Entitites;
 using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
+using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Services.Concrete;
 
@@ -32,14 +33,20 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
         return mappeds;
     }
 
+    public async Task<IEnumerable<ApplicationStackToListDto>> GetStackTypeAsync()
+    {
+        var stackTypes = await dataContext.ApplicationStacks
+            .OrderByDescending(t=> t.CreatedAt)
+            .ToListAsync();
+
+        var mappeds = mapper.Map<List<ApplicationStackToListDto>>(stackTypes);
+
+        return mappeds;
+    }
+
     public async Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto)
     {
         var application = mapper.Map<Application>(dto);
-        
-        // Generate a random color for the avatar
-        var avatarColorHex = UtilHelper.GenerateRandomColorHex();
-
-        application.AvatarColorHex = avatarColorHex;
 
         await dataContext.Applications.AddAsync(application);
         await dataContext.SaveChangesAsync();
