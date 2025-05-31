@@ -63,16 +63,13 @@
                                         <AvatarGroup MaxCount="2" MaxStyle="color: #f56a00; background-color:#fde3cf;">
                                             @foreach (var application in context.Applications)
                                             {
-                                                //Todo: Uncomment when Tooltip is available
-                                                @*<Tooltip Title="@($"{application.Name}")" Placement="Placement.Top">
+                                                <Tooltip Title="@($"{application.Name}")" Placement="Placement.Top">
                                                     <Unbound Context="appAvatarContext">
-                                                        <Avatar
-                                                            Style="@($"background-color: {application.AvatarColorHex};")"
-                                                            RefBack="@appAvatarContext">
-                                                            @(application.Name[0].ToString().ToUpper())
+                                                        <Avatar RefBack="@appAvatarContext"
+                                                            Src="@("data:image/svg+xml;utf8," + Uri.EscapeDataString(application.Stack.IconSvg))">
                                                         </Avatar>
                                                     </Unbound>
-                                                </Tooltip>*@
+                                                </Tooltip>
                                             }
                                         </AvatarGroup>
                                     </GridRow>
@@ -178,11 +175,10 @@
 
                     <Tag Closable Style="padding: 6px 10px; margin-top: 6px;"
                          OnClose="@(() => RemoveApplication(applicationId))">
-                        //Todo: Uncomment when Tooltip is available
-                        @*<Avatar Size="@("1.7rem")"
-                                Style="@($"background-color: {application.AvatarColorHex}; margin-right: 8px;")">
-                            @(application.Name[0].ToString().ToUpper())
-                        </Avatar>*@
+                        // todo
+                        <Avatar Size="@("1.7rem")"
+                                Src="@("data:image/svg+xml;utf8," + "Uri.EscapeDataString(context.Stack.IconSvg)")">
+                        </Avatar>
                         <Text Strong Style="font-size: 13px">@application.Name</Text>
                     </Tag>
                 }

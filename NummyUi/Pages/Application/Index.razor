@@ -23,7 +23,7 @@
                             <CardMeta>
                                 <AvatarTemplate>
                                     <Avatar Shape="AvatarShape.Square"
-                                            Src="@context.Stack.IconSvg"
+                                            Src="@("data:image/svg+xml;utf8," + Uri.EscapeDataString(context.Stack.IconSvg))"
                                             Size="@("2.6em")">
                                     </Avatar>
                                 </AvatarTemplate>
@@ -56,7 +56,7 @@
        OnCancel="@HandleCancel"
        OkText="@(_isEdit ? "Update" : "Add")"
        CancelText="@("Cancel")">
-    <Form Model="@_applicationAddModel" LabelCol="new ColLayoutParam { Span = 6 }"
+    <Form @ref="@_addApplicationForm" Model="@_applicationAddModel" LabelCol="new ColLayoutParam { Span = 6 }"
           WrapperCol="new ColLayoutParam { Span = 18 }">
         <FormItem Label="Name">
             <Input @bind-Value="@_applicationAddModel.Name" Placeholder="Enter application name"/>

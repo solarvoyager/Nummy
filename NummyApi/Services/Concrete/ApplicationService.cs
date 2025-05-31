@@ -64,6 +64,7 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
 
         application.Name = dto.Name;
         application.Description = dto.Description;
+        application.StackId = dto.StackId;
 
         await dataContext.SaveChangesAsync();
 
