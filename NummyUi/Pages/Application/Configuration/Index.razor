@@ -46,7 +46,9 @@
     </GridRow>
 
     <GridRow Style="margin-bottom: 20px;">
-        <Card BodyStyle="padding: 20px" Bordered Hoverable Style="border-color: red; border-radius: 4px; width: 100%">
+        <Card BodyStyle="padding: 20px" Bordered Hoverable 
+              Style="border-color: red; border-radius: 4px; width: 100%; cursor: pointer"
+              OnClick="toggleShowEx">
             <GridRow>
                 <GridCol>
                     <Avatar Shape="AvatarShape.Square"
@@ -57,28 +59,33 @@
                 </GridCol>
                 <GridCol>
                     <Title Level="3">Nummy.ExceptionHandler</Title>
-                    <Text Type="TextElementType.Secondary">A .NET Core library for global exception handling in your application.</Text>
-                    <Divider Style="margin: 15px 0"/>
-                    <Title Level="4">Configuration Steps:</Title>
-                    <Steps Current="exceptionHandlerStep" OnChange="onExceptionHandlerStepChange" Direction="vertical" Class="site-navigation-steps">
-                        <Step Title="Install" Description="Install-Package Nummy.ExceptionHandler">
-                            <DescriptionTemplate>
-                                <Text>Run the following command in Package Manager Console:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                    <Text Type="TextElementType.Secondary">A .NET Core library for global exception handling in your
+                        application.
+                    </Text>
+                    <Collapse ActiveKey="@(_showEx ? new[] { "1" } : new string[] { })" Ghost>
+                        <Panel Key="1" ShowArrow="false">
+                            <Divider Style="margin: 15px 0"/>
+                            <Title Level="4">Configuration Steps:</Title>
+                            <Steps Current="exceptionHandlerStep" OnChange="onExceptionHandlerStepChange"
+                                   Direction="vertical" Class="site-navigation-steps">
+                                <Step Title="Install" Description="Install-Package Nummy.ExceptionHandler">
+                                    <DescriptionTemplate>
+                                        <Text>Run the following command in Package Manager Console:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 Install-Package Nummy.ExceptionHandler</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Using" Description="using Nummy.ExceptionHandler.Extensions;">
-                            <DescriptionTemplate>
-                                <Text>Add the following using statement at the top of your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Using" Description="using Nummy.ExceptionHandler.Extensions;">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following using statement at the top of your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 using Nummy.ExceptionHandler.Extensions;</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Configure" Description="Add services in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following configuration in your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Configure" Description="Add services in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following configuration in your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyExceptionHandler(options =>
 {
     options.HandleException = true;
@@ -86,24 +93,28 @@ builder.Services.AddNummyExceptionHandler(options =>
     options.ResponseStatusCode = HttpStatusCode.BadRequest;
     options.DsnUrl = "your-nummy-dsn-url"
 });</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Middleware" Description="Add middleware in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following middleware in your Program.cs after building the app:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Middleware" Description="Add middleware in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following middleware in your Program.cs after building the app:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 var app = builder.Build();
 app.UseNummyExceptionHandler();</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                    </Steps>
+                                    </DescriptionTemplate>
+                                </Step>
+                            </Steps>
+                        </Panel>
+                    </Collapse>
                 </GridCol>
             </GridRow>
         </Card>
     </GridRow>
 
     <GridRow Style="margin-bottom: 20px;">
-        <Card BodyStyle="padding: 20px" Bordered Hoverable Style="border-color: orange; border-radius: 4px; width: 100%">
+        <Card BodyStyle="padding: 20px" Bordered Hoverable
+              Style="border-color: orange; border-radius: 4px; width: 100%; cursor: pointer"
+              OnClick="toggleShowCodeLogger">
             <GridRow>
                 <GridCol>
                     <Avatar Shape="AvatarShape.Square"
@@ -115,50 +126,57 @@ app.UseNummyExceptionHandler();</pre>
                 <GridCol>
                     <Title Level="3">Nummy.CodeLogger</Title>
                     <Text Type="TextElementType.Secondary">A .NET Core library for code logging and monitoring.</Text>
-                    <Divider Style="margin: 15px 0"/>
-                    <Title Level="4">Configuration Steps:</Title>
-                    <Steps Current="codeLoggerStep" OnChange="onCodeLoggerStepChange" Direction="vertical" Class="site-navigation-steps">
-                        <Step Title="Install" Description="Install-Package Nummy.CodeLogger">
-                            <DescriptionTemplate>
-                                <Text>Run the following command in Package Manager Console:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                    <Collapse ActiveKey="@(_showCodeLogger ? new[] { "1" } : new string[] { })" Ghost>
+                        <Panel Key="1" ShowArrow="false">
+                            <Divider Style="margin: 15px 0"/>
+                            <Title Level="4">Configuration Steps:</Title>
+                            <Steps Current="codeLoggerStep" OnChange="onCodeLoggerStepChange" Direction="vertical"
+                                   Class="site-navigation-steps">
+                                <Step Title="Install" Description="Install-Package Nummy.CodeLogger">
+                                    <DescriptionTemplate>
+                                        <Text>Run the following command in Package Manager Console:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 Install-Package Nummy.CodeLogger</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Using" Description="using Nummy.CodeLogger.Extensions;">
-                            <DescriptionTemplate>
-                                <Text>Add the following using statement at the top of your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Using" Description="using Nummy.CodeLogger.Extensions;">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following using statement at the top of your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 using Nummy.CodeLogger.Extensions;</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Configure" Description="Add services in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following configuration in your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Configure" Description="Add services in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following configuration in your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyCodeLogger(options =>
 {
     options.DsnUrl = "your-nummy-dsn-url";
     options.EnableConsoleLogging = true;
 });</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Middleware" Description="Add middleware in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following middleware in your Program.cs after building the app:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Middleware" Description="Add middleware in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following middleware in your Program.cs after building the app:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 var app = builder.Build();
 app.UseNummyCodeLogger();</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                    </Steps>
+                                    </DescriptionTemplate>
+                                </Step>
+                            </Steps>
+                        </Panel>
+                    </Collapse>
                 </GridCol>
             </GridRow>
         </Card>
     </GridRow>
 
     <GridRow Style="margin-bottom: 20px;">
-        <Card BodyStyle="padding: 20px" Bordered Hoverable Style="border-color: forestgreen; border-radius: 4px; width: 100%">
+        <Card BodyStyle="padding: 20px" Bordered Hoverable
+              Style="border-color: forestgreen; border-radius: 4px; width: 100%; cursor: pointer"
+              OnClick="toggleShowHttpLogger">
             <GridRow>
                 <GridCol>
                     <Avatar Shape="AvatarShape.Square"
@@ -170,44 +188,49 @@ app.UseNummyCodeLogger();</pre>
                 <GridCol>
                     <Title Level="3">Nummy.HttpLogger</Title>
                     <Text Type="TextElementType.Secondary">A .NET Core library for HTTP request/response logging.</Text>
-                    <Divider Style="margin: 15px 0"/>
-                    <Title Level="4">Configuration Steps:</Title>
-                    <Steps Current="httpLoggerStep" OnChange="onHttpLoggerStepChange" Direction="vertical" Class="site-navigation-steps">
-                        <Step Title="Install" Description="Install-Package Nummy.HttpLogger">
-                            <DescriptionTemplate>
-                                <Text>Run the following command in Package Manager Console:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                    <Collapse ActiveKey="@(_showHttpLogger ? new[] { "1" } : new string[] { })" Ghost>
+                        <Panel Key="1" ShowArrow="false">
+                            <Divider Style="margin: 15px 0"/>
+                            <Title Level="4">Configuration Steps:</Title>
+                            <Steps Current="httpLoggerStep" OnChange="onHttpLoggerStepChange" Direction="vertical"
+                                   Class="site-navigation-steps">
+                                <Step Title="Install" Description="Install-Package Nummy.HttpLogger">
+                                    <DescriptionTemplate>
+                                        <Text>Run the following command in Package Manager Console:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 Install-Package Nummy.HttpLogger</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Using" Description="using Nummy.HttpLogger.Extensions;">
-                            <DescriptionTemplate>
-                                <Text>Add the following using statement at the top of your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Using" Description="using Nummy.HttpLogger.Extensions;">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following using statement at the top of your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 using Nummy.HttpLogger.Extensions;</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Configure" Description="Add services in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following configuration in your Program.cs:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Configure" Description="Add services in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following configuration in your Program.cs:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyHttpLogger(options =>
 {
     options.DsnUrl = "your-nummy-dsn-url";
     options.LogRequestBody = true;
     options.LogResponseBody = true;
 });</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                        <Step Title="Middleware" Description="Add middleware in Program.cs">
-                            <DescriptionTemplate>
-                                <Text>Add the following middleware in your Program.cs after building the app:</Text>
-                                <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                                    </DescriptionTemplate>
+                                </Step>
+                                <Step Title="Middleware" Description="Add middleware in Program.cs">
+                                    <DescriptionTemplate>
+                                        <Text>Add the following middleware in your Program.cs after building the app:</Text>
+                                        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 var app = builder.Build();
 app.UseNummyHttpLogger();</pre>
-                            </DescriptionTemplate>
-                        </Step>
-                    </Steps>
+                                    </DescriptionTemplate>
+                                </Step>
+                            </Steps>
+                        </Panel>
+                    </Collapse>
                 </GridCol>
             </GridRow>
         </Card>
@@ -220,6 +243,10 @@ app.UseNummyHttpLogger();</pre>
     int exceptionHandlerStep { get; set; } = 0;
     int codeLoggerStep { get; set; } = 0;
     int httpLoggerStep { get; set; } = 0;
+    
+    bool _showEx = false;
+    bool _showCodeLogger = false;
+    bool _showHttpLogger = false;
 
     void onExceptionHandlerStepChange(int current)
     {
@@ -236,6 +263,27 @@ app.UseNummyHttpLogger();</pre>
         httpLoggerStep = current;
     }
 
+    void toggleShowEx()
+    {
+        _showEx = !_showEx;
+        _showCodeLogger = false;
+        _showHttpLogger = false;
+    }
+
+    void toggleShowCodeLogger()
+    {
+        _showCodeLogger = !_showCodeLogger;
+        _showEx = false;
+        _showHttpLogger = false;
+    }
+
+    void toggleShowHttpLogger()
+    {
+        _showHttpLogger = !_showHttpLogger;
+        _showEx = false;
+        _showCodeLogger = false;
+    }
+    
     private ApplicationToListDto application = new ApplicationToListDto(Guid.NewGuid(),
         "qweqwe", "qweqwe", DateTimeOffset.Now,
         new ApplicationStackToListDto(Guid.NewGuid(), ApplicationStackType.CSharp,
