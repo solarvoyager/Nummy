@@ -90,6 +90,11 @@
 
 @code {
 
+    private RenderFragment<ApplicationToListDto> Configuration => ctx => @<AntDesign.Tooltip Title="Configuration">
+                                                                    <Icon Type="setting" Theme="@IconThemeType.Fill"
+                                                                          OnClick="@(() => NavigateToConfiguration(ctx))"/>
+                                                                </AntDesign.Tooltip>;
+    
     private RenderFragment<ApplicationToListDto> Edit => ctx => @<AntDesign.Tooltip Title="Edit">
                                                                     <Icon Type="edit" Theme="@IconThemeType.Outline"
                                                                           OnClick="@(() => ShowModal(true, ctx))"/>
@@ -109,6 +114,7 @@
     {
         return new List<RenderFragment>
         {
+            Configuration(context),
             Edit(context),
             Delete(context),
         };

@@ -10,6 +10,7 @@ public partial class Index
 {
     [Inject] private IApplicationService ApplicationService { get; set; } = null!;
     [Inject] private IMessageService MessageService { get; set; } = null!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
     private readonly ListGridType _grid = new()
     {
@@ -140,5 +141,10 @@ public partial class Index
         {
             await MessageService.Error($"Error: {ex.Message}");
         }
+    }
+    
+    private void NavigateToConfiguration(ApplicationToListDto application)
+    {
+        NavigationManager.NavigateTo($"/application/configuration/{application.Id}");
     }
 }

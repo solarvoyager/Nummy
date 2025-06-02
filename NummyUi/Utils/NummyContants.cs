@@ -72,13 +72,13 @@ public static class NummyContants
             Key = "team",
             Icon = "team"
         },
-        new()
+        /*new()
         {
             Path = "/configuration",
             Name = "Configuration (in dev)",
             Key = "configuration",
             Icon = "setting"
-        },
+        },*/
     ];
     
     public static readonly Dictionary<string, string> AccountMenuItems = new()

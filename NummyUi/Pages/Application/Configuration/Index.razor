@@ -1,0 +1,77 @@
+﻿@page "/application/configuration/{Id:guid}"
+@using NummyShared.DTOs
+@using NummyShared.DTOs.Enums
+
+<Card>
+    <GridRow>
+        <Title Level="2" Style="margin-bottom: 8px">Configurations</Title>
+    </GridRow>
+    <GridRow>
+        <Text Type="TextElementType.Secondary" Style="color: #00A0E9">Manage Your application's package configurations
+        </Text>
+    </GridRow>
+    <GridRow>
+        <Title Level="4" Style="margin: 40px 0 25px;">Application Details</Title>
+    </GridRow>
+    <GridRow>
+        <Text Strong>Name</Text>
+        <Input ReadOnly Value="@application.Name" Style="margin-bottom: 15px; margin-top: 4px"/>
+    </GridRow>
+    <GridRow>
+        <Text Strong>Description</Text>
+        <TextArea ReadOnly Rows="3" Value="@application.Description"
+                  Style="margin-bottom: 15px; margin-top: 4px"></TextArea>
+    </GridRow>
+    <GridRow>
+        <Text Strong>Created At</Text>
+        <Input ReadOnly Value="@application.CreatedAt" Style="margin-bottom: 15px; margin-top: 4px"/>
+    </GridRow>
+    <GridRow>
+        <Text Strong>Stack</Text>
+    </GridRow>
+    <GridRow Style="display: flex; align-items: center; margin-bottom: 15px; margin-top: 4px;">
+        <GridCol>
+            <Avatar Shape="AvatarShape.Square"
+                    Src="@("data:image/svg+xml;utf8," + Uri.EscapeDataString(application.Stack.IconSvg))"
+                    Size="@("2.3em")"
+                    Style="margin-right: 10px">
+            </Avatar>
+        </GridCol>
+        <GridCol>
+            <Text>@application.Stack.Title</Text>
+        </GridCol>
+    </GridRow>
+    <GridRow>
+        <Title Level="4" Style="margin: 40px 0 25px;">Connected Packages</Title>
+    </GridRow>
+
+    <GridRow>
+        <Card BodyStyle="padding: 20px" Bordered Hoverable Style="border-color: red; ">
+            <GridRow>
+                <GridCol>
+                    <Avatar Shape="AvatarShape.Square"
+                            Src="https://api.nuget.org/v3-flatcontainer/nummy.exceptionhandler/1.5.0/icon"
+                            Size="@("2.4em")"
+                            Style="margin-right: 20px; border-radius: 4px">
+                    </Avatar>
+                </GridCol>
+                <GridCol>
+                    <Title Level="4">Nummy.ExceptionHandler</Title>
+                    <Text Type="TextElementType.Secondary">This is a .NET Core library for global exception handling in
+                        your application.
+                    </Text>
+                </GridCol>
+            </GridRow>
+        </Card>
+    </GridRow>
+</Card>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    private ApplicationToListDto application = new ApplicationToListDto(Guid.NewGuid(),
+        "qweqwe", "qweqwe", DateTimeOffset.Now,
+        new ApplicationStackToListDto(Guid.NewGuid(), ApplicationStackType.CSharp,
+            "ASDASD", "ASDSAD"));
+
+}
