@@ -8,12 +8,6 @@ Nummy is a web application that shows your applications' logs and exceptions, re
 
 [Nummy.HttpLogger](https://www.nuget.org/packages/Nummy.HttpLogger) - to log http requests and responses
 
-### Screens
-
-![Dashboard](NummyUi/wwwroot/screens/dashboard.png)
-![CodeLogs](NummyUi/wwwroot/screens/code_logs.png)
-
-
 It is built using .NET Core, Entity Framework Core, and PostgreSQL.
 
 ### To set up Nummy on your Docker:
@@ -22,4 +16,35 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
 2. Run local instance using: `docker compose up --detach`
 3. Open browser and go to Dashboard http://localhost:8080/
 4. Copy DSN address from UI and configure it to your .net core application.
+
+Here’s your **modified `docker-compose.yml`** with **proper volume configuration** for Postgres and recommended improvements for safe updates:
+
+### ✅ Key Enhancements:
+
+* **Postgres volume (`postgres-data`)** added to persist data.
+* Docker **names and ports untouched** to avoid breaking existing setups.
+* Ready for **safe `up -d --no-deps` updates** without losing data.
+
+---
+
+### 🚀 Now You Can Safely Update
+
+Pull the latest image versions:
+
+```bash
+docker-compose pull nummy-api nummy-ui
+```
+
+Recreate only the updated services (API/UI):
+
+```bash
+docker-compose up -d --no-deps --build nummy-api nummy-ui
+```
+
+💡 *The `nummy-postgres` container and its data volume (`postgres-data`) will remain untouched.*
+
+### Screens
+
+![Dashboard](NummyUi/wwwroot/screens/dashboard.png)
+![CodeLogs](NummyUi/wwwroot/screens/code_logs.png)
 
