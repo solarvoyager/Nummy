@@ -14,10 +14,13 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
 
 ### To set up Nummy on your Docker:
 
-1. Copy [docker-compose.yml](https://github.com/solarvoyager/Nummy/blob/fb5247f0b977d1d20424abc4c87f8a1c0d621bcd/docker-compose.yml) file.
-2. Run local instance using: `docker compose up --detach`
-3. Open browser and go to Dashboard http://localhost:8080/
-4. Copy DSN address from UI and configure it to your .net core application.
+1. Copy or Download [docker-compose.yml](https://github.com/solarvoyager/Nummy/blob/fb5247f0b977d1d20424abc4c87f8a1c0d621bcd/docker-compose.yml) file.
+2. Run local instance with command:
+   ```bash
+   docker compose up --detach
+   ```
+4. Open browser and go to Dashboard http://localhost:8080/
+5. Create application and go to Configuration section to copy your application DSN address to use in packages
 
 ---
 
