@@ -11,8 +11,9 @@
         <Text Type="TextElementType.Secondary" Style="color: #00A0E9">Manage Your application's package configurations
         </Text>
     </GridRow>
+    <Divider/>
     <GridRow>
-        <Title Level="4" Style="margin: 40px 0 25px;">Application Details</Title>
+        <Title Level="4" Style="margin: 20px 0 25px;">Application Details</Title>
     </GridRow>
     <GridRow>
         <Text Strong>Name</Text>
@@ -42,18 +43,22 @@
             <Text>@application.Stack.Title</Text>
         </GridCol>
     </GridRow>
+    <Divider/>
     <GridRow>
-        <Title Level="4" Style="margin: 40px 0 8px;">Application Code</Title>
+        <Title Level="4" Style="margin: 20px 0 8px;">Application Code</Title>
     </GridRow>
     <GridRow>
-        <Text Type="@TextElementType.Secondary">Copy the code below and paste it into your application to
-            connect it with Nummy.</Text>
+        <Text Type="@TextElementType.Secondary" Style="margin-bottom: 20px">Copy the code below and paste it into your
+            application to
+            connect it with Nummy.
+        </Text>
     </GridRow>
     <GridRow>
         <ApplicationCodeCard ApplicationCode="@application.Id.ToString()"/>
     </GridRow>
+    <Divider/>
     <GridRow>
-        <Title Level="4" Style="margin: 40px 0 25px;">Connected Packages</Title>
+        <Title Level="4" Style="margin: 20px 0 25px;">Connected Packages</Title>
     </GridRow>
 
     <GridRow Style="margin-bottom: 20px; width: 100%;">
@@ -85,12 +90,12 @@ using Nummy.ExceptionHandler.Extensions;</pre>
                         <Text>Add the following configuration in your Program.cs:</Text>
                         <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyExceptionHandler(options =>
-{
-    options.HandleException = true;
-    options.Response = new { message = "An error occurred" };
-    options.ResponseStatusCode = HttpStatusCode.BadRequest;
-    options.ApplicaionId = "@application.Id"
-});</pre>
+                            {
+                            options.HandleException = true;
+                            options.Response = new { message = "An error occurred" };
+                            options.ResponseStatusCode = HttpStatusCode.BadRequest;
+                            options.ApplicaionId = "@application.Id"
+                            });</pre>
                     </DescriptionTemplate>
                 </Step>
                 <Step Title="Middleware" Description="Add middleware in Program.cs">
@@ -134,10 +139,10 @@ using Nummy.CodeLogger.Extensions;</pre>
                         <Text>Add the following configuration in your Program.cs:</Text>
                         <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyCodeLogger(options =>
-{
-    options.ApplicationId = "@application.Id";
-    options.EnableConsoleLogging = true;
-});</pre>
+                            {
+                            options.ApplicationId = "@application.Id";
+                            options.EnableConsoleLogging = true;
+                            });</pre>
                     </DescriptionTemplate>
                 </Step>
                 <Step Title="Middleware" Description="Add middleware in Program.cs">
@@ -181,11 +186,11 @@ using Nummy.HttpLogger.Extensions;</pre>
                         <Text>Add the following configuration in your Program.cs:</Text>
                         <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 10px;">
 builder.Services.AddNummyHttpLogger(options =>
-{
-    options.ApplicationId = "@application.Id";
-    options.LogRequestBody = true;
-    options.LogResponseBody = true;
-});</pre>
+                            {
+                            options.ApplicationId = "@application.Id";
+                            options.LogRequestBody = true;
+                            options.LogResponseBody = true;
+                            });</pre>
                     </DescriptionTemplate>
                 </Step>
                 <Step Title="Middleware" Description="Add middleware in Program.cs">

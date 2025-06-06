@@ -7,7 +7,24 @@
 
 
 <PageHeader Style="margin-bottom: 16px" Title="Code Logs" SubTitle="View and manage code logs."/>
-<Collapse DefaultActiveKey="@(new[] { "1" })">
+<Collapse DefaultActiveKey="@(new[] { "0" })">
+    <Panel Header="Application" Key="0">
+        <ChildContent>
+            <Select TItem="Guid?"
+                    TItemValue="Guid?"
+                    Style="width: 200px"
+                    Placeholder="Select Application"
+                    @bind-Value="_selectedApplicationId"
+                    OnSelectedItemChanged="(v)=>OnApplicationChanged(v)">
+                <SelectOptions>
+                    @foreach (var app in _applications)
+                    {
+                        <SelectOption TItemValue="Guid?" TItem="Guid?" Value="@app.Id" Label="@app.Name"/>
+                    }
+                </SelectOptions>
+            </Select>
+        </ChildContent>
+    </Panel>
     <Panel Header="Search" Key="1">
         <ChildContent>
             <Search Placeholder="Search by Title, Description, ExceptionType, Id..." @bind-Value="_query"

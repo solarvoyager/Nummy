@@ -7,7 +7,7 @@ namespace NummyUi.Services;
 
 public interface ILogService
 {
-    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto);
+    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto);
     Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier);
     Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto);
     Task<ResponseLogDto> GetResponseLog(Guid httpLogId);
@@ -18,13 +18,13 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 {
     private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(GetCodeLogsDto dto)
+    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId,GetCodeLogsDto dto)
     {
         var request = new HttpRequestMessage
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Post,
-            RequestUri = new Uri(NummyContants.GetCodeLogsUrl, UriKind.Relative)
+            RequestUri = new Uri(NummyContants.GetCodeLogsUrl + $"?applicationId={applicationId}", UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);

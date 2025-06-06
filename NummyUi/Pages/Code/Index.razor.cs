@@ -9,14 +9,17 @@ namespace NummyUi.Pages.Code;
 
 public partial class Index
 {
-    [Inject] private ILogService LogService { get; set; }
-    [Inject] private ModalService ModalService { get; set; }
-    [Inject] private IMessageService MessageServices { get; set; }
+    [Inject] private ILogService LogService { get; set; } = null!;
+    [Inject] private ModalService ModalService { get; set; } = null!;
+    [Inject] private IMessageService MessageServices { get; set; } = null!;
+    [Inject] private IApplicationService ApplicationService { get; set; } = null!;
 
     private Table<CodeLogToListDto>? _table;
 
-    private IEnumerable<CodeLogToListDto> _items = new List<CodeLogToListDto>();
-    private IEnumerable<CodeLogToListDto> _selectedItems = new List<CodeLogToListDto>();
+    private IEnumerable<CodeLogToListDto> _items = [];
+    private IEnumerable<CodeLogToListDto> _selectedItems = [];
+    private IEnumerable<ApplicationToListDto> _applications = [];
+    private Guid? _selectedApplicationId;
 
     private int _pageIndex = 1;
     private int _pageSize = 10;
@@ -39,6 +42,18 @@ public partial class Index
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadApplicationsAsync();
+        await LoadDataAsync();
+    }
+
+    private async Task LoadApplicationsAsync()
+    {
+        _applications = await ApplicationService.Get();
+    }
+
+    private async Task OnApplicationChanged(Guid? applicationId)
+    {
+        _selectedApplicationId = applicationId;
         await LoadDataAsync();
     }
 
@@ -112,7 +127,7 @@ public partial class Index
             _sortOrder,
             pickedLevels);
 
-        var result = await LogService.GetCodeLogs(request);
+        var result = await LogService.GetCodeLogs(_selectedApplicationId, request);
 
         _items = result.Datas;
         _total = result.TotalCount;
