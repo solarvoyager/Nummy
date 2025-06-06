@@ -22,3 +22,7 @@ public record HourlyRequestDto(
     string Hour,
     int Count
 );
+
+public record ServiceUrlResponseDto(
+    string ServiceUrl
+);

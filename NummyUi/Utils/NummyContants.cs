@@ -8,14 +8,16 @@ public static class NummyContants
     public const string UserKey = "UserData";
     public const string GitHubUrl = "https://github.com/orgs/solarvoyager";
     
-    public const string GetPendingMigrationsUrl = "api/database/migrations/pending";
-    public const string ApplyPendingMigrationsUrl = "api/database/migrations/pending/apply";
     public const string GetCodeLogsUrl = "api/log/get/code";
     public const string GetRequestLogsUrl = "api/log/get/request";
     public const string GetResponseLogsUrl = "api/log/get/response";
     public const string DeleteCodeLogsUrl = "api/log/delete/code";
     public const string GetCodeLogsByTraceIdentifierUrl = "api/log/get/code";
     public const string GetTotalCountsUrl = "api/statistical/total";
+    
+    public const string GetServiceUrlUrl = "api/helper/service-url";
+    public const string GetPendingMigrationsUrl = "api/helper/pending-migrations";
+    public const string ApplyPendingMigrationsUrl = "api/helper/apply-pending-migrations";
     
     public const string GetUserUrl = "api/user";
     public const string LoginUrl = "api/user/login";
