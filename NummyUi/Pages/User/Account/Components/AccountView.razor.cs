@@ -23,7 +23,7 @@ namespace NummyUi.Pages.User.Account.Components
 
             _model = new BaseViewModel
             {
-                Name = user.Name,
+                Name = user!.Name,
                 Surname = user.Surname,
                 Email = user.Email,
                 Phone = user.Phone,

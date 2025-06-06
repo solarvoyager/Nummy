@@ -5,6 +5,7 @@ namespace NummyUi.Utils;
 public static class NummyContants
 {
     public const string ClientName = "NummyApiClient";
+    public const string UserKey = "UserData";
     public const string GitHubUrl = "https://github.com/orgs/solarvoyager";
     
     public const string GetPendingMigrationsUrl = "api/database/migrations/pending";
@@ -15,7 +16,6 @@ public static class NummyContants
     public const string DeleteCodeLogsUrl = "api/log/delete/code";
     public const string GetCodeLogsByTraceIdentifierUrl = "api/log/get/code";
     public const string GetTotalCountsUrl = "api/statistical/total";
-    public const string GetDsnUrl = "api/helper/dsn";
     
     public const string GetUserUrl = "api/user";
     public const string LoginUrl = "api/user/login";
@@ -46,6 +46,20 @@ public static class NummyContants
         },
         new()
         {
+            Path = "/application",
+            Name = "Applications",
+            Key = "application",
+            Icon = "appstore"
+        },
+        new()
+        {
+            Path = "/team",
+            Name = "Teams",
+            Key = "team",
+            Icon = "team"
+        },
+        new()
+        {
             Path = "/http",
             Name = "Http Logs",
             Key = "http",
@@ -57,20 +71,6 @@ public static class NummyContants
             Name = "Code Logs",
             Key = "code",
             Icon = "node-index"
-        },
-        new()
-        {
-            Path = "/application",
-            Name = "Applications (in dev)",
-            Key = "application",
-            Icon = "appstore"
-        },
-        new()
-        {
-            Path = "/team",
-            Name = "Teams (in dev)",
-            Key = "team",
-            Icon = "team"
         },
         /*new()
         {
