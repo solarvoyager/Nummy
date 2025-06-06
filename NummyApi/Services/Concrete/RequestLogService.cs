@@ -28,7 +28,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> Get(GetRequestLogsDto dto)
+    public async Task<PaginatedListDto<RequestLogToListDto>> Get(Guid? applicationId, GetRequestLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
@@ -77,6 +77,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 x.Request.Id,
                 x.Request.HttpLogId,
                 x.Request.TraceIdentifier,
+                x.Request.ApplicationId,
                 x.Response.StatusCode,
                 x.Request.Method,
                 x.Request.Path,

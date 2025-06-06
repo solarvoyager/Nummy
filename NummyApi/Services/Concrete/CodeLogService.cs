@@ -19,12 +19,13 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> Get(GetCodeLogsDto dto)
+    public async Task<PaginatedListDto<CodeLogToListDto>> Get(Guid? applicationId, GetCodeLogsDto dto)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
         var query = dataContext.CodeLogs
-            .Where(l => dto.Levels.Contains(l.LogLevel));
+            .Where(l => dto.Levels.Contains(l.LogLevel) && 
+                        (applicationId == null || l.ApplicationId == applicationId));
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(l =>

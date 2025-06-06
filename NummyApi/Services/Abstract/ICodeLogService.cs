@@ -7,7 +7,7 @@ namespace NummyApi.Services.Abstract;
 public interface ICodeLogService
 {
     Task Add(CodeLogToAddDto dto);
-    Task<PaginatedListDto<CodeLogToListDto>> Get(GetCodeLogsDto dto);
+    Task<PaginatedListDto<CodeLogToListDto>> Get(Guid? applicationId, GetCodeLogsDto dto);
     Task<bool> Delete(DeleteCodeLogsDto dto);
     Task<IEnumerable<CodeLogToListDto>> Get(string traceIdentifier);
 }

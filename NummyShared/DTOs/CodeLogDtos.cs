@@ -4,6 +4,7 @@ namespace NummyShared.DTOs;
 
 public record CodeLogToAddDto(
     string? TraceIdentifier,
+    Guid ApplicationId,
     CodeLogLevel LogLevel,
     string Title,
     string? Description,
@@ -14,6 +15,7 @@ public record CodeLogToAddDto(
 
 public record CodeLogToListDto(
     Guid Id,
+    Guid ApplicationId,
     string? TraceIdentifier,
     CodeLogLevel LogLevel,
     string Title,
