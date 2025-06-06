@@ -57,6 +57,12 @@ public partial class Index
         await LoadDataAsync();
     }
 
+    private async Task OnClearApplicationSelection()
+    {
+        _selectedApplicationId = null;
+        await LoadDataAsync();
+    }
+
     private async Task OnPageIndexChanged(PaginationEventArgs args)
     {
         _pageSize = args.PageSize;

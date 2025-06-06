@@ -9,7 +9,9 @@ namespace NummyUi.Pages.Http;
 public partial class Index : ComponentBase
 {
     private Table<RequestLogToListDto>? _table;
-    private IEnumerable<RequestLogToListDto> _requestLogs = new List<RequestLogToListDto>();
+    private IEnumerable<RequestLogToListDto> _requestLogs = [];
+    private IEnumerable<ApplicationToListDto> _applications = [];
+    private Guid? _selectedApplicationId;
     private int _totalCount;
     private int _pageSize = 10;
     private int _pageIndex = 1;
@@ -28,8 +30,33 @@ public partial class Index : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadApplicationsAsync();
         await LoadData();
         await LoadStatistics();
+    }
+
+    private async Task LoadApplicationsAsync()
+    {
+        try
+        {
+            _applications = await ApplicationService.Get();
+        }
+        catch (System.Exception ex)
+        {
+            await MessageService.Error("Failed to load applications");
+        }
+    }
+
+    private async Task OnApplicationChanged(Guid? applicationId)
+    {
+        _selectedApplicationId = applicationId;
+        await LoadData();
+    }
+
+    private async Task OnClearApplicationSelection()
+    {
+        _selectedApplicationId = null;
+        await LoadData();
     }
 
     private async Task LoadData()
@@ -45,7 +72,7 @@ public partial class Index : ComponentBase
                 SortOrder: _sortOrder
             );
 
-            var result = await LogService.GetRequestLogs(dto);
+            var result = await LogService.GetRequestLogs(_selectedApplicationId, dto);
             _requestLogs = result.Datas;
             _totalCount = result.TotalCount;
         }

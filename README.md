@@ -20,7 +20,7 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
    docker compose up --detach
    ```
 4. Open browser and go to Dashboard http://localhost:8080/
-5. Create application and go to Configuration section to copy your application DSN address to use in packages
+5. Create application and go to Configuration section to copy your Application Code to use in packages
 
 ---
 

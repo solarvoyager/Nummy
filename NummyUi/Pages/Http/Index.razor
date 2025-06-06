@@ -5,6 +5,7 @@
 @inject ILogService LogService
 @inject IStatisticalService StatisticalService
 @inject IMessageService MessageService
+@inject IApplicationService ApplicationService
 
 <PageHeader Style="margin-bottom: 16px" Title="HTTP Logs" Subtitle="View and manage http logs."/>
 
@@ -34,10 +35,33 @@
 
 <Card>
     <Row Style="margin-bottom: 16px">
-        <Search Placeholder="Search logs..."
-                EnterButton="true"
-                OnSearch="@(async (e) => await OnSearch(e))"
-                AllowClear/> @*ClassicSearchIcon*@
+        <Space>
+            <SpaceItem>
+                <Select TItem="Guid?"
+                        TItemValue="Guid?"
+                        Style="width: 200px"
+                        Placeholder="Select Application"
+                        @bind-Value="_selectedApplicationId"
+                        OnSelectedItemChanged="(v)=>OnApplicationChanged(v)">
+                    <SelectOptions>
+                        @foreach (var app in _applications)
+                        {
+                            <SelectOption TItemValue="Guid?" TItem="Guid?" Value="@app.Id" Label="@app.Name"/>
+                        }
+                    </SelectOptions>
+                </Select>
+            </SpaceItem>
+            <SpaceItem>
+                <Button OnClick="@OnClearApplicationSelection" Icon="@IconType.Outline.Clear">Clear</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <Search Placeholder="Search ..."
+                        EnterButton="true"
+                        Style="width: 100%"
+                        OnSearch="@(async (e) => await OnSearch(e))"
+                        AllowClear/> @*ClassicSearchIcon*@
+            </SpaceItem>
+        </Space>
     </Row>
     <Table TItem="RequestLogToListDto"
            @ref="@_table"

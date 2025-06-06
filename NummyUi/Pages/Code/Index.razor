@@ -7,30 +7,35 @@
 
 
 <PageHeader Style="margin-bottom: 16px" Title="Code Logs" SubTitle="View and manage code logs."/>
-<Collapse DefaultActiveKey="@(new[] { "0" })">
-    <Panel Header="Application" Key="0">
-        <ChildContent>
-            <Select TItem="Guid?"
-                    TItemValue="Guid?"
-                    Style="width: 200px"
-                    Placeholder="Select Application"
-                    @bind-Value="_selectedApplicationId"
-                    OnSelectedItemChanged="(v)=>OnApplicationChanged(v)">
-                <SelectOptions>
-                    @foreach (var app in _applications)
-                    {
-                        <SelectOption TItemValue="Guid?" TItem="Guid?" Value="@app.Id" Label="@app.Name"/>
-                    }
-                </SelectOptions>
-            </Select>
-        </ChildContent>
-    </Panel>
+<Collapse DefaultActiveKey="@(new[] { "1" })">
     <Panel Header="Search" Key="1">
         <ChildContent>
-            <Search Placeholder="Search by Title, Description, ExceptionType, Id..." @bind-Value="_query"
-                    OnSearch="OnSearch"  
-                    EnterButton="true"
-                    AllowClear/> @* OnSearch="() => _table?.ReloadData()"*@
+            <Space>
+                <SpaceItem>
+                    <Select TItem="Guid?"
+                            TItemValue="Guid?"
+                            Style="width: 200px"
+                            Placeholder="Select Application"
+                            @bind-Value="_selectedApplicationId"
+                            OnSelectedItemChanged="(v)=>OnApplicationChanged(v)">
+                        <SelectOptions>
+                            @foreach (var app in _applications)
+                            {
+                                <SelectOption TItemValue="Guid?" TItem="Guid?" Value="@app.Id" Label="@app.Name"/>
+                            }
+                        </SelectOptions>
+                    </Select>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button OnClick="@OnClearApplicationSelection" Icon="@IconType.Outline.Clear">Clear</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Search Placeholder="Search by Title, Description, ExceptionType, Id..." @bind-Value="_query"
+                            OnSearch="OnSearch"
+                            EnterButton="true"
+                            AllowClear/> @* OnSearch="() => _table?.ReloadData()"*@
+                </SpaceItem>
+            </Space>
         </ChildContent>
     </Panel>
     <Panel Header="Filter" Key="2">

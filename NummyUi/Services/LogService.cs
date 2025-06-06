@@ -9,7 +9,7 @@ public interface ILogService
 {
     Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto);
     Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier);
-    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto);
+    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(Guid? applicationId, GetRequestLogsDto dto);
     Task<ResponseLogDto> GetResponseLog(Guid httpLogId);
     Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);
 }
@@ -18,7 +18,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 {
     private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId,GetCodeLogsDto dto)
+    public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto)
     {
         var request = new HttpRequestMessage
         {
@@ -51,13 +51,13 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         return result!;
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(GetRequestLogsDto dto)
+    public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(Guid? applicationId, GetRequestLogsDto dto)
     {
         var request = new HttpRequestMessage
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Post,
-            RequestUri = new Uri(NummyContants.GetRequestLogsUrl, UriKind.Relative)
+            RequestUri = new Uri(NummyContants.GetRequestLogsUrl + $"?applicationId={applicationId}", UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);
