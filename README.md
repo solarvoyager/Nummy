@@ -26,13 +26,15 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
 
 ### 🚀 Now You Can Safely Update
 
-Pull the latest image versions:
+1. Copy or Download [docker-compose.yml](https://github.com/solarvoyager/Nummy/blob/fb5247f0b977d1d20424abc4c87f8a1c0d621bcd/docker-compose.yml) file.
+
+2. Pull the latest image versions:
 
 ```bash
 docker-compose pull nummy-api nummy-ui
 ```
 
-Recreate only the updated services (API/UI):
+3. Recreate only the updated services (API/UI):
 
 ```bash
 docker-compose up -d --no-deps --build nummy-api nummy-ui
