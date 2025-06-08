@@ -38,7 +38,8 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 request => request.HttpLogId,
                 response => response.HttpLogId,
                 (request, response) => new { Request = request, Response = response }
-            );
+            )
+            .Where(l=> applicationId == null || l.Request.ApplicationId == applicationId);
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(x =>
