@@ -1,0 +1,74 @@
+﻿<div class="rgb-card">
+    <div class="card-content">
+        <h2>;lsdkfl;vsvxvdsd</h2>
+        <p>saldas;dkasdlkas;daksd;laskd;lakd;laskkdal;kds;akdas;</p>
+    </div>
+</div>
+
+<style>
+    .rgb-card {
+        position: relative;
+        padding: 2rem;
+        border-radius: 2px;
+        background: rgba(0, 0, 0, 0.0);
+        color: white;
+        text-align: center;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .rgb-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+            from 0deg,
+            #ff0000,
+            #ff9900,
+            #33cc33,
+            #00ccff,
+            #6600cc,
+            #ff0066,
+            #ff0000
+        );
+        animation: rotate 6s linear infinite;
+        z-index: -2;
+    }
+
+    .rgb-card::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        right: 2px;
+        bottom: 2px;
+        border-radius: 2px;
+        background: #FFFFFF;
+        z-index: -1;
+    }
+
+    @@keyframes rotate {
+        to {
+            transform: rotate(1turn);
+        }
+    }
+
+    .card-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+</style>

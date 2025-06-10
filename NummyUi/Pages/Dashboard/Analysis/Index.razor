@@ -4,77 +4,77 @@
 @using NummyUi.Pages.Dashboard.Analysis.ComponentsNew.Charts
 @using NummyUi.Pages.Dashboard.Analysis.Components.Charts.Field
 @using NummyUi.Pages.Dashboard.Analysis.Components.Charts.ChartCard
+@using NummyUi.Pages.Dashboard.Analysis.ComponentsNew
 @attribute [ReuseTabsPage(Title = "Dashboard", Pin = true, Closable = false, Order = 0)]
 
 <GridContent>
     <MigrationPanel/>
-    @if (_loading)
-    {
-        <Spin Size="large" Style="display: flex; justify-content: center; align-items: center; margin: 24px"/>
-    }
-    else
-    {
-        <Row Type="flex" Gutter="24">
-            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Logs Today"
-                           Total="@(_totalCounts?.TodayCodeLogs.ToString())"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <Field Label="Errors today" Description="* Including Fatal"
-                               Value="@_totalCounts?.TodayErrorAndFatals.ToString()"/>
-                    </ChildContent>
-                    <Footer>
-                        <trend Flag="up">
-                            Total log/errors
-                            <span
-                                class="trendText">@($"{_totalCounts?.TotalCodeLogs}/{_totalCounts?.TotalErrorAndFatals}")</span>
-                        </trend>
-                    </Footer>
-                </ChartCard>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Requests Today"
-                           Total="@_totalCounts?.RequestsToday.ToString()"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <WeeklyRequests WeeklyCounts="@_totalCounts?.WeeklyRequests"/>
-                    </ChildContent>
-                    <Footer>
-                        <Field Label="Total/this week"
-                               Value="@($"{_totalCounts?.TotalRequests}/{_totalCounts?.RequestsThisWeek}")"/>
-                    </Footer>
-                </ChartCard>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Requests this Hour"
-                           Total="@_totalCounts?.RequestsThisHour.ToString()"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <HourlyRequests HourlyCounts="@_totalCounts?.HourlyRequests"/>
-                    </ChildContent>
-                    <Footer>
-                        <Field Label="Conversion Rate" Value="60%"/>
-                    </Footer>
-                </ChartCard>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
-                <ChartCard Title="Operational Effect"
-                           Total="78%"
-                           ContentHeight="46">
-                    <ChildContent>
-                        <MiniProgress
-                            Percent="78"
-                            StrokeWidth="8"
-                            Target="80"
-                            Color="#13C2C2"/>
-                    </ChildContent>
-                    <Footer>
-                        <Field Label="Conversion Rate" Value="60%"/>
-                    </Footer>
-                </ChartCard>
-            </AntDesign.Col>
-        </Row>
-    }
+    <Spin Spinning="_loading">
+        <ChildContent>
+            <Row Type="flex" Gutter="24">
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                    <ChartCard Title="Logs Today"
+                               Total="@(_totalCounts?.TodayCodeLogs.ToString())"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <Field Label="Errors today" Description="* Including Fatal"
+                                   Value="@_totalCounts?.TodayErrorAndFatals.ToString()"/>
+                        </ChildContent>
+                        <Footer>
+                            <trend Flag="up">
+                                Total log/errors
+                                <span
+                                    class="trendText">@($"{_totalCounts?.TotalCodeLogs}/{_totalCounts?.TotalErrorAndFatals}")</span>
+                            </trend>
+                        </Footer>
+                    </ChartCard>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                    <ChartCard Title="Requests Today"
+                               Total="@_totalCounts?.RequestsToday.ToString()"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <WeeklyRequests WeeklyCounts="@_totalCounts?.WeeklyRequests"/>
+                        </ChildContent>
+                        <Footer>
+                            <Field Label="Total/this week"
+                                   Value="@($"{_totalCounts?.TotalRequests}/{_totalCounts?.RequestsThisWeek}")"/>
+                        </Footer>
+                    </ChartCard>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                    <ChartCard Title="Requests this Hour"
+                               Total="@_totalCounts?.RequestsThisHour.ToString()"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <HourlyRequests HourlyCounts="@_totalCounts?.HourlyRequests"/>
+                        </ChildContent>
+                        <Footer>
+                            <Field Label="Conversion Rate" Value="60%"/>
+                        </Footer>
+                    </ChartCard>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12" Xl="6" Style="margin-bottom: 24px;">
+                    <ChartCard Title="Operational Effect"
+                               Total="78%"
+                               ContentHeight="46">
+                        <ChildContent>
+                            <MiniProgress
+                                Percent="78"
+                                StrokeWidth="8"
+                                Target="80"
+                                Color="#13C2C2"/>
+                        </ChildContent>
+                        <Footer>
+                            <Field Label="Conversion Rate" Value="60%"/>
+                        </Footer>
+                    </ChartCard>
+                </AntDesign.Col>
+            </Row>
+        </ChildContent>
+    </Spin>
+
+    <AiPanel/>
 
     @*<SalesCard/>*@
 </GridContent>
