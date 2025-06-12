@@ -1,25 +1,30 @@
-﻿<div class="rgb-card">
+﻿<div class="card-container">
     <div class="card-content">
-        <h2>;lsdkfl;vsvxvdsd</h2>
-        <p>saldas;dkasdlkas;daksd;laskd;lakd;laskkdal;kds;akdas;</p>
+        <Space Align="SpaceAlign.Center">
+            <SpaceItem>
+                <Icon Type="@IconType.Outline.Sync" Spin/>
+                <Icon Type="@IconType.Outline.RadarChart" Theme="Outline"/>
+            </SpaceItem>
+            <SpaceItem>
+                <Text Type="secondary">AI Suggestions</Text>
+            </SpaceItem>
+        </Space>
     </div>
 </div>
 
 <style>
-    .rgb-card {
+    .card-container {
         position: relative;
-        padding: 2rem;
-        border-radius: 2px;
-        background: rgba(0, 0, 0, 0.0);
-        color: white;
-        text-align: center;
+        width: 600px;
+        height: 420px;
+        background: rgba(255, 255, 255, 0);
+        border-radius: 4px;
         overflow: hidden;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         z-index: 0;
     }
 
-    .rgb-card::before {
-        content: '';
+    .card-container::before {
+        content: "";
         position: absolute;
         top: -50%;
         left: -50%;
@@ -27,48 +32,49 @@
         height: 200%;
         background: conic-gradient(
             from 0deg,
-            #ff0000,
-            #ff9900,
-            #33cc33,
-            #00ccff,
-            #6600cc,
-            #ff0066,
-            #ff0000
+            #00ffcc,
+            #0066ff,
+            #cc00ff,
+            #00ffcc
         );
         animation: rotate 6s linear infinite;
         z-index: -2;
     }
 
-    .rgb-card::after {
-        content: '';
+    .card-container::after {
+        content: "";
         position: absolute;
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        bottom: 2px;
-        border-radius: 2px;
-        background: #FFFFFF;
+        top: 4px;
+        left: 4px;
+        right: 4px;
+        bottom: 4px;
+        background: #ffffff;
+        border-radius: 3px;
         z-index: -1;
     }
 
-    @@keyframes rotate {
-        to {
-            transform: rotate(1turn);
-        }
-    }
-
     .card-content {
-        position: relative;
-        z-index: 1;
+        padding: 24px;
+        color: #bdacac;
     }
 
-    h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+    .card-content h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
     }
 
-    p {
-        line-height: 1.6;
-        font-size: 1rem;
+    .card-content p {
+        font-size: 16px;
+        line-height: 1;
+        opacity: 0.8;
+    }
+
+    @@keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
