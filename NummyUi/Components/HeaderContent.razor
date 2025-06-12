@@ -4,7 +4,7 @@
 <Space Size="@("24")"
        Class="header-content"
        Style="width: 100%; height: 58px; display: flex; align-items: center; justify-content: flex-end;">
-    <SpaceItem>
+    @*<SpaceItem>
         <HeaderSearch Class="action search" Placeholder="Site Search" DefaultValue="umi ui"
                       Options="DefaultOptions"/>
     </SpaceItem>
@@ -16,8 +16,8 @@
                 </span>
             </Unbound>
         </Tooltip>
-    </SpaceItem>
-    <SpaceItem>
+    </SpaceItem>*@
+    @*<SpaceItem>
         <NoticeIcon ClearText="Empty" ViewMoreText="see more" Count="_count" OnClear="HandleClear"
                     OnViewMore="HandleViewMore">
             <NoticeList TabKey="notification" Title="Notifications" EmptyText="You have viewed all notifications"
@@ -27,14 +27,14 @@
             <NoticeList TabKey="event" Title="Upcoming" EmptyText="You have completed all to do" ShowViewMore
                         Data="_events"/>
         </NoticeIcon>
-    </SpaceItem>
+    </SpaceItem>*@
     <SpaceItem>
         <AvatarDropdown Name="@($"{_user!.Name} {_user.Surname}")"
                         Avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIK57MZRfv5EA3K1qBxMrUQ0Mc9RtVAvXR4pigpbojuQ&s&ec=72940544"
                         MenuItems="@AvatarMenuItems"
                         OnItemSelected="HandleSelectUser"/>
     </SpaceItem>
-    <SpaceItem>
+    @*<SpaceItem>
         <SelectLang OnItemSelected="HandleSelectLang"/>
-    </SpaceItem>
+    </SpaceItem>*@
 </Space>

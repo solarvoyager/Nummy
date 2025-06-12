@@ -86,9 +86,9 @@ public static class NummyContants
     public static readonly Dictionary<string, string> AccountMenuItems = new()
     {
         {"account", "Account Settings"},
-        {"security", "Security Settings"},
-        {"binding", "Account Binding"},
-        {"notification", "New Message Notification"},
+        //{"security", "Security Settings"},
+        //{"binding", "Account Binding"},
+        //{"notification", "New Message Notification"},
     };
 
     public const string AccountMenuDefaultItemKey = "account";
