@@ -1,13 +1,23 @@
 ﻿<div class="card-container">
     <div class="card-content">
-        <Space Align="SpaceAlign.Center">
-            <SpaceItem>
-                <Icon Type="@IconType.Outline.Sync" Spin/>
-                <Icon Type="@IconType.Outline.RadarChart" Theme="Outline"/>
-            </SpaceItem>
-            <SpaceItem>
-                <Text Type="secondary">AI Suggestions</Text>
-            </SpaceItem>
+        <Space Align="SpaceAlign.Center" Direction="DirectionVHType.Vertical">
+            <Space Align="SpaceAlign.Center" Direction="DirectionVHType.Horizontal">
+                <SpaceItem>
+                    <Icon Type="@IconType.Outline.RadarChart" Theme="Outline" Spin/>
+                </SpaceItem>
+                <SpaceItem>
+                    <Text Style="font-size: 17px" Strong>Nummy AI</Text>
+                </SpaceItem>
+            </Space>
+            <Space Align="SpaceAlign.Center" Direction="DirectionVHType.Horizontal">
+                <SpaceItem>
+                    <Icon Type="@IconType.Outline.RadarChart" Style="opacity: 0" Theme="Outline"/>
+                </SpaceItem>
+                <SpaceItem>
+                    <Text Style="font-size: 11px; color: #00A0E9">Based on your data Nummy focus you if something strange happens
+                    </Text>
+                </SpaceItem>
+            </Space>
         </Space>
     </div>
 </div>
@@ -44,10 +54,10 @@
     .card-container::after {
         content: "";
         position: absolute;
-        top: 4px;
-        left: 4px;
-        right: 4px;
-        bottom: 4px;
+        top: 1px;
+        left: 2px;
+        right: 1px;
+        bottom: 1px;
         background: #ffffff;
         border-radius: 3px;
         z-index: -1;

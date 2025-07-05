@@ -121,8 +121,8 @@
         <PropertyColumn Property="@(c => c.LogLevel)">
             <LogLevelTag LogLevel="@context.LogLevel"></LogLevelTag>
         </PropertyColumn>
-        <PropertyColumn Property="@(c => c.Title)"/>
         <PropertyColumn Property="@(c => c.ExceptionType)"/>
+        <PropertyColumn Property="@(c => c.Title)"/>
         <PropertyColumn Property="@(c => c.CreatedAt)" Format="yyyy-MM-dd HH:mm:ss"/>
         <ActionColumn>
             <Button Type="@ButtonType.Link" OnClick="@(() => ShowViewModal(context.Id))">
