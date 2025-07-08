@@ -1,5 +1,5 @@
-﻿<div class="card-container">
-    <div class="card-content">
+﻿<div class="card-wrapper">
+    <div class="card">
         <Space Align="SpaceAlign.Center" Direction="DirectionVHType.Vertical">
             <Space Align="SpaceAlign.Center" Direction="DirectionVHType.Horizontal">
                 <SpaceItem>
@@ -23,6 +23,74 @@
 </div>
 
 <style>
+    .card-wrapper {
+        position: relative;
+        padding: 1px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+            from 0deg,
+            #00f0ff,
+            #00cfff,
+            #0099ff,
+            #0066ff,
+            #5f00ff,
+            #9f00ff,
+            #ff00cc,
+            #ff0077,
+            #ff0040,
+            #ff3300,
+            #ff7b00,
+            #ffaa00,
+            #ccff00,
+            #88ff00,
+            #00ff85,
+            #00ffaa,
+            #00ffe7,
+            #00f0ff
+        );
+        animation: rotate 8s linear infinite;
+        z-index: 0;
+    }
+
+    .card-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: 8px;
+        z-index: 1;
+    }
+
+    .card {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 6px;
+        padding: 40px;
+        text-align: center;
+    }
+
+    @@keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+@*<style>
     .card-container {
         position: relative;
         width: 600px;
@@ -87,4 +155,4 @@
             transform: rotate(360deg);
         }
     }
-</style>
+</style>*@
