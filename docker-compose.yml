@@ -7,27 +7,29 @@ services:
   # Postgres instance
   nummy-postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: nummy_postgres
     environment:
-      - POSTGRES_DB=nummydatabase
-      - POSTGRES_USER=nummyuser
-      - POSTGRES_PASSWORD=nummypassword
+      - POSTGRES_DB=nummy_database
+      - POSTGRES_USER=nummy_user
+      - POSTGRES_PASSWORD=nummy_password
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/nummy_postgresql/data
     networks:
       - network
 
   # Nummy API instance
   nummy-api:
     image: hamidmusayev04/nummy-api:latest
-    container_name: api
+    container_name: nummy_api
     environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=nummydatabase
-      - POSTGRES_USER=nummyuser
-      - POSTGRES_PASSWORD=nummypassword
+      - POSTGRES_HOST=nummy_postgres
+      - POSTGRES_DB=nummy_database
+      - POSTGRES_USER=nummy_user
+      - POSTGRES_PASSWORD=nummy_password
+      - UI_SUPER_ADMIN_EMAIL = nummy_admin@nummy.com
+      - UI_SUPER_ADMIN_PASSWORD = nummy_admin_password
     ports:
       - "8082:8082"
       - "8083:8083"
@@ -37,7 +39,7 @@ services:
   # Nummy UI instance
   nummy-ui:
     image: hamidmusayev04/nummy-ui:latest
-    container_name: ui
+    container_name: nummy_ui
     environment:
       - NUMMY_API_HOST=api
       - NUMMY_API_PORT=8082
