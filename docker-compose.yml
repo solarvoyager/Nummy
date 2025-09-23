@@ -1,13 +1,11 @@
-version: '3.8'
-
 name: nummy
 
 services:
 
   # Postgres instance
-  nummy-postgres:
+  postgres:
     image: postgres:latest
-    container_name: nummy_postgres
+    #container_name: nummy_postgres
     environment:
       - POSTGRES_DB=nummy_database
       - POSTGRES_USER=nummy_user
@@ -15,17 +13,17 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - postgres-data:/var/lib/nummy_postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - network
 
   # Nummy API instance
-  nummy-api:
+  api:
     image: hamidmusayev04/nummy-api:latest
-    container_name: nummy_api
+    #container_name: nummy_api
     environment:
-      - POSTGRES_HOST=nummy_postgres
-      - POSTGRES_PORT=5433
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
       - POSTGRES_DB=nummy_database
       - POSTGRES_USER=nummy_user
       - POSTGRES_PASSWORD=nummy_password
@@ -38,9 +36,9 @@ services:
       - network
 
   # Nummy UI instance
-  nummy-ui:
+  ui:
     image: hamidmusayev04/nummy-ui:latest
-    container_name: nummy_ui
+    #container_name: nummy_ui
     environment:
       - NUMMY_API_HOST=api
       - NUMMY_API_PORT=8082
