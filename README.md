@@ -31,13 +31,13 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
 2. Pull the latest image versions:
 
 ```bash
-docker-compose pull nummy-api nummy-ui
+docker compose pull api ui
 ```
 
 3. Recreate only the updated services (API/UI):
 
 ```bash
-docker-compose up -d --no-deps --build nummy-api nummy-ui
+docker compose up -d --no-deps --build api ui
 ```
 
 💡 *The `nummy-postgres` container and its data volume (`postgres-data`) will remain untouched.*
