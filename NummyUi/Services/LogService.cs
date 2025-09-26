@@ -24,7 +24,10 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Post,
-            RequestUri = new Uri(NummyContants.GetCodeLogsUrl + $"?applicationId={applicationId}", UriKind.Relative)
+            RequestUri =
+                new Uri(
+                    NummyContants.GetCodeLogsUrl +
+                    (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);
@@ -34,13 +37,14 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 
         return result!;
     }
-    
+
     public async Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyContants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}", UriKind.Relative)
+            RequestUri = new Uri(NummyContants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}",
+                UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);
@@ -57,7 +61,10 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Post,
-            RequestUri = new Uri(NummyContants.GetRequestLogsUrl + $"?applicationId={applicationId}", UriKind.Relative)
+            RequestUri =
+                new Uri(
+                    NummyContants.GetRequestLogsUrl +
+                    (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);
