@@ -4,10 +4,11 @@ public record RequestLogToAddDto(
     Guid HttpLogId,
     Guid ApplicationId,
     string TraceIdentifier,
-    string Body,
+    string? Body,
     string Method,
     string Path,
-    string? RemoteIp
+    string? RemoteIp,
+    string? Headers
 );
 
 public record RequestLogToListDto(
@@ -15,9 +16,8 @@ public record RequestLogToListDto(
     Guid HttpLogId,
     string TraceIdentifier,
     Guid ApplicationId,
-    // moved to response log to list dto
-    //string Body,
     int ResponseStatusCode,
+    long ResponseDurationMs,
     string Method,
     string Path,
     string? RemoteIp,

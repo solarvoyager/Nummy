@@ -130,10 +130,7 @@
                     <AntDesign.Space Direction="DirectionVHType.Vertical">
                         <AntDesign.SpaceItem>
                             <strong>Duration:</strong>
-                            @($"{(_responseLog.Duration.Minutes > 0 ? $"{_responseLog.Duration.Minutes} minutes " : string.Empty)}" +
-                            $"{(_responseLog.Duration.Seconds > 0 ? $" {_responseLog.Duration.Seconds} seconds " : string.Empty)}" +
-                            $"{(_responseLog.Duration.Milliseconds > 0 ? $" {_responseLog.Duration.Milliseconds} milliseconds " : string.Empty)}" +
-                            $"({_responseLog.Duration.TotalMilliseconds} ms)")
+                            @($"{_responseLog.DurationMs} ms")
                         </AntDesign.SpaceItem>
                         <AntDesign.SpaceItem>
                             <strong>Status Code:</strong>
@@ -141,6 +138,19 @@
                         </AntDesign.SpaceItem>
                     </AntDesign.Space>
                     </Body>
+                </AntDesign.Card>
+            </AntDesign.Col>
+        </AntDesign.Row>
+        <br/>
+        <AntDesign.Row Gutter="16">
+            <AntDesign.Col Span="12">
+                <AntDesign.Card Title="Request Headers" BodyStyle="margin: 0; padding: 8px;">
+                    <Text>@_requestHeaders</Text>
+                </AntDesign.Card>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <AntDesign.Card Title="Response Headers" BodyStyle="margin: 0; padding: 8px;">
+                    <Text>@_responseHeaders</Text>
                 </AntDesign.Card>
             </AntDesign.Col>
         </AntDesign.Row>

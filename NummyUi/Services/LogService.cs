@@ -10,7 +10,7 @@ public interface ILogService
     Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto);
     Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier);
     Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(Guid? applicationId, GetRequestLogsDto dto);
-    Task<ResponseLogDto> GetResponseLog(Guid httpLogId);
+    Task<HttpLogDto> GetResponseLog(Guid httpLogId);
     Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);
 }
 
@@ -92,7 +92,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         return result!;
     }*/
 
-    public async Task<ResponseLogDto> GetResponseLog(Guid httpLogId)
+    public async Task<HttpLogDto> GetResponseLog(Guid httpLogId)
     {
         var request = new HttpRequestMessage
         {
@@ -103,7 +103,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.Content.ReadFromJsonAsync<ResponseLogDto>();
+        var result = await response.Content.ReadFromJsonAsync<HttpLogDto>();
 
         return result!;
     }

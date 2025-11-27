@@ -80,6 +80,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 x.Request.TraceIdentifier,
                 x.Request.ApplicationId,
                 x.Response.StatusCode,
+                x.Response.DurationMs,
                 x.Request.Method,
                 x.Request.Path,
                 x.Request.RemoteIp,

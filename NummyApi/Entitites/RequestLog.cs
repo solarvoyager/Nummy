@@ -8,8 +8,9 @@ public class RequestLog : Auditable
     public Guid ApplicationId { get; set; }
     public virtual Application? Application { get; set; }
     public required string TraceIdentifier { get; set; }
-    public required string Body { get; set; }
+    public string? Body { get; set; }
     public required string Method { get; set; }
     public required string Path { get; set; }
     public string? RemoteIp { get; set; }
+    public string? Headers { get; set; }
 }

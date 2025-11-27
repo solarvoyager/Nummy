@@ -63,38 +63,26 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
     }*/
 
-    public async Task<ResponseLogDto> Get(Guid httpLogId)
+    public async Task<HttpLogDto?> Get(Guid httpLogId)
     {
-        var query =
-            from requestLog in dataContext.RequestLogs
-            join responseLog in dataContext.ResponseLogs
-                on requestLog.HttpLogId equals responseLog.HttpLogId into responseGroup
-            from responseLog in responseGroup.DefaultIfEmpty()
-            where requestLog.HttpLogId == httpLogId
-            select new
-            {
-                Id = responseLog != null ? responseLog.Id : Guid.Empty, // or whatever default you want
-                requestLog.HttpLogId,
-                RequestBody = requestLog.Body,
-                ResponseBody = responseLog != null ? responseLog.Body : null,
-                StatusCode = responseLog != null ? responseLog.StatusCode : 0,
-                CreatedAt = responseLog != null ? responseLog.CreatedAt : DateTimeOffset.Now,
-                Duration = responseLog != null ? responseLog.CreatedAt - requestLog.CreatedAt : TimeSpan.Zero
-            };
+        var request = await  dataContext.RequestLogs.FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
+        if (request == null) return null;
+        
+        var response = await dataContext.ResponseLogs.FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
 
-        var data = await query.FirstOrDefaultAsync();
-
-        var mapped = new ResponseLogDto
+        var data = new HttpLogDto
         (
-            Id: data!.Id,
-            HttpLogId: data.HttpLogId,
-            RequestBody: data.RequestBody,
-            ResponseBody: data.ResponseBody,
-            StatusCode: data.StatusCode,
-            CreatedAt: data.CreatedAt,
-            Duration: data.Duration
+            response?.Id ?? Guid.Empty, // or whatever default you want
+            request.HttpLogId,
+            request.Body,
+            request.Headers,
+            response?.Body,
+            response?.Headers,
+            response?.StatusCode,
+            response?.DurationMs,
+            response?.CreatedAt
         );
 
-        return mapped;
+        return data;
     }
 }

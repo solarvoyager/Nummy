@@ -26,3 +26,15 @@ public record HourlyRequestDto(
 public record ServiceUrlResponseDto(
     string ServiceUrl
 );
+
+public record HttpLogDto(
+    Guid Id,
+    Guid HttpLogId,
+    string? RequestBody,
+    string? RequestHeaders,
+    string? ResponseBody,
+    string? ResponseHeaders,
+    int? StatusCode,
+    long? DurationMs,
+    DateTimeOffset? CreatedAt
+);

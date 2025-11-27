@@ -4,9 +4,9 @@ namespace NummyUi.Components;
 
 public partial class StatusCodeTag : ComponentBase
 {
-    [Parameter] public int StatusCode { get; set; }
+    [Parameter] public int? StatusCode { get; set; }
     
-    private string GetTagColor(int statusCode)
+    private static string GetTagColor(int? statusCode)
     {
         return statusCode switch
         {
@@ -14,11 +14,11 @@ public partial class StatusCodeTag : ComponentBase
             >= 300 and < 400 => "cyan", // Redirection
             >= 400 and < 500 => "orange", // Client Error
             >= 500 => "red", // Server Error
-            _ => "blue" // Default
+            _ => "grey" // Unknown
         };
     }
 
-    private string GetStatusMessage(int statusCode)
+    private static string GetStatusMessage(int? statusCode)
     {
         return statusCode switch
         {
