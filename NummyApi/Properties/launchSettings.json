@@ -17,10 +17,13 @@
       "applicationUrl": "http://localhost:8082",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "POSTGRES_HOST": "localhost",
-        "POSTGRES_DB": "nummydatabase",
-        "POSTGRES_USER": "nummyuser",
-        "POSTGRES_PASSWORD": "nummypassword"
+        "POSTGRES_HOST": "postgres",
+        "POSTGRES_PORT": "5432",
+        "POSTGRES_USER": "nummy_user",
+        "POSTGRES_PASSWORD": "nummy_password",
+        "POSTGRES_DB": "nummy_database",
+        "UI_ADMIN_EMAIL": "nummy_admin@nummy.com",
+        "UI_ADMIN_PASSWORD": "nummy_admin_password"
       }
     },
     "http": {

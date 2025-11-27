@@ -51,10 +51,21 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<NummyDataContext>();
-    await context.Database.MigrateAsync(); // applies migrations
+    await context.Database.EnsureCreatedAsync();
+    
+    var migrations = await context.Database.GetPendingMigrationsAsync();
+    if(!migrations.Any()) return;
+    
+    await context.Database.MigrateAsync();
 
-    var email = Environment.GetEnvironmentVariable("UI_SUPER_ADMIN_EMAIL");
-    var password = Environment.GetEnvironmentVariable("UI_SUPER_ADMIN_PASSWORD");
+    var email = Environment.GetEnvironmentVariable("UI_ADMIN_EMAIL");
+    var password = Environment.GetEnvironmentVariable("UI_ADMIN_PASSWORD");
+
+    if (string.IsNullOrEmpty(email))
+        throw new Exception("UI_ADMIN_EMAIL evironment variable is not set in docker compose");
+    
+    if (string.IsNullOrEmpty(password))
+        throw new Exception("UI_ADMIN_PASSWORD evironment variable is not set in docker compose");
 
     var (hash, salt) = SecurityHelper.GeneratePasswordHash(password!);
 
@@ -64,9 +75,9 @@ using (var scope = app.Services.CreateScope())
         context.Users.Add(new User
         {
             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-            Name = "Super",
-            Surname = "Admin",
-            Email = email!,
+            Name = "Admin",
+            Surname = "User",
+            Email = email,
             PasswordHash = hash,
             PasswordSalt = salt,
             AvatarColorHex = "#4287f5",
