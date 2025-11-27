@@ -330,11 +330,13 @@ namespace NummyApi.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Body")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Headers")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("HttpLogId")
                         .HasColumnType("uuid");
@@ -373,6 +375,12 @@ namespace NummyApi.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("DurationMs")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Headers")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("HttpLogId")
                         .HasColumnType("uuid");
@@ -501,6 +509,20 @@ namespace NummyApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            AvatarColorHex = "#FFFFFF",
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 4, 0, 0, 0)),
+                            Email = "admin@nummy.com",
+                            LastLoginDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Admin",
+                            PasswordHash = "YZJ1zBZS6raVIQZWzOVyRvE0Sx/mVK2TfhEflZFNb7I=",
+                            PasswordSalt = "5MORNB2/gTu09bn/85CNK2aWQAhqoDsUnKclQo9xkPM=",
+                            Surname = "User"
+                        });
                 });
 
             modelBuilder.Entity("NummyApi.Entitites.Application", b =>

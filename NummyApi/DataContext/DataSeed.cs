@@ -3,8 +3,28 @@ using NummyApi.Entitites;
 using NummyApi.Helpers;
 using NummyShared.DTOs.Enums;
 
+namespace NummyApi.DataContext;
+
 public abstract class DataSeed
 {
+
+    internal static void SeedAdminUser(ModelBuilder modelBuilder)
+    {
+        var pass = SecurityHelper.GeneratePasswordHash("nummyadmin12");
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                CreatedAt = new DateTime(2025, 1, 1),
+                Name = "Admin",
+                Surname = "User",
+                Email = "admin@nummy.com",
+                PasswordHash = pass.Hash,
+                PasswordSalt = pass.Salt,
+                AvatarColorHex = "#FFFFFF"
+            });
+    }
+
     internal static void SeedApplicationStacks(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ApplicationStack>().HasData(
