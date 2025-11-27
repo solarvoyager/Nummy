@@ -23,7 +23,7 @@ services:
     #container_name: nummy_api
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5433
+      - POSTGRES_PORT=5432
       - POSTGRES_DB=nummy_database
       - POSTGRES_USER=nummy_user
       - POSTGRES_PASSWORD=nummy_password
