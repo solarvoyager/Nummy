@@ -21,7 +21,7 @@ var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
 var pass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 
 var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={pass};IncludeErrorDetail=true;";
-//$"Host=localhost;Port=5433;Database=nummydatabase;Username=nummyuser;Password=nummypassword;IncludeErrorDetail=true;";
+//$"Host=localhost;Port=5433;Database=nummy_database;Username=nummy_user;Password=nummy_password;IncludeErrorDetail=true;";
 
 // example for testing:
 // docker run --name postgres-container -e POSTGRES_PASSWORD=nummy_password -e POSTGRES_USER=nummy_user -p 5433:5432 -d postgres:latest
@@ -54,39 +54,39 @@ using (var scope = app.Services.CreateScope())
     //await context.Database.EnsureCreatedAsync();
     
     var migrations = await context.Database.GetPendingMigrationsAsync();
-    if(!migrations.Any()) return;
-    
-    await context.Database.MigrateAsync();
-
-    var email = Environment.GetEnvironmentVariable("UI_ADMIN_EMAIL");
-    var password = Environment.GetEnvironmentVariable("UI_ADMIN_PASSWORD");
-
-    if (string.IsNullOrEmpty(email))
-        throw new Exception("UI_ADMIN_EMAIL evironment variable is not set in docker compose");
-    
-    if (string.IsNullOrEmpty(password))
-        throw new Exception("UI_ADMIN_PASSWORD evironment variable is not set in docker compose");
-
-    var (hash, salt) = SecurityHelper.GeneratePasswordHash(password!);
-
-    var exists = await context.Users.AnyAsync(u => u.Email == email);
-    if (!exists)
+    if (migrations.Any())
     {
-        context.Users.Add(new User
+        await context.Database.MigrateAsync();
+
+        var email = Environment.GetEnvironmentVariable("UI_ADMIN_EMAIL");
+        var password = Environment.GetEnvironmentVariable("UI_ADMIN_PASSWORD");
+
+        if (string.IsNullOrEmpty(email))
+            throw new Exception("UI_ADMIN_EMAIL evironment variable is not set in docker compose");
+    
+        if (string.IsNullOrEmpty(password))
+            throw new Exception("UI_ADMIN_PASSWORD evironment variable is not set in docker compose");
+
+        var (hash, salt) = SecurityHelper.GeneratePasswordHash(password!);
+
+        var exists = await context.Users.AnyAsync(u => u.Email == email);
+        if (!exists)
         {
-            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-            Name = "Admin",
-            Surname = "User",
-            Email = email,
-            PasswordHash = hash,
-            PasswordSalt = salt,
-            AvatarColorHex = "#4287f5",
-            CreatedAt = new DateTime(2025, 1, 1),
-        });
-        await context.SaveChangesAsync();
+            context.Users.Add(new User
+            {
+                Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                Name = "Admin",
+                Surname = "User",
+                Email = email,
+                PasswordHash = hash,
+                PasswordSalt = salt,
+                AvatarColorHex = "#4287f5",
+                CreatedAt = new DateTime(2025, 1, 1),
+            });
+            await context.SaveChangesAsync();
+        }
     }
 }
-
 
 app.UseSwagger();
 app.UseSwaggerUI();
