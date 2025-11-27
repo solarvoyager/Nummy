@@ -1,6 +1,6 @@
 @using NummyShared.DTOs.Enums
 
-<div @onclick="ToggleShow" style="cursor: pointer">
+<div style="cursor: pointer">
     <Card BodyStyle="padding: 20px" Bordered Style=@($"border-color: {BorderColor}; border-radius: 4px;")>
         <GridRow>
             <GridCol>
@@ -13,14 +13,6 @@
             <GridCol>
                 <Title Level="3">@Title</Title>
                 <Text Type="TextElementType.Secondary">@Description</Text>
-                <Collapse DefaultActiveKey="@(IsExpanded ? ["1"] : [])" Style="margin-top: 16px">
-                    <Panel Key="1" ShowArrow="false" Header="Configuration Steps">
-                        <Steps Current="@CurrentStep" OnChange="OnStepChange" Direction="vertical"
-                               Class="site-navigation-steps">
-                            @StepsContent
-                        </Steps>
-                    </Panel>
-                </Collapse>
             </GridCol>
         </GridRow>
     </Card>
@@ -30,15 +22,5 @@
     [Parameter] public string Title { get; set; }
     [Parameter] public string Description { get; set; }
     [Parameter] public string IconUrl { get; set; }
-    [Parameter] public int CurrentStep { get; set; }
-    [Parameter] public EventCallback<int> OnStepChange { get; set; }
-    [Parameter] public bool IsExpanded { get; set; }
-    [Parameter] public EventCallback<bool> IsExpandedChanged { get; set; }
-    [Parameter] public RenderFragment StepsContent { get; set; }
     [Parameter] public string BorderColor { get; set; }
-
-    private async Task ToggleShow()
-    {
-        await IsExpandedChanged.InvokeAsync(!IsExpanded);
-    }
 } 
