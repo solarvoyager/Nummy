@@ -51,7 +51,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<NummyDataContext>();
-    await context.Database.EnsureCreatedAsync();
+    //await context.Database.EnsureCreatedAsync();
     
     var migrations = await context.Database.GetPendingMigrationsAsync();
     if(!migrations.Any()) return;
