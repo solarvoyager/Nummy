@@ -35,7 +35,7 @@ public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //DataSeed.SeedApplicationStacks(modelBuilder);
+        DataSeed.SeedApplicationStacks(modelBuilder);
         // remove unused auditable properties
         //modelBuilder.AddGlobalFilter(nameof(Auditable.IsDeleted), false);
     }

@@ -7,7 +7,6 @@ namespace NummyApi.DataContext;
 
 public abstract class DataSeed
 {
-
     internal static void SeedApplicationStacks(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ApplicationStack>().HasData(
