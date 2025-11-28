@@ -88,6 +88,7 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
         (
             response?.Id ?? Guid.Empty, // or whatever default you want
             request.HttpLogId,
+            request.TraceIdentifier,
             request.Body,
             request.Headers.Select(h => new HeaderDto(h.Key, h.Value)).ToList(),
             response?.Body,

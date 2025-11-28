@@ -30,6 +30,7 @@ public record ServiceUrlResponseDto(
 public record HttpLogDto(
     Guid Id,
     Guid HttpLogId,
+    string TraceIdentifier,
     string? RequestBody,
     List<HeaderDto> RequestHeaders,
     string? ResponseBody,

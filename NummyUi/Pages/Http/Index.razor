@@ -107,16 +107,10 @@
                         Details
                     </TitleTemplate>
                     <Body>
-                    <AntDesign.Space Direction="DirectionVHType.Vertical">
-                        <AntDesign.SpaceItem>
-                            <strong>HTTP LogId:</strong>
-                            @(_responseLog.HttpLogId)
-                        </AntDesign.SpaceItem>
-                        <AntDesign.SpaceItem>
-                            <strong>HTTP TraceId:</strong>
-                            (_responseLog.TraceIdentifier)
-                        </AntDesign.SpaceItem>
-                    </AntDesign.Space>
+                    <Descriptions Bordered Size="@DescriptionsSize.Small">
+                        <DescriptionsItem Title="Log Id" Span="6">@_responseLog.HttpLogId</DescriptionsItem>
+                        <DescriptionsItem Title="Trace Id" Span="6">@_responseLog.TraceIdentifier</DescriptionsItem>
+                    </Descriptions>
                     </Body>
                 </AntDesign.Card>
             </AntDesign.Col>
@@ -127,16 +121,12 @@
                         Response Details
                     </TitleTemplate>
                     <Body>
-                    <AntDesign.Space Direction="DirectionVHType.Vertical">
-                        <AntDesign.SpaceItem>
-                            <strong>Duration:</strong>
-                            @($"{_responseLog.DurationMs} ms")
-                        </AntDesign.SpaceItem>
-                        <AntDesign.SpaceItem>
-                            <strong>Status Code:</strong>
-                            <StatusCodeTag StatusCode="@_responseLog.StatusCode"></StatusCodeTag>
-                        </AntDesign.SpaceItem>
-                    </AntDesign.Space>
+                    <Descriptions Bordered Size="@DescriptionsSize.Small">
+                    <DescriptionsItem Title="Duration" Span="6">@($"{_responseLog.DurationMs} ms")</DescriptionsItem>
+                    <DescriptionsItem Title="Status" Span="6">
+                        <StatusCodeTag StatusCode="@_responseLog.StatusCode"></StatusCodeTag>
+                    </DescriptionsItem>
+                    </Descriptions>
                     </Body>
                 </AntDesign.Card>
             </AntDesign.Col>
@@ -145,20 +135,20 @@
         <AntDesign.Row Gutter="16">
             <AntDesign.Col Span="12">
                 <AntDesign.Card Title="Request Headers" BodyStyle="margin: 0; padding: 8px;">
-                    <Descriptions Title="Custom Size" Bordered Size="@DescriptionsSize.Small">
+                    <Descriptions Bordered Size="@DescriptionsSize.Small">
                         @foreach (var header in _requestHeaders)
                         {
-                            <DescriptionsItem Title="@header.Key">@header.Value</DescriptionsItem>
+                            <DescriptionsItem Title="@header.Key" Span="6">@header.Value</DescriptionsItem>
                         }
                     </Descriptions>
                 </AntDesign.Card>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <AntDesign.Card Title="Response Headers" BodyStyle="margin: 0; padding: 8px;">
-                    <Descriptions Title="Custom Size" Bordered Size="@DescriptionsSize.Small">
+                    <Descriptions Bordered Size="@DescriptionsSize.Small">
                         @foreach (var header in _responseHeaders)
                         {
-                            <DescriptionsItem Title="@header.Key">@header.Value</DescriptionsItem>
+                            <DescriptionsItem Title="@header.Key" Span="6">@header.Value</DescriptionsItem>
                         }
                     </Descriptions>
                 </AntDesign.Card>
