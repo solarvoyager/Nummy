@@ -145,12 +145,22 @@
         <AntDesign.Row Gutter="16">
             <AntDesign.Col Span="12">
                 <AntDesign.Card Title="Request Headers" BodyStyle="margin: 0; padding: 8px;">
-                    <Text>@_requestHeaders</Text>
+                    <Descriptions Title="Custom Size" Bordered Size="@DescriptionsSize.Small">
+                        @foreach (var header in _requestHeaders)
+                        {
+                            <DescriptionsItem Title="@header.Key">@header.Value</DescriptionsItem>
+                        }
+                    </Descriptions>
                 </AntDesign.Card>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <AntDesign.Card Title="Response Headers" BodyStyle="margin: 0; padding: 8px;">
-                    <Text>@_responseHeaders</Text>
+                    <Descriptions Title="Custom Size" Bordered Size="@DescriptionsSize.Small">
+                        @foreach (var header in _responseHeaders)
+                        {
+                            <DescriptionsItem Title="@header.Key">@header.Value</DescriptionsItem>
+                        }
+                    </Descriptions>
                 </AntDesign.Card>
             </AntDesign.Col>
         </AntDesign.Row>
