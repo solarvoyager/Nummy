@@ -320,6 +320,44 @@ namespace NummyApi.Migrations
                     b.ToTable("CodeLogs");
                 });
 
+            modelBuilder.Entity("NummyApi.Entitites.Header", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("RequestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RequestLogId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ResponseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ResponseLogId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestLogId");
+
+                    b.HasIndex("ResponseLogId");
+
+                    b.ToTable("Headers");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.RequestLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -334,9 +372,6 @@ namespace NummyApi.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Headers")
-                        .HasColumnType("text");
 
                     b.Property<Guid>("HttpLogId")
                         .HasColumnType("uuid");
@@ -378,9 +413,6 @@ namespace NummyApi.Migrations
 
                     b.Property<long>("DurationMs")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Headers")
-                        .HasColumnType("text");
 
                     b.Property<Guid>("HttpLogId")
                         .HasColumnType("uuid");
@@ -533,6 +565,17 @@ namespace NummyApi.Migrations
                     b.Navigation("Application");
                 });
 
+            modelBuilder.Entity("NummyApi.Entitites.Header", b =>
+                {
+                    b.HasOne("NummyApi.Entitites.RequestLog", null)
+                        .WithMany("Headers")
+                        .HasForeignKey("RequestLogId");
+
+                    b.HasOne("NummyApi.Entitites.ResponseLog", null)
+                        .WithMany("Headers")
+                        .HasForeignKey("ResponseLogId");
+                });
+
             modelBuilder.Entity("NummyApi.Entitites.RequestLog", b =>
                 {
                     b.HasOne("NummyApi.Entitites.Application", "Application")
@@ -585,6 +628,16 @@ namespace NummyApi.Migrations
             modelBuilder.Entity("NummyApi.Entitites.Application", b =>
                 {
                     b.Navigation("TeamApplications");
+                });
+
+            modelBuilder.Entity("NummyApi.Entitites.RequestLog", b =>
+                {
+                    b.Navigation("Headers");
+                });
+
+            modelBuilder.Entity("NummyApi.Entitites.ResponseLog", b =>
+                {
+                    b.Navigation("Headers");
                 });
 
             modelBuilder.Entity("NummyApi.Entitites.Team", b =>

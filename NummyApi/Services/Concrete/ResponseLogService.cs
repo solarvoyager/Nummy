@@ -65,19 +65,23 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
 
     public async Task<HttpLogDto?> Get(Guid httpLogId)
     {
-        var request = await  dataContext.RequestLogs.FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
+        var request = await dataContext.RequestLogs
+            .Include(l => l.Headers)
+            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
         if (request == null) return null;
-        
-        var response = await dataContext.ResponseLogs.FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
+
+        var response = await dataContext.ResponseLogs
+            .Include(l => l.Headers)
+            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
 
         var data = new HttpLogDto
         (
             response?.Id ?? Guid.Empty, // or whatever default you want
             request.HttpLogId,
             request.Body,
-            request.Headers,
+            request.Headers.Select(h => new HeaderDto(h.Key, h.Value)).ToList(),
             response?.Body,
-            response?.Headers,
+            response?.Headers.Select(h => new HeaderDto(h.Key, h.Value)).ToList(),
             response?.StatusCode,
             response?.DurationMs,
             response?.CreatedAt

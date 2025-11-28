@@ -5,7 +5,7 @@ public record ResponseLogToAddDto(
     string? Body,
     int StatusCode,
     long DurationMs,
-    string? Headers
+    List<HeaderToListDto> Headers
 );
 
 public record ResponseLogToListDto(
@@ -14,6 +14,6 @@ public record ResponseLogToListDto(
     string? Body,
     int StatusCode,
     long DurationMs,
-    string? Headers,
+    List<HeaderToListDto> Headers,
     DateTimeOffset CreatedAt
 );

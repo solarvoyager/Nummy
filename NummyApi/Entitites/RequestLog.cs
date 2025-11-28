@@ -12,5 +12,5 @@ public class RequestLog : Auditable
     public required string Method { get; set; }
     public required string Path { get; set; }
     public string? RemoteIp { get; set; }
-    public string? Headers { get; set; }
+    public virtual ICollection<Header> Headers { get; set; } = [];
 }

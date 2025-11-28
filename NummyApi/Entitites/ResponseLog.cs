@@ -8,6 +8,6 @@ public class ResponseLog : Auditable
     public required string Body { get; set; }
     public required int StatusCode { get; set; }
     public required long DurationMs { get; set; }
-    public string? Headers { get; set; }
+    public virtual ICollection<Header> Headers { get; set; } = [];
     
 }

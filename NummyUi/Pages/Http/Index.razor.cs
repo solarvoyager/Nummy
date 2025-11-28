@@ -19,9 +19,9 @@ public partial class Index : ComponentBase
     private bool _responseModalVisible;
     private HttpLogDto? _responseLog;
     private string _requestBody = string.Empty;
-    private string _requestHeaders = string.Empty;
-    private string _responseHeaders = string.Empty;
+    private List<HeaderDto> _requestHeaders = [];
     private string _responseBody = string.Empty;
+    private List<HeaderDto> _responseHeaders = [];
     private IEnumerable<CodeLogToListDto> _codeLogs = [];
 
     private string _searchQuery = string.Empty;
@@ -138,11 +138,12 @@ public partial class Index : ComponentBase
         try
         {
             _responseLog = await LogService.GetResponseLog(request.HttpLogId);
-            
+
             if (_responseLog.RequestBody != null) _requestBody = _responseLog.RequestBody;
-            if (_responseLog.RequestHeaders != null) _requestHeaders = _responseLog.RequestHeaders;
+            if (_responseLog.RequestHeaders.Any()) _requestHeaders = _responseLog.RequestHeaders;
             if (_responseLog.ResponseBody != null) _responseBody = _responseLog.ResponseBody;
-            if (_responseLog.ResponseHeaders != null) _requestHeaders = _responseLog.ResponseHeaders;
+            if (_responseLog.ResponseHeaders != null && _responseLog.ResponseHeaders.Any())
+                _requestHeaders = _responseLog.ResponseHeaders;
 
             // Fetch code logs for this request using the new endpoint
             _codeLogs = await LogService.GetCodeLogs(request.TraceIdentifier);

@@ -31,10 +31,16 @@ public record HttpLogDto(
     Guid Id,
     Guid HttpLogId,
     string? RequestBody,
-    string? RequestHeaders,
+    List<HeaderDto> RequestHeaders,
     string? ResponseBody,
-    string? ResponseHeaders,
+    List<HeaderDto>? ResponseHeaders,
     int? StatusCode,
     long? DurationMs,
     DateTimeOffset? CreatedAt
+);
+
+public record HeaderDto
+(
+    string Key,
+    string Value
 );

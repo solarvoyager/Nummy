@@ -9,6 +9,7 @@ public class NummyDataContext(DbContextOptions<NummyDataContext> options) : DbCo
     // Nummy.HttpLogger
     public DbSet<RequestLog> RequestLogs { get; set; }
     public DbSet<ResponseLog> ResponseLogs { get; set; }
+    public DbSet<Header> Headers { get; set; }
 
     // Nummy.CodeLogger & Nummy.ExceptionHandler
     public DbSet<CodeLog> CodeLogs { get; set; }

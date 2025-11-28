@@ -37,7 +37,6 @@ namespace NummyApi.Migrations
                     Body = table.Column<string>(type: "text", nullable: false),
                     StatusCode = table.Column<int>(type: "integer", nullable: false),
                     DurationMs = table.Column<long>(type: "bigint", nullable: false),
-                    Headers = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -165,7 +164,6 @@ namespace NummyApi.Migrations
                     Method = table.Column<string>(type: "text", nullable: false),
                     Path = table.Column<string>(type: "text", nullable: false),
                     RemoteIp = table.Column<string>(type: "text", nullable: true),
-                    Headers = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -203,6 +201,34 @@ namespace NummyApi.Migrations
                         principalTable: "Teams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Headers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Key = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    RequestId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResponseId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RequestLogId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResponseLogId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Headers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Headers_RequestLogs_RequestLogId",
+                        column: x => x.RequestLogId,
+                        principalTable: "RequestLogs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Headers_ResponseLogs_ResponseLogId",
+                        column: x => x.ResponseLogId,
+                        principalTable: "ResponseLogs",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -248,6 +274,16 @@ namespace NummyApi.Migrations
                 column: "ApplicationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Headers_RequestLogId",
+                table: "Headers",
+                column: "RequestLogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Headers_ResponseLogId",
+                table: "Headers",
+                column: "ResponseLogId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RequestLogs_ApplicationId",
                 table: "RequestLogs",
                 column: "ApplicationId");
@@ -280,10 +316,7 @@ namespace NummyApi.Migrations
                 name: "CodeLogs");
 
             migrationBuilder.DropTable(
-                name: "RequestLogs");
-
-            migrationBuilder.DropTable(
-                name: "ResponseLogs");
+                name: "Headers");
 
             migrationBuilder.DropTable(
                 name: "TeamApplications");
@@ -292,13 +325,19 @@ namespace NummyApi.Migrations
                 name: "TeamUsers");
 
             migrationBuilder.DropTable(
-                name: "Applications");
+                name: "RequestLogs");
+
+            migrationBuilder.DropTable(
+                name: "ResponseLogs");
 
             migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Applications");
 
             migrationBuilder.DropTable(
                 name: "ApplicationStacks");
