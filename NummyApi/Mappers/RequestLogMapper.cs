@@ -8,7 +8,7 @@ public class RequestLogMapper : Profile
 {
     public RequestLogMapper()
     {
-        CreateMap<RequestLogToAddDto, RequestLog>();
+        CreateMap<RequestLogToAddDto, RequestLog>().ForMember(dest => dest.Headers, src => src.Ignore());
         CreateMap<RequestLog, RequestLogToListDto>();
     }
 }

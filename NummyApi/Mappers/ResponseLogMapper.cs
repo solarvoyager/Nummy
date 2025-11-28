@@ -8,7 +8,7 @@ public class ResponseLogMapper : Profile
 {
     public ResponseLogMapper()
     {
-        CreateMap<ResponseLogToAddDto, ResponseLog>();
+        CreateMap<ResponseLogToAddDto, ResponseLog>().ForMember(dest => dest.Headers, src => src.Ignore());
         CreateMap<ResponseLog, ResponseLogToListDto>();
     }
 }

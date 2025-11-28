@@ -8,7 +8,7 @@ public record RequestLogToAddDto(
     string Method,
     string Path,
     string? RemoteIp,
-    List<HeaderToListDto> Headers
+    List<HeaderToAddDto> Headers
 );
 
 public record RequestLogToListDto(

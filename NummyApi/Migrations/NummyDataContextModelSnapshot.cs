@@ -333,13 +333,7 @@ namespace NummyApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RequestId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("RequestLogId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ResponseId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ResponseLogId")

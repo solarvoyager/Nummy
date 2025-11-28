@@ -5,7 +5,7 @@ public record ResponseLogToAddDto(
     string? Body,
     int StatusCode,
     long DurationMs,
-    List<HeaderToListDto> Headers
+    List<HeaderToAddDto> Headers
 );
 
 public record ResponseLogToListDto(

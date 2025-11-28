@@ -210,8 +210,6 @@ namespace NummyApi.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Key = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: false),
-                    RequestId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ResponseId = table.Column<Guid>(type: "uuid", nullable: true),
                     RequestLogId = table.Column<Guid>(type: "uuid", nullable: true),
                     ResponseLogId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)

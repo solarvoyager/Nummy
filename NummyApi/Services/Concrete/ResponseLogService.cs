@@ -23,7 +23,17 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
     {
         var mapped = mapper.Map<ResponseLog>(dto);
 
-        await dataContext.AddAsync(mapped);
+        var added = await dataContext.AddAsync(mapped);
+        await dataContext.SaveChangesAsync();
+        
+        var headers = dto.Headers.Select(h => new Header
+        {
+            Key = h.Key,
+            Value = h.Value,
+            ResponseLogId = added.Entity.Id
+        }).ToList();
+        
+        await dataContext.AddRangeAsync(headers);
         await dataContext.SaveChangesAsync();
     }
 
