@@ -13,6 +13,11 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
 {
     public async Task Add(CodeLogToAddDto dto)
     {
+        var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId);
+        if(!isExists) throw new Exception($"{dto.ApplicationId} does not exist. " +
+                                          $"Please create a new application in Nummy UI " +
+                                          $"and copy it's Id to AddNummyCodeLogger inside in Program.cs");
+        
         var mapped = mapper.Map<CodeLog>(dto);
 
         await dataContext.AddAsync(mapped);
