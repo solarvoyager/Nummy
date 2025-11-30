@@ -9,8 +9,8 @@ namespace NummyUi.Services
         Task<ApplicationToListDto?> Get(Guid id);
         Task<IEnumerable<ApplicationToListDto>> Get();
         Task<IEnumerable<ApplicationStackToListDto>> GetStackType();
-        Task<ApplicationToListDto> Add(string name, string description, Guid stackTypeId);
-        Task<ApplicationToListDto?> Update(Guid id, string name, string description, Guid stackTypeId);
+        Task<ApplicationToListDto> Add(string name, string description, string? healthCheckerUrl, Guid stackTypeId);
+        Task<ApplicationToListDto?> Update(Guid id, string name, string description, string? healthCheckerUrl, Guid stackTypeId);
         Task Delete(Guid id);
     }
 
@@ -66,11 +66,11 @@ namespace NummyUi.Services
             return result!;
         }
 
-        public async Task<ApplicationToListDto> Add(string name, string description, Guid stackTypeId)
+        public async Task<ApplicationToListDto> Add(string name, string description, string? healthCheckerUrl, Guid stackTypeId)
         {
             var request = new HttpRequestMessage
             {
-                Content = JsonContent.Create(new ApplicationToAddDto(name, description, stackTypeId)),
+                Content = JsonContent.Create(new ApplicationToAddDto(name, description, healthCheckerUrl, stackTypeId)),
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(NummyContants.AddApplicationUrl, UriKind.Relative)
             };
@@ -83,11 +83,11 @@ namespace NummyUi.Services
             return result!;
         }
 
-        public async Task<ApplicationToListDto?> Update(Guid id, string name, string description, Guid stackTypeId)
+        public async Task<ApplicationToListDto?> Update(Guid id, string name, string description, string? healthCheckerUrl, Guid stackTypeId)
         {
             var request = new HttpRequestMessage
             {
-                Content = JsonContent.Create(new ApplicationToUpdateDto(name, description, stackTypeId)),
+                Content = JsonContent.Create(new ApplicationToUpdateDto(name, description, healthCheckerUrl, stackTypeId)),
                 Method = HttpMethod.Put,
                 RequestUri = new Uri(NummyContants.UpdateApplicationUrl + $"/{id}", UriKind.Relative)
             };

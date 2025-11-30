@@ -103,8 +103,12 @@ public partial class Index
 
     private async Task OnAdd()
     {
-        await ApplicationService.Add(_applicationAddModel.Name, _applicationAddModel.Description,
-            _applicationAddModel.StackTypeId);
+        await ApplicationService.Add(
+            _applicationAddModel.Name,
+            _applicationAddModel.Description,
+            _applicationAddModel.HealthCheckerUrl,
+            _applicationAddModel.StackTypeId
+        );
 
         await LoadApplications();
         _isTeamEditOrAddModalVisible = false;
@@ -114,8 +118,13 @@ public partial class Index
 
     private async Task OnUpdate()
     {
-        await ApplicationService.Update(_editingId.Value, _applicationAddModel.Name, _applicationAddModel.Description,
-            _applicationAddModel.StackTypeId);
+        await ApplicationService.Update(
+            _editingId.Value,
+            _applicationAddModel.Name,
+            _applicationAddModel.Description,
+            _applicationAddModel.HealthCheckerUrl,
+            _applicationAddModel.StackTypeId
+        );
 
         await LoadApplications();
         _isTeamEditOrAddModalVisible = false;
@@ -142,7 +151,7 @@ public partial class Index
             await MessageService.Error($"Error: {ex.Message}");
         }
     }
-    
+
     private void NavigateToConfiguration(ApplicationToListDto application)
     {
         NavigationManager.NavigateTo($"/application/configuration/{application.Id}");

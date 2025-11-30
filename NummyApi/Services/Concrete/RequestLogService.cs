@@ -24,7 +24,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
     {
         var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId);
         if(!isExists) throw new Exception($"{dto.ApplicationId} does not exist. " +
-                                          $"Please create a new application in Nummy UI " +
+                                          $"Please create a new application in Nummy " +
                                           $"and copy it's Id to AddNummyHttpLogger inside in Program.cs");
         
         var mapped = mapper.Map<RequestLog>(dto);
