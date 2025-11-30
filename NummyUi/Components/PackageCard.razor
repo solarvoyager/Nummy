@@ -1,18 +1,23 @@
 @using NummyShared.DTOs.Enums
 
-<div style="cursor: pointer">
-    <Card BodyStyle="padding: 20px" Bordered Style=@($"border-color: {BorderColor}; border-radius: 8px;")>
+<div style="margin: 8px">
+    <Card BodyStyle="padding: 12px;" Bordered Style=@($"border-color: {BorderColor}; border-radius: 2px;")>
         <GridRow>
-            <GridCol>
+            <GridCol Span="24">
                 <Avatar Shape="AvatarShape.Square"
                         Src="@IconUrl"
-                        Size="@("2.9em")"
-                        Style="margin-right: 20px; border-radius: 4px">
+                        Size="@("2.2em")"
+                        Style="margin-right: 8px; border-radius: 4px">
                 </Avatar>
+                <Text Strong Style="font-size: 16px;">@Title</Text>
             </GridCol>
-            <GridCol>
-                <Title Level="3">@Title</Title>
-                <Text Type="TextElementType.Secondary">@Description</Text>
+            <GridCol Span="24" Style="margin-bottom: 12px; margin-top: 8px;">
+                <Text Type="@TextElementType.Secondary">@Description</Text>
+            </GridCol>
+            <GridCol Span="24">
+                <Button  OnClick="()=>OpenLink(DocsUrl)" style=@($"background-color: {BorderColor}; color: white; border-color: white")
+                        Icon="@IconType.Outline.ArrowRight" Size="_size">Go to Docs
+                </Button>
             </GridCol>
         </GridRow>
     </Card>
@@ -23,4 +28,12 @@
     [Parameter] public string Description { get; set; }
     [Parameter] public string IconUrl { get; set; }
     [Parameter] public string BorderColor { get; set; }
+    [Parameter] public string DocsUrl { get; set; }
+    
+    [Inject] IJSRuntime JS { get; set; }
+
+    private async Task OpenLink(string url)
+    {
+        await JS.InvokeVoidAsync("open", url, "_blank");
+    }
 } 

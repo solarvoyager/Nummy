@@ -3,49 +3,54 @@
 
 <Card>
     <GridRow>
-        <Title Level="2" Style="margin-bottom: 8px">Configurations</Title>
-    </GridRow>
-    <GridRow>
-        <Text Type="TextElementType.Secondary" Style="color: #00A0E9">Manage Your application's package configurations
-        </Text>
-    </GridRow>
-    <Divider/>
-    @if (_application != null)
-    {
-        <GridRow>
-            <ApplicationConfigurationCard ApplicationId="@_application.Id.ToString()"/>
-        </GridRow>
-        <Divider/>
-        <GridRow>
-            <PackageCard Title="Nummy.ExceptionHandler"
-                         Description="A .NET Core library for global exception handling in your application."
-                         IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.exceptionhandler/2.1.0/icon"
-                         BorderColor="red">
-            </PackageCard>
-        </GridRow>
+        <GridCol Span="24">
+            <Title Level="4" Style="margin-bottom: 0">Configurations</Title>
+            <Text Type="TextElementType.Secondary" Style="color: #00A0E9">
+                You will need these values when configuring packages
+            </Text>
+        </GridCol>
+        @if (_application != null)
+        {
+            <GridCol Span="24">
+                <ApplicationConfigurationCard ApplicationId="@_application.Id.ToString()"/>
+                <Title Level="4">Packages</Title>
+            </GridCol>
+            
+            <GridCol Span="12">
+                <PackageCard Title="Nummy.ExceptionHandler"
+                             Description="A .NET Core library for global exception handling in your application."
+                             IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.exceptionhandler/2.1.0/icon"
+                             DocsUrl="https://www.nuget.org/packages/Nummy.ExceptionHandler/"
+                             BorderColor="red">
+                </PackageCard>
+            </GridCol>
 
-        <GridRow>
-            <PackageCard Title="Nummy.CodeLogger"
-                         Description="A .NET Core library for code logging and monitoring."
-                         IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.codelogger/2.1.0/icon"
-                         BorderColor="orange">
-            </PackageCard>
-        </GridRow>
+            <GridCol Span="12">
+                <PackageCard Title="Nummy.CodeLogger"
+                             Description="A .NET Core library for code logging and monitoring."
+                             IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.codelogger/2.1.0/icon"
+                             DocsUrl="https://www.nuget.org/packages/Nummy.CodeLogger/"
+                             BorderColor="orange">
+                </PackageCard>
+            </GridCol>
 
-        <GridRow>
-            <PackageCard Title="Nummy.HttpLogger"
-                         Description="A .NET Core library for HTTP request/response logging."
-                         IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.httplogger/2.1.0/icon"
-                         BorderColor="green">
-            </PackageCard>
-        </GridRow>
-        
-        <GridRow>
-            <PackageCard Title="Nummy.HealthChecker"
-                         Description="A .NET Core library for health checking."
-                         IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.healthchecker/1.0.0/icon"
-                         BorderColor="darkorchid">
-            </PackageCard>
-        </GridRow>
-    }
+            <GridCol Span="12">
+                <PackageCard Title="Nummy.HttpLogger"
+                             Description="A .NET Core library for HTTP request/response logging."
+                             IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.httplogger/2.1.0/icon"
+                             DocsUrl="https://www.nuget.org/packages/Nummy.HttpLogger/"
+                             BorderColor="green">
+                </PackageCard>
+            </GridCol>
+
+            <GridCol Span="12">
+                <PackageCard Title="Nummy.HealthChecker"
+                             Description="A .NET Core library for health checking."
+                             IconUrl="https://api.nuget.org/v3-flatcontainer/nummy.healthchecker/1.0.0/icon"
+                             DocsUrl="https://www.nuget.org/packages/Nummy.HealthChecker/"
+                             BorderColor="darkorchid">
+                </PackageCard>
+            </GridCol>
+        }
+    </GridRow>
 </Card>

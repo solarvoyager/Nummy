@@ -21,7 +21,7 @@
                               Actions="GetActions(context)">
                             <CardMeta>
                                 <AvatarTemplate>
-                                    <Avatar Shape="AvatarShape.Square"
+                                    <Avatar Shape="@AvatarShape.Square"
                                             Src="@("data:image/svg+xml;utf8," + Uri.EscapeDataString(context.Stack.IconSvg))"
                                             Size="@("2.6em")">
                                     </Avatar>
@@ -38,6 +38,32 @@
                                     <div>
                                         <p>Stack</p>
                                         <p>@context.Stack.Title</p>
+                                    </div>
+                                </div>
+                                <div class="cardInfo">
+                                    <div>
+                                        <p>Status</p>
+                                        @if (context.IsHealthy == null)
+                                        {
+                                            <div class="statusText">
+                                                <div class="circleYellow"></div>
+                                                <p>Not configured</p>
+                                            </div>
+                                        }
+                                        else if (context.IsHealthy.Value)
+                                        {
+                                            <div class="statusText">
+                                                <div class="circleGreen"></div>
+                                                <p>Healthy</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="statusText">
+                                                <div class="circleRed"></div>
+                                                <p>Unhealthy</p>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +87,8 @@
             <Input @bind-Value="@_applicationAddModel.Name" Placeholder="Enter application name"/>
         </FormItem>
         <FormItem Label="Description">
-            <TextArea @bind-Value="@_applicationAddModel.Description" Placeholder="Enter application description"></TextArea>
+            <TextArea @bind-Value="@_applicationAddModel.Description"
+                      Placeholder="Enter application description"></TextArea>
         </FormItem>
         <FormItem Label="Stack">
             <Select Mode="Single"
@@ -85,7 +112,8 @@
             </Select>
         </FormItem>
         <FormItem Label="Health Checker Url">
-            <TextArea @bind-Value="@_applicationAddModel.HealthCheckerUrl" Placeholder="If you are configured Nummy.HealthCheckerEnter then enter health checker url"></TextArea>
+            <TextArea @bind-Value="@_applicationAddModel.HealthCheckerUrl"
+                      Placeholder="If you are configured Nummy.HealthCheckerEnter then enter health checker url"></TextArea>
         </FormItem>
     </Form>
 </Modal>
@@ -93,20 +121,22 @@
 @code {
 
     private RenderFragment<ApplicationToListDto> Configuration => ctx => @<AntDesign.Tooltip Title="Configuration">
-                                                                    <Icon Type="setting" Theme="@IconThemeType.Outline"
-                                                                          OnClick="@(() => NavigateToConfiguration(ctx))"/>
-                                                                </AntDesign.Tooltip>;
-    
+                                                                             <Icon Type="setting"
+                                                                                   Theme="@IconThemeType.Outline"
+                                                                                   OnClick="@(() => NavigateToConfiguration(ctx))"/>
+                                                                         </AntDesign.Tooltip>;
+
     private RenderFragment<ApplicationToListDto> Edit => ctx => @<AntDesign.Tooltip Title="Edit">
                                                                     <Icon Type="edit" Theme="@IconThemeType.Outline"
                                                                           OnClick="@(() => ShowModal(true, ctx))"/>
                                                                 </AntDesign.Tooltip>;
 
     private RenderFragment<ApplicationToListDto> Delete => ctx => @<AntDesign.Tooltip Title="Delete">
-                                                                      <Popconfirm Title="Are you sure delete this application?"
-                                                                                  OkText="Yes"
-                                                                                  CancelText="No"
-                                                                                  OnConfirm="@(() => OnDelete(ctx.Id))">
+                                                                      <Popconfirm
+                                                                          Title="Are you sure delete this application?"
+                                                                          OkText="Yes"
+                                                                          CancelText="No"
+                                                                          OnConfirm="@(() => OnDelete(ctx.Id))">
                                                                           <Icon Type="delete" Style="color: red"
                                                                                 Theme="@IconThemeType.Outline"/>
                                                                       </Popconfirm>
@@ -140,5 +170,35 @@
 
     .cardInfo p:first-child {
         color: rgba(0, 0, 0, 0.45);
+    }
+
+    .circleRed {
+        width: 12px;
+        height: 12px;
+        background-color: #ff7675;
+        border: 1px solid #ba0000;
+        border-radius: 50%;
+    }
+
+    .circleYellow {
+        width: 12px;
+        height: 12px;
+        background-color: #ffe175;
+        border: 1px solid #ba8f00;
+        border-radius: 50%;
+    }
+
+    .circleGreen {
+        width: 12px;
+        height: 12px;
+        background-color: #87ff75;
+        border: 1px solid #06ba00;
+        border-radius: 50%;
+    }
+
+    .statusText {
+        display: flex;
+        align-items: center;  
+        gap: 8px;
     }
 </style>
