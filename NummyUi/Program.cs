@@ -41,7 +41,7 @@ var apiPort = Environment.GetEnvironmentVariable("NUMMY_API_PORT");
 
 var baseUrl = $"http://{apiHost}:{apiPort}";
 
-builder.Services.AddHttpClient(NummyContants.ClientName, config =>
+builder.Services.AddHttpClient(NummyConstants.ClientName, config =>
 {
     config.BaseAddress = new Uri(baseUrl);
     //config.Timeout = new TimeSpan(0, 0, 15);

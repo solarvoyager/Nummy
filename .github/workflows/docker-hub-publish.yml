@@ -32,6 +32,11 @@ jobs:
           LATEST_VERSION_API=$(docker manifest inspect $DOCKER_IMAGE_API | jq -r '.schema2.config.digest' | cut -d ":" -f2)
           echo "Latest version for $DOCKER_IMAGE_API on Docker Hub: $LATEST_VERSION_API"
           echo "::set-output name=version_api::$LATEST_VERSION_API"
+          
+          DOCKER_IMAGE_WORKER="hamidmusayev04/nummy-worker"
+          LATEST_VERSION_WORKER=$(docker manifest inspect $DOCKER_IMAGE_WORKER | jq -r '.schema2.config.digest' | cut -d ":" -f2)
+          echo "Latest version for $DOCKER_IMAGE_WORKER on Docker Hub: $LATEST_VERSION_WORKER"
+          echo "::set-output name=version_worker::$LATEST_VERSION_WORKER"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -55,4 +60,13 @@ jobs:
           docker build -t hamidmusayev04/nummy-api:$COMMIT_SHA -t hamidmusayev04/nummy-api:latest -f NummyApi/Dockerfile .
           docker push hamidmusayev04/nummy-api:latest
           docker push hamidmusayev04/nummy-api:$COMMIT_SHA
+          cd ..
+          
+      - name: Build and push Docker WORKER image
+        run: |
+          COMMIT_SHA=${{ steps.set-version.outputs.version }}
+          LATEST_VERSION=${{ steps.latest-version.outputs.version_worker }}
+          docker build -t hamidmusayev04/nummy-worker:$COMMIT_SHA -t hamidmusayev04/nummy-worker:latest -f NummyWorker/Dockerfile .
+          docker push hamidmusayev04/nummy-worker:latest
+          docker push hamidmusayev04/nummy-worker:$COMMIT_SHA
           cd ..

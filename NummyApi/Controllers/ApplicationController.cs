@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
 
 namespace NummyApi.Controllers;
 
@@ -14,12 +15,26 @@ public class ApplicationController(IApplicationService applicationService) : Con
         var applications = await applicationService.GetAsync();
         return Ok(applications);
     }
-    
+
     [HttpGet("stackType")]
     public async Task<ActionResult<List<ApplicationStackToListDto>>> GetStackType()
     {
         var stackTypes = await applicationService.GetStackTypeAsync();
         return Ok(stackTypes);
+    }
+
+    [HttpGet("healthCheckerUrl")]
+    public async Task<ActionResult<List<ApplicationHealthCheckerUrlToListDto>>> GetHealthCheckerUrl()
+    {
+        var stackTypes = await applicationService.GetHealthCheckerUrlAsync();
+        return Ok(stackTypes);
+    }
+
+    [HttpPut("isHealthy")]
+    public async Task<ActionResult> UpdateIsHealthy([FromBody] List<ApplicationIsHealthyToUpdateDto> applications)
+    {
+        await applicationService.UpdateIsHealthyAsync(applications);
+        return Ok();
     }
 
     [HttpGet("{id}")]

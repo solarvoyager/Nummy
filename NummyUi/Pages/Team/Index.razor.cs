@@ -134,7 +134,7 @@ public partial class Index
         try
         {
             await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText",
-                NummyContants.TeamShareUrl + $"/{team.Id}");
+                NummyConstants.TeamShareUrl + $"/{team.Id}");
             await MessageService.Info("Team sharing url copied to clipboard!");
         }
         catch (System.Exception ex)

@@ -45,3 +45,8 @@ public record HeaderDto
     string Key,
     string Value
 );
+
+public record  ApplicationHealthCheckerUrlToListDto(
+    Guid ApplicationId,
+    string HealthCheckerUrl
+);

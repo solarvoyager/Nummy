@@ -20,7 +20,7 @@ namespace NummyUi.Services
 
     public class UserService(IHttpClientFactory clientFactory) : IUserService
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
         public async Task<LoginResponseDto> Login(string email, string password)
         {
@@ -28,7 +28,7 @@ namespace NummyUi.Services
             {
                 Content = JsonContent.Create(new LoginRequestDto(email, password)),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyContants.LoginUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.LoginUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -55,7 +55,7 @@ namespace NummyUi.Services
                         password
                     )),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyContants.RegisterUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.RegisterUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -70,7 +70,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetUserUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetUserUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -85,7 +85,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetUserUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetUserUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);

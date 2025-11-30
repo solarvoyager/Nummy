@@ -11,18 +11,18 @@ public interface IDatabaseService
 
 public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseService
 {
-    private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {
-        var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyContants.GetPendingMigrationsUrl);
+        var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyConstants.GetPendingMigrationsUrl);
 
         return response!;
     }
 
     public async Task<bool> Migrate()
     {
-        var response = await _client.PutAsync(NummyContants.ApplyPendingMigrationsUrl, null);
+        var response = await _client.PutAsync(NummyConstants.ApplyPendingMigrationsUrl, null);
 
         return response.IsSuccessStatusCode;
     }

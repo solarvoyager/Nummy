@@ -14,14 +14,14 @@ namespace NummyUi.Services
 
     public class TeamService(IHttpClientFactory clientFactory) : ITeamService
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
         public async Task<TeamToListDto?> Get(Guid id)
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetTeamsUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetTeamsUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -37,7 +37,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetTeamsUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetTeamsUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -54,7 +54,7 @@ namespace NummyUi.Services
             {
                 Content = JsonContent.Create(new TeamToAddDto(name, description, userIds, applicationIds)),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyContants.AddTeamUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.AddTeamUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -71,7 +71,7 @@ namespace NummyUi.Services
             {
                 Content = JsonContent.Create(new TeamToUpdateDto(name, description)),
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(NummyContants.UpdateTeamUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.UpdateTeamUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -87,7 +87,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(NummyContants.DeleteTeamUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.DeleteTeamUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);

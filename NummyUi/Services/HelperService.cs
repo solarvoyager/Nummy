@@ -10,11 +10,11 @@ public interface IHelperService
 
 public class HelperService(IHttpClientFactory clientFactory) : IHelperService
 {
-    private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
     public async Task<ServiceUrlResponseDto> GetServiceUrl()
     {
-        var response = await _client.GetFromJsonAsync<ServiceUrlResponseDto>(NummyContants.GetServiceUrlUrl);
+        var response = await _client.GetFromJsonAsync<ServiceUrlResponseDto>(NummyConstants.GetServiceUrlUrl);
 
         return response!;
     }

@@ -5,7 +5,7 @@ namespace NummyUi.Pages.User.Account
 {
     public partial class Index
     {
-        private string _selectKey = NummyContants.AccountMenuDefaultItemKey;
+        private string _selectKey = NummyConstants.AccountMenuDefaultItemKey;
 
         private void SelectKey(MenuItem item)
         {

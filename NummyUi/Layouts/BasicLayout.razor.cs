@@ -27,7 +27,7 @@ public partial class BasicLayout
     private void SetSelectedKey()
     {
         var currentPath = NavigationManager.Uri.Replace(NavigationManager.BaseUri, "/");
-        var selectedMenu = NummyContants.MenuDataItems.FirstOrDefault(m => m.Path == currentPath);
+        var selectedMenu = NummyConstants.MenuDataItems.FirstOrDefault(m => m.Path == currentPath);
         if (selectedMenu != null)
         {
             _selectedKey = selectedMenu.Key;
@@ -36,7 +36,7 @@ public partial class BasicLayout
 
     private void OnMenuItemSelected(MenuItem menuItem)
     {
-        var selectedMenu = NummyContants.MenuDataItems.FirstOrDefault(m => m.Key == menuItem.Key);
+        var selectedMenu = NummyConstants.MenuDataItems.FirstOrDefault(m => m.Key == menuItem.Key);
         
         if (selectedMenu != null)
         {
@@ -56,7 +56,7 @@ public partial class BasicLayout
                 builder.AddAttribute(1, "Type", "github");
                 builder.CloseComponent();
             }),
-            Href = NummyContants.GitHubUrl,
+            Href = NummyConstants.GitHubUrl,
             BlankTarget = true,
         }
     ];

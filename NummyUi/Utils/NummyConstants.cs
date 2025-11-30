@@ -2,7 +2,7 @@
 
 namespace NummyUi.Utils;
 
-public static class NummyContants
+public static class NummyConstants
 {
     public const string ClientName = "NummyApiClient";
     public const string UserKey = "UserData";

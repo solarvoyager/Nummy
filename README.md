@@ -17,7 +17,7 @@ It is built using .NET Core, Entity Framework Core, and PostgreSQL.
    ```bash
    docker compose up --detach
    ```
-3. Go to http://localhost:8080/ in you browser.
+3. Go to http://localhost:8081/ in you browser.
 4. Go to Applications section to Create a new Application.
 5. Open Application and Copy your Application Id and Service Url to use in package configurations.
 

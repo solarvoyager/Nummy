@@ -10,7 +10,7 @@
                 Mode="MenuMode.Inline" 
                 SelectedKeys="new[] { _selectKey }" 
                 OnMenuItemClicked="SelectKey">
-                @foreach (var item in NummyContants.AccountMenuItems)
+                @foreach (var item in NummyConstants.AccountMenuItems)
                 {
                     <MenuItem Key="@item.Key">@item.Value</MenuItem>
                 }
@@ -18,7 +18,7 @@
         </div>
         <div class="right" style="flex: 1; padding: 8px 40px;">
             <div class="title" style="margin-bottom: 12px; color: rgba(0,0,0,.85); font-weight: 500; font-size: 20px;">
-                @NummyContants.AccountMenuItems[_selectKey]
+                @NummyConstants.AccountMenuItems[_selectKey]
             </div>
             @switch (_selectKey)
             {

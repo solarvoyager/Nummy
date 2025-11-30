@@ -16,7 +16,7 @@ public interface ILogService
 
 public class LogService(IHttpClientFactory clientFactory) : ILogService
 {
-    private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
     public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto)
     {
@@ -26,7 +26,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
             Method = HttpMethod.Post,
             RequestUri =
                 new Uri(
-                    NummyContants.GetCodeLogsUrl +
+                    NummyConstants.GetCodeLogsUrl +
                     (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
         };
 
@@ -43,7 +43,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyContants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}",
+            RequestUri = new Uri(NummyConstants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}",
                 UriKind.Relative)
         };
 
@@ -63,7 +63,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
             Method = HttpMethod.Post,
             RequestUri =
                 new Uri(
-                    NummyContants.GetRequestLogsUrl +
+                    NummyConstants.GetRequestLogsUrl +
                     (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
         };
 
@@ -97,7 +97,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyContants.GetResponseLogsUrl + $"/{httpLogId}", UriKind.Relative)
+            RequestUri = new Uri(NummyConstants.GetResponseLogsUrl + $"/{httpLogId}", UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);
@@ -114,7 +114,7 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         {
             Content = JsonContent.Create(dto),
             Method = HttpMethod.Delete,
-            RequestUri = new Uri(NummyContants.DeleteCodeLogsUrl, UriKind.Relative)
+            RequestUri = new Uri(NummyConstants.DeleteCodeLogsUrl, UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);

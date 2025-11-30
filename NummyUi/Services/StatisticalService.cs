@@ -10,14 +10,14 @@ public interface IStatisticalService
 
 public class StatisticalService(IHttpClientFactory clientFactory) : IStatisticalService
 {
-    private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
     public async Task<TotalCountsResponseDto> GetTotalCounts()
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyContants.GetTotalCountsUrl, UriKind.Relative)
+            RequestUri = new Uri(NummyConstants.GetTotalCountsUrl, UriKind.Relative)
         };
 
         var response = await _client.SendAsync(request);

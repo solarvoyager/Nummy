@@ -16,11 +16,25 @@ services:
       - postgres-data:/var/lib/postgresql
     networks:
       - network
+      
+  # Nummy WORKER instance
+  worker:
+    image: hamidmusayev04/nummy-worker:latest
+    #container_name: nummy_worker
+    restart: on-failure:5
+    environment:
+      - NUMMY_API_HOST=api
+      - NUMMY_API_PORT=8082
+    ports:
+      - "8084:8084"
+    networks:
+      - network
 
   # Nummy API instance
   api:
     image: hamidmusayev04/nummy-api:latest
     #container_name: nummy_api
+    restart: on-failure:5
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -39,6 +53,7 @@ services:
   ui:
     image: hamidmusayev04/nummy-ui:latest
     #container_name: nummy_ui
+    restart: on-failure:5
     environment:
       - NUMMY_API_HOST=api
       - NUMMY_API_PORT=8082

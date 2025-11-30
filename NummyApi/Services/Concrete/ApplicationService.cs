@@ -5,6 +5,7 @@ using NummyApi.Entitites;
 using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
+using NummyShared.DTOs.Domain;
 using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Services.Concrete;
@@ -42,6 +43,32 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
         var mappeds = mapper.Map<List<ApplicationStackToListDto>>(stackTypes);
 
         return mappeds;
+    }
+
+    public async Task<IEnumerable<ApplicationHealthCheckerUrlToListDto>> GetHealthCheckerUrlAsync()
+    {
+        var healthCheckerUrls = await dataContext.Applications
+            .Where(a => a.HealthCheckerUrl != null)
+            .Select(a => new ApplicationHealthCheckerUrlToListDto(a.Id, a.HealthCheckerUrl!))
+            .ToListAsync();
+
+        return healthCheckerUrls;
+    }
+    
+    public async Task UpdateIsHealthyAsync(List<ApplicationIsHealthyToUpdateDto> applications)
+    {
+        var appsDictionary = applications.ToDictionary(a=> a.ApplicationId,  a => a.IsHealthy);
+        
+        var applicationEntities = await dataContext.Applications
+            .Where(a => appsDictionary.Keys.Contains(a.Id))
+            .ToListAsync();
+
+        foreach (var application in applicationEntities)
+        {
+            application.IsHealthy = appsDictionary.GetValueOrDefault(application.Id);
+        }
+
+        await dataContext.SaveChangesAsync();
     }
 
     public async Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto)

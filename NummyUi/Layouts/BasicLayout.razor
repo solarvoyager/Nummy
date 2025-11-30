@@ -24,7 +24,7 @@ else
             </div>
             <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Inline" DefaultSelectedKeys=@(new[] { _selectedKey })
                   OnMenuItemClicked="@OnMenuItemSelected">
-                @foreach (var menuItem in NummyContants.MenuDataItems)
+                @foreach (var menuItem in NummyConstants.MenuDataItems)
                 {
                     <MenuItem Key="@menuItem.Key">
                         <Icon Type="@menuItem.Icon"/>

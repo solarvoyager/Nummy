@@ -38,3 +38,8 @@ public record DeleteRequestLogsDto(
 public record DeleteResponseLogsDto(
     ICollection<Guid> Ids
 );
+
+public record ApplicationIsHealthyToUpdateDto(
+    Guid ApplicationId,
+    bool IsHealthy
+);

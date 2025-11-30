@@ -16,14 +16,14 @@ namespace NummyUi.Services
 
     public class ApplicationService(IHttpClientFactory clientFactory) : IApplicationService
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyContants.ClientName);
+        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
 
         public async Task<ApplicationToListDto?> Get(Guid id)
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetApplicationsUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetApplicationsUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -39,7 +39,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetApplicationsUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetApplicationsUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -55,7 +55,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyContants.GetApplicationStackTypesUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.GetApplicationStackTypesUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -72,7 +72,7 @@ namespace NummyUi.Services
             {
                 Content = JsonContent.Create(new ApplicationToAddDto(name, description, healthCheckerUrl, stackTypeId)),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyContants.AddApplicationUrl, UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.AddApplicationUrl, UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -89,7 +89,7 @@ namespace NummyUi.Services
             {
                 Content = JsonContent.Create(new ApplicationToUpdateDto(name, description, healthCheckerUrl, stackTypeId)),
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(NummyContants.UpdateApplicationUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.UpdateApplicationUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
@@ -105,7 +105,7 @@ namespace NummyUi.Services
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(NummyContants.DeleteApplicationUrl + $"/{id}", UriKind.Relative)
+                RequestUri = new Uri(NummyConstants.DeleteApplicationUrl + $"/{id}", UriKind.Relative)
             };
 
             var response = await _client.SendAsync(request);
