@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Services.Abstract;
 
@@ -6,20 +6,18 @@ namespace NummyApi.Services.Concrete;
 
 public class DatabaseService(NummyDataContext dataContext) : IDatabaseService
 {
-    public async Task EnsureCreated()
+    public async Task EnsureCreated(CancellationToken cancellationToken = default)
     {
-        await dataContext.Database.EnsureCreatedAsync();
+        await dataContext.Database.EnsureCreatedAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<string>> GetPendingMigrations()
+    public async Task<IEnumerable<string>> GetPendingMigrations(CancellationToken cancellationToken = default)
     {
-        var pendingMigrations = await dataContext.Database.GetPendingMigrationsAsync();
-
-        return pendingMigrations;
+        return await dataContext.Database.GetPendingMigrationsAsync(cancellationToken);
     }
 
-    public async Task ApplyPendingMigrations()
+    public async Task ApplyPendingMigrations(CancellationToken cancellationToken = default)
     {
-        await dataContext.Database.MigrateAsync();
+        await dataContext.Database.MigrateAsync(cancellationToken);
     }
 }

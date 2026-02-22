@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
@@ -10,83 +10,51 @@ namespace NummyApi.Services.Concrete;
 
 public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : IResponseLogService
 {
-    public async Task<bool> Delete(DeleteResponseLogsDto dto)
+    public async Task<bool> Delete(DeleteResponseLogsDto dto, CancellationToken cancellationToken = default)
     {
         await dataContext.ResponseLogs
             .Where(l => dto.Ids.Contains(l.Id))
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken);
 
         return true;
     }
 
-    public async Task Add(ResponseLogToAddDto dto)
+    public async Task Add(ResponseLogToAddDto dto, CancellationToken cancellationToken = default)
     {
         var mapped = mapper.Map<ResponseLog>(dto);
 
-        var added = await dataContext.AddAsync(mapped);
-        await dataContext.SaveChangesAsync();
-        
         var headers = dto.Headers.Select(h => new Header
         {
             Key = h.Key,
             Value = h.Value,
-            ResponseLogId = added.Entity.Id
         }).ToList();
-        
-        await dataContext.AddRangeAsync(headers);
-        await dataContext.SaveChangesAsync();
+
+        mapped.Headers = headers;
+
+        await dataContext.ResponseLogs.AddAsync(mapped, cancellationToken);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    /*public async Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto, Guid? httpLogId)
+    public async Task<HttpLogDto?> Get(Guid httpLogId, CancellationToken cancellationToken = default)
     {
-        var skip = (dto.PageIndex - 1) * dto.PageSize;
+        using var transaction = await dataContext.Database.BeginTransactionAsync(
+            System.Data.IsolationLevel.ReadCommitted, cancellationToken);
 
-        var query = dataContext.ResponseLogs.AsQueryable();
-
-        if (httpLogId.HasValue)
-        {
-            query = query.Where(l => l.HttpLogId == httpLogId);
-        }
-
-        if (!string.IsNullOrWhiteSpace(dto.Query))
-            query = query.Where(l =>
-                EF.Functions.Like(l.Body.ToLower(), $"%{dto.Query.ToLower()}%") ||
-                EF.Functions.Like(l.StatusCode.ToString().ToLower(), $"%{dto.Query.ToLower()}%"));
-
-        var totalCount = await query.CountAsync();
-
-        if (dto.SortType is not null && dto.SortOrder is not null)
-            query = dto.SortType switch
-            {
-                ResponseLogSortType.StatusCode => dto.SortOrder == SortOrder.Descending
-                    ? query.OrderByDescending(q => q.StatusCode)
-                    : query.OrderBy(q => q.StatusCode),
-                _ => query
-            };
-
-        query = query
-            .Skip(skip)
-            .Take(dto.PageSize);
-
-        var mapped = mapper.Map<IEnumerable<ResponseLogToListDto>>(await query.ToListAsync());
-
-        return new PaginatedListDto<ResponseLogToListDto>(totalCount, mapped);
-    }*/
-
-    public async Task<HttpLogDto?> Get(Guid httpLogId)
-    {
         var request = await dataContext.RequestLogs
             .Include(l => l.Headers)
-            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
-        if (request == null) return null;
+            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId, cancellationToken);
+
+        if (request == null)
+            return null;
 
         var response = await dataContext.ResponseLogs
             .Include(l => l.Headers)
-            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId);
+            .FirstOrDefaultAsync(l => l.HttpLogId == httpLogId, cancellationToken);
 
-        var data = new HttpLogDto
-        (
-            response?.Id ?? Guid.Empty, // or whatever default you want
+        await transaction.CommitAsync(cancellationToken);
+
+        return new HttpLogDto(
+            response?.Id ?? Guid.Empty,
             request.HttpLogId,
             request.TraceIdentifier,
             request.Body,
@@ -97,7 +65,5 @@ public class ResponseLogService(NummyDataContext dataContext, IMapper mapper) : 
             response?.DurationMs,
             response?.CreatedAt
         );
-
-        return data;
     }
 }

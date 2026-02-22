@@ -10,30 +10,26 @@ namespace NummyApi.Services.Concrete;
 
 public class UserService(NummyDataContext context, IMapper mapper) : IUserService
 {
-    public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
+    public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email);
+            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
 
         if (user == null || !SecurityHelper.ValidatePassword(request.Password, user.PasswordHash, user.PasswordSalt))
             return new LoginResponseDto(false, "Invalid email or password", null);
 
         user.LastLoginDate = DateTimeOffset.Now;
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
 
         return new LoginResponseDto(true, "Login successful", user.Id);
     }
 
-    public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto request)
+    public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken = default)
     {
-        // Check if email already exists
-        if (await context.Users.AnyAsync(u => u.Email == request.Email))
+        if (await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken))
             return new RegisterResponseDto(false, "Email already exists");
 
-        // Generate password hash and salt
         var (hash, salt) = SecurityHelper.GeneratePasswordHash(request.Password);
-        
-        // Generate a random color for the avatar
         var avatarColorHex = UtilHelper.GenerateRandomColorHex();
 
         var user = new User
@@ -47,31 +43,26 @@ public class UserService(NummyDataContext context, IMapper mapper) : IUserServic
             LastLoginDate = DateTimeOffset.Now
         };
 
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
+        await context.Users.AddAsync(user, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         return new RegisterResponseDto(true, "Registration successful");
     }
 
-    public async Task<UserToListDto?> GetAsync(Guid id)
+    public async Task<UserToListDto?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
         if (user == null)
             return null;
 
-        var mapped = mapper.Map<UserToListDto>(user);
-
-        return mapped;
+        return mapper.Map<UserToListDto>(user);
     }
 
-    public async Task<IEnumerable<UserToListDto>> GetAsync()
+    public async Task<IEnumerable<UserToListDto>> GetAsync(CancellationToken cancellationToken = default)
     {
-        var users = await context.Users.ToListAsync();
-
-        var mappeds = mapper.Map<List<UserToListDto>>(users);
-
-        return mappeds;
+        var users = await context.Users.ToListAsync(cancellationToken);
+        return mapper.Map<List<UserToListDto>>(users);
     }
 }

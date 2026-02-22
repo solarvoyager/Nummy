@@ -1,13 +1,7 @@
-﻿using System.Text.Json;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
 namespace NummyUi.Services;
-
-public interface IDatabaseService
-{
-    Task<IEnumerable<string>> GetPendingMigrations();
-    Task<bool> Migrate();
-}
 
 public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseService
 {
@@ -15,15 +9,16 @@ public class DatabaseService(IHttpClientFactory clientFactory) : IDatabaseServic
 
     public async Task<IEnumerable<string>> GetPendingMigrations()
     {
-        var response = await _client.GetFromJsonAsync<IEnumerable<string>>(NummyConstants.GetPendingMigrationsUrl);
+        var response = await _client.GetAsync(NummyConstants.GetPendingMigrationsUrl);
+        response.EnsureSuccessStatusCode();
 
-        return response!;
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<string>>();
+        return result ?? [];
     }
 
     public async Task<bool> Migrate()
     {
         var response = await _client.PutAsync(NummyConstants.ApplyPendingMigrationsUrl, null);
-
         return response.IsSuccessStatusCode;
     }
 }

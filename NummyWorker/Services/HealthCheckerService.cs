@@ -1,11 +1,10 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using NummyShared.DTOs.Domain;
 
 namespace NummyWorker.Services;
 
 public class HealthCheckerService(
     ILogger<HealthCheckerService> logger,
-    IServiceScopeFactory scopeFactory,
     IHttpClientFactory httpClientFactory
 )
     : BackgroundService
@@ -13,7 +12,7 @@ public class HealthCheckerService(
     // How often to run the check
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(7);
 
-    // HTTP timeout per request
+    // HTTP timeout per individual health-check request
     private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(5);
 
     // Max concurrent HTTP requests
@@ -23,11 +22,14 @@ public class HealthCheckerService(
     {
         logger.LogInformation("HealthCheckerService started.");
 
+        // Create the client once and reuse it across all cycles.
+        var client = httpClientFactory.CreateClient(NummyConstants.ClientName);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                await CheckAllUrls(stoppingToken);
+                await CheckAllUrls(client, stoppingToken);
             }
             catch (Exception ex)
             {
@@ -47,55 +49,35 @@ public class HealthCheckerService(
         logger.LogInformation("HealthCheckerService stopping.");
     }
 
-    private async Task CheckAllUrls(CancellationToken cancellationToken)
+    private async Task CheckAllUrls(HttpClient client, CancellationToken cancellationToken)
     {
         logger.LogInformation("Starting URL health check cycle...");
 
-        var client = httpClientFactory.CreateClient(NummyConstants.ClientName);
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyConstants.GetHealthCheckerUrlsUrl, UriKind.Relative)
-        };
-
-        var response = await client.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var urlsToCheck = await response.Content
-            .ReadFromJsonAsync<List<ApplicationHealthCheckerUrlToListDto>>(cancellationToken: cancellationToken);
+        var urlsToCheck = await client.GetFromJsonAsync<List<ApplicationHealthCheckerUrlToListDto>>(
+            NummyConstants.GetHealthCheckerUrlsUrl, cancellationToken);
 
         if (urlsToCheck == null || urlsToCheck.Count == 0)
-            logger.LogInformation("No urls found...");
+        {
+            logger.LogInformation("No URLs to check. Skipping cycle.");
+            return;
+        }
 
-        // Use a semaphore to limit concurrency
         using var semaphore = new SemaphoreSlim(MaxConcurrency);
-
-        // Thread-safe collection to store results
         var results = new ConcurrentBag<ApplicationIsHealthyToUpdateDto>();
-
         var tasks = new List<Task>();
 
-        foreach (var item in urlsToCheck!)
+        foreach (var item in urlsToCheck)
         {
-            await semaphore.WaitAsync(cancellationToken);
-
+            // Semaphore is acquired solely inside CheckSingleUrl to avoid double-acquire deadlock.
             tasks.Add(CheckSingleUrl(item, client, semaphore, results, cancellationToken));
         }
 
         await Task.WhenAll(tasks);
 
-        var request2 = new HttpRequestMessage
-        {
-            Content = JsonContent.Create(results.ToList()),
-            Method = HttpMethod.Put,
-            RequestUri = new Uri(NummyConstants.UpdateHealthCheckerUrlsUrl, UriKind.Relative)
-        };
+        await client.PutAsJsonAsync(NummyConstants.UpdateHealthCheckerUrlsUrl, results.ToList(), cancellationToken);
 
-        var response2 = await client.SendAsync(request2, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        logger.LogInformation("URL health check cycle completed.");
+        var healthy = results.Count(r => r.IsHealthy);
+        logger.LogInformation("URL health check cycle completed: {Healthy}/{Total} URLs healthy.", healthy, results.Count);
     }
 
     private async Task CheckSingleUrl(
@@ -110,20 +92,12 @@ public class HealthCheckerService(
         try
         {
             var isHealthy = await CheckUrlAsync(client, item.HealthCheckerUrl, cancellationToken);
-            results.Add(new ApplicationIsHealthyToUpdateDto
-            (
-                item.ApplicationId,
-                isHealthy
-            ));
+            results.Add(new ApplicationIsHealthyToUpdateDto(item.ApplicationId, isHealthy));
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error checking URL {Url}", item.HealthCheckerUrl);
-            results.Add(new ApplicationIsHealthyToUpdateDto
-            (
-                item.ApplicationId,
-                false
-            ));
+            results.Add(new ApplicationIsHealthyToUpdateDto(item.ApplicationId, false));
         }
         finally
         {

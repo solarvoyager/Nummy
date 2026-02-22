@@ -12,7 +12,7 @@ public static class NummyConstants
     public const string GetRequestLogsUrl = "api/log/get/request";
     public const string GetResponseLogsUrl = "api/log/get/response";
     public const string DeleteCodeLogsUrl = "api/log/delete/code";
-    public const string GetCodeLogsByTraceIdentifierUrl = "api/log/get/code";
+    public const string GetCodeLogsByTraceIdentifierUrl = "api/log/get/code"; // base path; append /{traceIdentifier} at call site
     public const string GetTotalCountsUrl = "api/statistical/total";
     
     public const string GetServiceUrlUrl = "api/helper/service-url";

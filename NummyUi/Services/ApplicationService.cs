@@ -1,115 +1,65 @@
 using NummyShared.DTOs;
-using NummyShared.DTOs.Enums;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
-namespace NummyUi.Services
+namespace NummyUi.Services;
+
+public class ApplicationService(IHttpClientFactory clientFactory) : IApplicationService
 {
-    public interface IApplicationService
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+
+    public async Task<ApplicationToListDto?> Get(Guid id)
     {
-        Task<ApplicationToListDto?> Get(Guid id);
-        Task<IEnumerable<ApplicationToListDto>> Get();
-        Task<IEnumerable<ApplicationStackToListDto>> GetStackType();
-        Task<ApplicationToListDto> Add(string name, string description, string? healthCheckerUrl, Guid stackTypeId);
-        Task<ApplicationToListDto?> Update(Guid id, string name, string description, string? healthCheckerUrl, Guid stackTypeId);
-        Task Delete(Guid id);
+        var response = await _client.GetAsync(NummyConstants.GetApplicationsUrl + $"/{id}");
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        return await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
     }
 
-    public class ApplicationService(IHttpClientFactory clientFactory) : IApplicationService
+    public async Task<IEnumerable<ApplicationToListDto>> Get()
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+        var response = await _client.GetAsync(NummyConstants.GetApplicationsUrl);
+        response.EnsureSuccessStatusCode();
 
-        public async Task<ApplicationToListDto?> Get(Guid id)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetApplicationsUrl + $"/{id}", UriKind.Relative)
-            };
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<ApplicationToListDto>>();
+        return result ?? [];
+    }
 
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+    public async Task<IEnumerable<ApplicationStackToListDto>> GetStackType()
+    {
+        var response = await _client.GetAsync(NummyConstants.GetApplicationStackTypesUrl);
+        response.EnsureSuccessStatusCode();
 
-            var result = await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<ApplicationStackToListDto>>();
+        return result ?? [];
+    }
 
-            return result;
-        }
+    public async Task<ApplicationToListDto> Add(string name, string description, string? healthCheckerUrl, Guid stackTypeId)
+    {
+        var response = await _client.PostAsJsonAsync(NummyConstants.AddApplicationUrl,
+            new ApplicationToAddDto(name, description, healthCheckerUrl, stackTypeId));
 
-        public async Task<IEnumerable<ApplicationToListDto>> Get()
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetApplicationsUrl, UriKind.Relative)
-            };
+        response.EnsureSuccessStatusCode();
 
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+        var result = await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
+        return result ?? throw new InvalidOperationException("Add application response was empty.");
+    }
 
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<ApplicationToListDto>>();
+    public async Task<ApplicationToListDto?> Update(Guid id, string name, string description, string? healthCheckerUrl, Guid stackTypeId)
+    {
+        var response = await _client.PutAsJsonAsync(NummyConstants.UpdateApplicationUrl + $"/{id}",
+            new ApplicationToUpdateDto(name, description, healthCheckerUrl, stackTypeId));
 
-            return result!;
-        }
+        if (!response.IsSuccessStatusCode)
+            return null;
 
-        public async Task<IEnumerable<ApplicationStackToListDto>> GetStackType()
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetApplicationStackTypesUrl, UriKind.Relative)
-            };
+        return await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
+    }
 
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<ApplicationStackToListDto>>();
-
-            return result!;
-        }
-
-        public async Task<ApplicationToListDto> Add(string name, string description, string? healthCheckerUrl, Guid stackTypeId)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(new ApplicationToAddDto(name, description, healthCheckerUrl, stackTypeId)),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyConstants.AddApplicationUrl, UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
-
-            return result!;
-        }
-
-        public async Task<ApplicationToListDto?> Update(Guid id, string name, string description, string? healthCheckerUrl, Guid stackTypeId)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(new ApplicationToUpdateDto(name, description, healthCheckerUrl, stackTypeId)),
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(NummyConstants.UpdateApplicationUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<ApplicationToListDto>();
-
-            return result;
-        }
-
-        public async Task Delete(Guid id)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(NummyConstants.DeleteApplicationUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-        }
+    public async Task Delete(Guid id)
+    {
+        var response = await _client.DeleteAsync(NummyConstants.DeleteApplicationUrl + $"/{id}");
+        response.EnsureSuccessStatusCode();
     }
 }

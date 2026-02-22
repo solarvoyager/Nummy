@@ -1,8 +1,8 @@
-﻿namespace NummyApi.Services.Abstract;
+namespace NummyApi.Services.Abstract;
 
 public interface IDatabaseService
 {
-    Task EnsureCreated();
-    Task<IEnumerable<string>> GetPendingMigrations();
-    Task ApplyPendingMigrations();
+    Task EnsureCreated(CancellationToken cancellationToken = default);
+    Task<IEnumerable<string>> GetPendingMigrations(CancellationToken cancellationToken = default);
+    Task ApplyPendingMigrations(CancellationToken cancellationToken = default);
 }

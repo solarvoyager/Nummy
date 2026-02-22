@@ -2,90 +2,76 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
-using NummyApi.Helpers;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
-using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Services.Concrete;
 
 public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : IApplicationService
 {
-    public async Task<ApplicationToListDto?> GetAsync(Guid id)
+    public async Task<ApplicationToListDto?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var application = await dataContext.Applications.FindAsync(id);
+        var application = await dataContext.Applications.FindAsync([id], cancellationToken);
         if (application == null)
             return null;
 
-        var mapped = mapper.Map<ApplicationToListDto>(application);
-
-        return mapped;
+        return mapper.Map<ApplicationToListDto>(application);
     }
 
-    public async Task<IEnumerable<ApplicationToListDto>> GetAsync()
+    public async Task<IEnumerable<ApplicationToListDto>> GetAsync(CancellationToken cancellationToken = default)
     {
         var applications = await dataContext.Applications
-            .OrderByDescending(t=> t.CreatedAt)
-            .ToListAsync();
+            .OrderByDescending(t => t.CreatedAt)
+            .ToListAsync(cancellationToken);
 
-        var mappeds = mapper.Map<List<ApplicationToListDto>>(applications);
-
-        return mappeds;
+        return mapper.Map<List<ApplicationToListDto>>(applications);
     }
 
-    public async Task<IEnumerable<ApplicationStackToListDto>> GetStackTypeAsync()
+    public async Task<IEnumerable<ApplicationStackToListDto>> GetStackTypeAsync(CancellationToken cancellationToken = default)
     {
         var stackTypes = await dataContext.ApplicationStacks
-            .OrderByDescending(t=> t.CreatedAt)
-            .ToListAsync();
+            .OrderByDescending(t => t.CreatedAt)
+            .ToListAsync(cancellationToken);
 
-        var mappeds = mapper.Map<List<ApplicationStackToListDto>>(stackTypes);
-
-        return mappeds;
+        return mapper.Map<List<ApplicationStackToListDto>>(stackTypes);
     }
 
-    public async Task<IEnumerable<ApplicationHealthCheckerUrlToListDto>> GetHealthCheckerUrlAsync()
+    public async Task<IEnumerable<ApplicationHealthCheckerUrlToListDto>> GetHealthCheckerUrlAsync(CancellationToken cancellationToken = default)
     {
-        var healthCheckerUrls = await dataContext.Applications
+        return await dataContext.Applications
             .Where(a => a.HealthCheckerUrl != null)
             .Select(a => new ApplicationHealthCheckerUrlToListDto(a.Id, a.HealthCheckerUrl!))
-            .ToListAsync();
-
-        return healthCheckerUrls;
+            .ToListAsync(cancellationToken);
     }
-    
-    public async Task UpdateIsHealthyAsync(List<ApplicationIsHealthyToUpdateDto> applications)
+
+    public async Task UpdateIsHealthyAsync(List<ApplicationIsHealthyToUpdateDto> applications, CancellationToken cancellationToken = default)
     {
-        var appsDictionary = applications.ToDictionary(a=> a.ApplicationId,  a => a.IsHealthy);
-        
+        var appsDictionary = applications.ToDictionary(a => a.ApplicationId, a => a.IsHealthy);
+
         var applicationEntities = await dataContext.Applications
             .Where(a => appsDictionary.Keys.Contains(a.Id))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         foreach (var application in applicationEntities)
-        {
             application.IsHealthy = appsDictionary.GetValueOrDefault(application.Id);
-        }
 
-        await dataContext.SaveChangesAsync();
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto)
+    public async Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto, CancellationToken cancellationToken = default)
     {
         var application = mapper.Map<Application>(dto);
 
-        await dataContext.Applications.AddAsync(application);
-        await dataContext.SaveChangesAsync();
+        await dataContext.Applications.AddAsync(application, cancellationToken);
+        await dataContext.SaveChangesAsync(cancellationToken);
 
-        var mapped = mapper.Map<ApplicationToListDto>(application);
-
-        return mapped;
+        return mapper.Map<ApplicationToListDto>(application);
     }
 
-    public async Task<ApplicationToListDto?> UpdateAsync(Guid id, ApplicationToUpdateDto dto)
+    public async Task<ApplicationToListDto?> UpdateAsync(Guid id, ApplicationToUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var application = await dataContext.Applications.FindAsync(id);
+        var application = await dataContext.Applications.FindAsync([id], cancellationToken);
         if (application == null)
             return null;
 
@@ -94,19 +80,17 @@ public class ApplicationService(NummyDataContext dataContext, IMapper mapper) : 
         application.HealthCheckerUrl = dto.HealthCheckerUrl;
         application.StackId = dto.StackId;
 
-        await dataContext.SaveChangesAsync();
+        await dataContext.SaveChangesAsync(cancellationToken);
 
-        var mapped = mapper.Map<ApplicationToListDto>(application);
-
-        return mapped;
+        return mapper.Map<ApplicationToListDto>(application);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var application = await dataContext.Applications.FindAsync(id);
+        var application = await dataContext.Applications.FindAsync([id], cancellationToken);
         if (application == null) return;
 
         dataContext.Applications.Remove(application);
-        await dataContext.SaveChangesAsync();
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 }

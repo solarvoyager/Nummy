@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
+using NummyApi.Exceptions;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
@@ -11,25 +12,24 @@ namespace NummyApi.Services.Concrete;
 
 public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICodeLogService
 {
-    public async Task Add(CodeLogToAddDto dto)
+    public async Task Add(CodeLogToAddDto dto, CancellationToken cancellationToken = default)
     {
-        var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId);
-        if(!isExists) throw new Exception($"{dto.ApplicationId} does not exist. " +
-                                          $"Please create a new application in Nummy " +
-                                          $"and copy it's Id to AddNummyCodeLogger inside in Program.cs");
-        
+        var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId, cancellationToken);
+        if (!isExists)
+            throw new ApplicationNotFoundException(dto.ApplicationId);
+
         var mapped = mapper.Map<CodeLog>(dto);
 
-        await dataContext.AddAsync(mapped);
-        await dataContext.SaveChangesAsync();
+        await dataContext.AddAsync(mapped, cancellationToken);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<PaginatedListDto<CodeLogToListDto>> Get(Guid? applicationId, GetCodeLogsDto dto)
+    public async Task<PaginatedListDto<CodeLogToListDto>> Get(Guid? applicationId, GetCodeLogsDto dto, CancellationToken cancellationToken = default)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
         var query = dataContext.CodeLogs
-            .Where(l => dto.Levels.Contains(l.LogLevel) && 
+            .Where(l => dto.Levels.Contains(l.LogLevel) &&
                         (applicationId == null || l.ApplicationId == applicationId));
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
@@ -39,7 +39,7 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
                 EF.Functions.Like(l.Description!.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(l.ExceptionType!.ToLower(), $"%{dto.Query.ToLower()}%"));
 
-        var totalCount = await query.CountAsync();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         if (dto.SortType is not null && dto.SortOrder is not null)
             query = dto.SortType switch
@@ -69,32 +69,27 @@ public class CodeLogService(NummyDataContext dataContext, IMapper mapper) : ICod
             .Skip(skip)
             .Take(dto.PageSize);
 
-        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(await query.ToListAsync());
+        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(await query.ToListAsync(cancellationToken));
 
         return new PaginatedListDto<CodeLogToListDto>(totalCount, mapped);
     }
 
-    public async Task<bool> Delete(DeleteCodeLogsDto dto)
+    public async Task<bool> Delete(DeleteCodeLogsDto dto, CancellationToken cancellationToken = default)
     {
-        var logs = await dataContext.CodeLogs
+        await dataContext.CodeLogs
             .Where(x => dto.Ids.Contains(x.Id))
-            .ToListAsync();
-
-        dataContext.CodeLogs.RemoveRange(logs);
-        await dataContext.SaveChangesAsync();
+            .ExecuteDeleteAsync(cancellationToken);
 
         return true;
     }
 
-    public async Task<IEnumerable<CodeLogToListDto>> Get(string traceIdentifier)
+    public async Task<IEnumerable<CodeLogToListDto>> Get(string traceIdentifier, CancellationToken cancellationToken = default)
     {
         var logs = await dataContext.CodeLogs
             .Where(x => x.TraceIdentifier == traceIdentifier)
             .OrderBy(x => x.CreatedAt)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        var mapped = mapper.Map<IEnumerable<CodeLogToListDto>>(logs);
-
-        return mapper.Map<IEnumerable<CodeLogToListDto>>(mapped);
+        return mapper.Map<IEnumerable<CodeLogToListDto>>(logs);
     }
 }

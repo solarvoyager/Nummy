@@ -1,8 +1,8 @@
-﻿using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Domain;
 
 namespace NummyApi.Services.Abstract;
 
 public interface IStatisticalService
 {
-    Task<TotalCountsResponseDto> GetTotalCountsAsync();
+    Task<TotalCountsResponseDto> GetTotalCountsAsync(CancellationToken cancellationToken = default);
 }

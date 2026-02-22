@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NummyApi.DataContext;
 using NummyApi.Entitites;
+using NummyApi.Exceptions;
 using NummyApi.Services.Abstract;
 using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
@@ -11,39 +12,36 @@ namespace NummyApi.Services.Concrete;
 
 public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : IRequestLogService
 {
-    public async Task<bool> Delete(DeleteRequestLogsDto dto)
+    public async Task<bool> Delete(DeleteRequestLogsDto dto, CancellationToken cancellationToken = default)
     {
         await dataContext.RequestLogs
             .Where(l => dto.Ids.Contains(l.Id))
-            .ExecuteDeleteAsync();
+            .ExecuteDeleteAsync(cancellationToken);
 
         return true;
     }
 
-    public async Task Add(RequestLogToAddDto dto)
+    public async Task Add(RequestLogToAddDto dto, CancellationToken cancellationToken = default)
     {
-        var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId);
-        if(!isExists) throw new Exception($"{dto.ApplicationId} does not exist. " +
-                                          $"Please create a new application in Nummy " +
-                                          $"and copy it's Id to AddNummyHttpLogger inside in Program.cs");
-        
+        var isExists = await dataContext.Applications.AnyAsync(x => x.Id == dto.ApplicationId, cancellationToken);
+        if (!isExists)
+            throw new ApplicationNotFoundException(dto.ApplicationId);
+
         var mapped = mapper.Map<RequestLog>(dto);
 
-        var added = await dataContext.AddAsync(mapped);
-        await dataContext.SaveChangesAsync();
-        
         var headers = dto.Headers.Select(h => new Header
         {
             Key = h.Key,
             Value = h.Value,
-            RequestLogId = added.Entity.Id
         }).ToList();
-        
-        await dataContext.AddRangeAsync(headers);
-        await dataContext.SaveChangesAsync();
+
+        mapped.Headers = headers;
+
+        await dataContext.RequestLogs.AddAsync(mapped, cancellationToken);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<PaginatedListDto<RequestLogToListDto>> Get(Guid? applicationId, GetRequestLogsDto dto)
+    public async Task<PaginatedListDto<RequestLogToListDto>> Get(Guid? applicationId, GetRequestLogsDto dto, CancellationToken cancellationToken = default)
     {
         var skip = (dto.PageIndex - 1) * dto.PageSize;
 
@@ -54,7 +52,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 response => response.HttpLogId,
                 (request, response) => new { Request = request, Response = response }
             )
-            .Where(l=> applicationId == null || l.Request.ApplicationId == applicationId);
+            .Where(l => applicationId == null || l.Request.ApplicationId == applicationId);
 
         if (!string.IsNullOrWhiteSpace(dto.Query))
             query = query.Where(x =>
@@ -63,7 +61,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 EF.Functions.Like(x.Request.Path.ToLower(), $"%{dto.Query.ToLower()}%") ||
                 EF.Functions.Like(x.Request.RemoteIp!.ToLower(), $"%{dto.Query.ToLower()}"));
 
-        var totalCount = await query.CountAsync();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         if (dto.SortType is not null && dto.SortOrder is not null)
             query = dto.SortType switch
@@ -101,7 +99,7 @@ public class RequestLogService(NummyDataContext dataContext, IMapper mapper) : I
                 x.Request.RemoteIp,
                 x.Request.CreatedAt
             ))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new PaginatedListDto<RequestLogToListDto>(totalCount, result);
     }

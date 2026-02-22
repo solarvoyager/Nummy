@@ -1,97 +1,56 @@
-﻿using NummyShared.DTOs;
+using NummyShared.DTOs;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
-namespace NummyUi.Services
+namespace NummyUi.Services;
+
+public class TeamService(IHttpClientFactory clientFactory) : ITeamService
 {
-    public interface ITeamService
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+
+    public async Task<TeamToListDto?> Get(Guid id)
     {
-        Task<TeamToListDto?> Get(Guid id);
-        Task<IEnumerable<TeamToListDto>> Get();
-        Task<TeamToListDto> Add(string name, string description, IEnumerable<Guid> userIds, IEnumerable<Guid> applicationIds);
-        Task<TeamToListDto?> Update(Guid id, string name, string description);
-        Task Delete(Guid id);
+        var response = await _client.GetAsync(NummyConstants.GetTeamsUrl + $"/{id}");
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        return await response.Content.ReadFromJsonAsync<TeamToListDto>();
     }
 
-    public class TeamService(IHttpClientFactory clientFactory) : ITeamService
+    public async Task<IEnumerable<TeamToListDto>> Get()
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+        var response = await _client.GetAsync(NummyConstants.GetTeamsUrl);
+        response.EnsureSuccessStatusCode();
 
-        public async Task<TeamToListDto?> Get(Guid id)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetTeamsUrl + $"/{id}", UriKind.Relative)
-            };
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<TeamToListDto>>();
+        return result ?? [];
+    }
 
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+    public async Task<TeamToListDto> Add(string name, string description, IEnumerable<Guid> userIds, IEnumerable<Guid> applicationIds)
+    {
+        var response = await _client.PostAsJsonAsync(NummyConstants.AddTeamUrl,
+            new TeamToAddDto(name, description, userIds, applicationIds));
 
-            var result = await response.Content.ReadFromJsonAsync<TeamToListDto>();
+        response.EnsureSuccessStatusCode();
 
-            return result;
-        }
+        var result = await response.Content.ReadFromJsonAsync<TeamToListDto>();
+        return result ?? throw new InvalidOperationException("Add team response was empty.");
+    }
 
-        public async Task<IEnumerable<TeamToListDto>> Get()
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetTeamsUrl, UriKind.Relative)
-            };
+    public async Task<TeamToListDto?> Update(Guid id, string name, string description)
+    {
+        var response = await _client.PutAsJsonAsync(NummyConstants.UpdateTeamUrl + $"/{id}",
+            new TeamToUpdateDto(name, description));
 
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+            return null;
 
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<TeamToListDto>>();
+        return await response.Content.ReadFromJsonAsync<TeamToListDto>();
+    }
 
-            return result!;
-        }
-
-        public async Task<TeamToListDto> Add(string name, string description, IEnumerable<Guid> userIds, IEnumerable<Guid> applicationIds)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(new TeamToAddDto(name, description, userIds, applicationIds)),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyConstants.AddTeamUrl, UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<TeamToListDto>();
-
-            return result!;
-        }
-
-        public async Task<TeamToListDto?> Update(Guid id, string name, string description)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(new TeamToUpdateDto(name, description)),
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(NummyConstants.UpdateTeamUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<TeamToListDto>();
-
-            return result;
-        }
-
-        public async Task Delete(Guid id)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(NummyConstants.DeleteTeamUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-        }
+    public async Task Delete(Guid id)
+    {
+        var response = await _client.DeleteAsync(NummyConstants.DeleteTeamUrl + $"/{id}");
+        response.EnsureSuccessStatusCode();
     }
 }

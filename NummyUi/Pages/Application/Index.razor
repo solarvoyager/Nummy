@@ -76,7 +76,7 @@
 </Spin>
 
 <Modal Title="@(_isEdit ? "Edit Application" : "Add Application")"
-       Visible="@_isTeamEditOrAddModalVisible"
+       Visible="@_isAddOrEditModalVisible"
        OnOk="@HandleOk"
        OnCancel="@HandleCancel"
        OkText="@(_isEdit ? "Update" : "Add")"

@@ -1,50 +1,33 @@
-﻿using NummyUi.Models;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
+using NummyUi.Models;
+using NummyUi.Services.Abstract;
 
-namespace NummyUi.Services
+namespace NummyUi.Services;
+
+public class ChartService(HttpClient httpClient) : IChartService
 {
-    public interface IChartService
+    public async Task<ChartDataItem[]> GetVisitDataAsync()
     {
-        Task<ChartDataItem[]> GetVisitDataAsync();
-        Task<ChartDataItem[]> GetVisitData2Async();
-        Task<ChartDataItem[]> GetSalesDataAsync();
-        Task<RadarDataItem[]> GetRadarDataAsync();
+        return (await GetChartDataAsync()).VisitData;
     }
 
-    public class ChartService : IChartService
+    public async Task<ChartDataItem[]> GetVisitData2Async()
     {
-        private readonly HttpClient _httpClient;
+        return (await GetChartDataAsync()).VisitData2;
+    }
 
-        public ChartService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+    public async Task<ChartDataItem[]> GetSalesDataAsync()
+    {
+        return (await GetChartDataAsync()).SalesData;
+    }
 
-        public async Task<ChartDataItem[]> GetVisitDataAsync()
-        {
-            return (await GetChartDataAsync()).VisitData;
-        }
+    public async Task<RadarDataItem[]> GetRadarDataAsync()
+    {
+        return (await GetChartDataAsync()).RadarData;
+    }
 
-        public async Task<ChartDataItem[]> GetVisitData2Async()
-        {
-            return (await GetChartDataAsync()).VisitData2;
-        }
-
-        public async Task<ChartDataItem[]> GetSalesDataAsync()
-        {
-            return (await GetChartDataAsync()).SalesData;
-        }
-
-        public async Task<RadarDataItem[]> GetRadarDataAsync()
-        {
-            return (await GetChartDataAsync()).RadarData;
-        }
-
-        private async Task<ChartData> GetChartDataAsync()
-        {
-            return await _httpClient.GetFromJsonAsync<ChartData>("data/fake_chart_data.json");
-        }
+    private async Task<ChartData> GetChartDataAsync()
+    {
+        var result = await httpClient.GetFromJsonAsync<ChartData>("data/fake_chart_data.json");
+        return result ?? new ChartData();
     }
 }

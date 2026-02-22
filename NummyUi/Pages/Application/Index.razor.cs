@@ -2,7 +2,7 @@ using AntDesign;
 using Microsoft.AspNetCore.Components;
 using NummyShared.DTOs;
 using NummyUi.Models.Application;
-using NummyUi.Services;
+using NummyUi.Services.Abstract;
 
 namespace NummyUi.Pages.Application;
 
@@ -26,7 +26,7 @@ public partial class Index
     private IEnumerable<ApplicationStackToListDto> _stackTypes = [];
     private bool _stackTypesLoading = false;
 
-    private bool _isTeamEditOrAddModalVisible = false;
+    private bool _isAddOrEditModalVisible = false;
     private bool _isEdit = false;
     private ApplicationAddModel _applicationAddModel = new();
     private Guid? _editingId;
@@ -38,7 +38,7 @@ public partial class Index
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadApplications();
+        await Task.WhenAll(LoadApplications(), LoadStackTypes());
     }
 
     private async Task LoadApplications()
@@ -55,10 +55,8 @@ public partial class Index
         _stackTypesLoading = false;
     }
 
-    private async Task ShowModal(bool isEdit = false, ApplicationToListDto? application = null)
+    private void ShowModal(bool isEdit = false, ApplicationToListDto? application = null)
     {
-        await LoadStackTypes();
-
         _isEdit = isEdit;
         if (isEdit && application != null)
         {
@@ -76,7 +74,7 @@ public partial class Index
             _editingId = null;
         }
 
-        _isTeamEditOrAddModalVisible = true;
+        _isAddOrEditModalVisible = true;
     }
 
     private async Task HandleOk()
@@ -86,13 +84,9 @@ public partial class Index
             if (_addApplicationForm.Validate())
             {
                 if (_isEdit && _editingId.HasValue)
-                {
                     await OnUpdate();
-                }
                 else
-                {
                     await OnAdd();
-                }
             }
         }
         catch (System.Exception ex)
@@ -111,7 +105,7 @@ public partial class Index
         );
 
         await LoadApplications();
-        _isTeamEditOrAddModalVisible = false;
+        _isAddOrEditModalVisible = false;
 
         await MessageService.Success("Application added successfully");
     }
@@ -119,7 +113,7 @@ public partial class Index
     private async Task OnUpdate()
     {
         await ApplicationService.Update(
-            _editingId.Value,
+            _editingId!.Value,
             _applicationAddModel.Name,
             _applicationAddModel.Description,
             _applicationAddModel.HealthCheckerUrl,
@@ -127,14 +121,14 @@ public partial class Index
         );
 
         await LoadApplications();
-        _isTeamEditOrAddModalVisible = false;
+        _isAddOrEditModalVisible = false;
 
         await MessageService.Success("Application updated successfully");
     }
 
     private void HandleCancel()
     {
-        _isTeamEditOrAddModalVisible = false;
+        _isAddOrEditModalVisible = false;
     }
 
     private async Task OnDelete(Guid id)
@@ -143,7 +137,6 @@ public partial class Index
         {
             await ApplicationService.Delete(id);
             await LoadApplications();
-
             await MessageService.Success("Application deleted successfully");
         }
         catch (System.Exception ex)

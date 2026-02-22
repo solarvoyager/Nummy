@@ -1,47 +1,32 @@
 using NummyUi.Models;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
+using NummyUi.Services.Abstract;
 
-namespace NummyUi.Services
+namespace NummyUi.Services;
+
+public class ProjectService(HttpClient httpClient) : IProjectService
 {
-    public interface IProjectService
+    public async Task<NoticeType[]> GetProjectNoticeAsync()
     {
-        Task<NoticeType[]> GetProjectNoticeAsync();
-        Task<ActivitiesType[]> GetActivitiesAsync();
-        Task<ListItemDataType[]> GetFakeListAsync(int count = 0);
-        Task<NoticeItem[]> GetNoticesAsync();
+        var result = await httpClient.GetFromJsonAsync<NoticeType[]>("data/notice.json");
+        return result ?? [];
     }
 
-    public class ProjectService : IProjectService
+    public async Task<NoticeItem[]> GetNoticesAsync()
     {
-        private readonly HttpClient _httpClient;
+        var result = await httpClient.GetFromJsonAsync<NoticeItem[]>("data/notices.json");
+        return result ?? [];
+    }
 
-        public ProjectService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+    public async Task<ActivitiesType[]> GetActivitiesAsync()
+    {
+        var result = await httpClient.GetFromJsonAsync<ActivitiesType[]>("data/activities.json");
+        return result ?? [];
+    }
 
-        public async Task<NoticeType[]> GetProjectNoticeAsync()
-        {
-            return await _httpClient.GetFromJsonAsync<NoticeType[]>("data/notice.json");
-        }
-
-        public async Task<NoticeItem[]> GetNoticesAsync()
-        {
-            return await _httpClient.GetFromJsonAsync<NoticeItem[]>("data/notices.json");
-        }
-
-        public async Task<ActivitiesType[]> GetActivitiesAsync()
-        {
-            return await _httpClient.GetFromJsonAsync<ActivitiesType[]>("data/activities.json");
-        }
-
-        public async Task<ListItemDataType[]> GetFakeListAsync(int count = 0)
-        {
-            var data = await _httpClient.GetFromJsonAsync<ListItemDataType[]>("data/fake_list.json");
-            return count > 0 ? data.Take(count).ToArray() : data;
-        }
+    public async Task<ListItemDataType[]> GetFakeListAsync(int count = 0)
+    {
+        var data = await httpClient.GetFromJsonAsync<ListItemDataType[]>("data/fake_list.json");
+        if (data == null) return [];
+        return count > 0 ? data.Take(count).ToArray() : data;
     }
 }

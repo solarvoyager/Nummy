@@ -1,18 +1,10 @@
-﻿using NummyShared.DTOs;
+using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
 using NummyShared.DTOs.Generic;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
 namespace NummyUi.Services;
-
-public interface ILogService
-{
-    Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto);
-    Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier);
-    Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(Guid? applicationId, GetRequestLogsDto dto);
-    Task<HttpLogDto> GetResponseLog(Guid httpLogId);
-    Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto);
-}
 
 public class LogService(IHttpClientFactory clientFactory) : ILogService
 {
@@ -20,92 +12,45 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
 
     public async Task<PaginatedListDto<CodeLogToListDto>> GetCodeLogs(Guid? applicationId, GetCodeLogsDto dto)
     {
-        var request = new HttpRequestMessage
-        {
-            Content = JsonContent.Create(dto),
-            Method = HttpMethod.Post,
-            RequestUri =
-                new Uri(
-                    NummyConstants.GetCodeLogsUrl +
-                    (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
-        };
+        var url = NummyConstants.GetCodeLogsUrl +
+                  (applicationId != null ? $"?applicationId={applicationId}" : string.Empty);
 
-        var response = await _client.SendAsync(request);
+        var response = await _client.PostAsJsonAsync(url, dto);
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<CodeLogToListDto>>();
-
-        return result!;
+        return result ?? new PaginatedListDto<CodeLogToListDto>(0, []);
     }
 
     public async Task<IEnumerable<CodeLogToListDto>> GetCodeLogs(string traceIdentifier)
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyConstants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}",
-                UriKind.Relative)
-        };
-
-        var response = await _client.SendAsync(request);
+        var response = await _client.GetAsync(
+            NummyConstants.GetCodeLogsByTraceIdentifierUrl + $"/{traceIdentifier}");
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<IEnumerable<CodeLogToListDto>>();
-
-        return result!;
+        return result ?? [];
     }
 
     public async Task<PaginatedListDto<RequestLogToListDto>> GetRequestLogs(Guid? applicationId, GetRequestLogsDto dto)
     {
-        var request = new HttpRequestMessage
-        {
-            Content = JsonContent.Create(dto),
-            Method = HttpMethod.Post,
-            RequestUri =
-                new Uri(
-                    NummyConstants.GetRequestLogsUrl +
-                    (applicationId != null ? $"?applicationId={applicationId}" : string.Empty), UriKind.Relative)
-        };
+        var url = NummyConstants.GetRequestLogsUrl +
+                  (applicationId != null ? $"?applicationId={applicationId}" : string.Empty);
 
-        var response = await _client.SendAsync(request);
+        var response = await _client.PostAsJsonAsync(url, dto);
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<RequestLogToListDto>>();
-
-        return result!;
+        return result ?? new PaginatedListDto<RequestLogToListDto>(0, []);
     }
-
-    /*public async Task<PaginatedListDto<ResponseLogToListDto>> GetResponseLogs(GetResponseLogsDto dto, Guid? httpLogId)
-    {
-        var request = new HttpRequestMessage
-        {
-            Content = JsonContent.Create(dto),
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(NummyContants.GetResponseLogUrl + $"?httpLogId={httpLogId}", UriKind.Relative)
-        };
-
-        var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<PaginatedListDto<ResponseLogToListDto>>();
-
-        return result!;
-    }*/
 
     public async Task<HttpLogDto> GetResponseLog(Guid httpLogId)
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyConstants.GetResponseLogsUrl + $"/{httpLogId}", UriKind.Relative)
-        };
-
-        var response = await _client.SendAsync(request);
+        var response = await _client.GetAsync(NummyConstants.GetResponseLogsUrl + $"/{httpLogId}");
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content.ReadFromJsonAsync<HttpLogDto>();
-
-        return result!;
+        return result ?? throw new InvalidOperationException($"HTTP log '{httpLogId}' response was empty.");
     }
 
     public async Task<bool> DeleteCodeLogs(DeleteCodeLogsDto dto)
@@ -118,7 +63,6 @@ public class LogService(IHttpClientFactory clientFactory) : ILogService
         };
 
         var response = await _client.SendAsync(request);
-
         return response.IsSuccessStatusCode;
     }
 }

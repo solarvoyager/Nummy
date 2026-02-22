@@ -1,12 +1,8 @@
-﻿using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Domain;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
 namespace NummyUi.Services;
-
-public interface IStatisticalService
-{
-    Task<TotalCountsResponseDto> GetTotalCounts();
-}
 
 public class StatisticalService(IHttpClientFactory clientFactory) : IStatisticalService
 {
@@ -14,23 +10,12 @@ public class StatisticalService(IHttpClientFactory clientFactory) : IStatistical
 
     public async Task<TotalCountsResponseDto> GetTotalCounts()
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(NummyConstants.GetTotalCountsUrl, UriKind.Relative)
-        };
+        var response = await _client.GetAsync(NummyConstants.GetTotalCountsUrl);
 
-        var response = await _client.SendAsync(request);
-
-        // TODO: Check if the response is successful
-        // show message to user
         if (!response.IsSuccessStatusCode)
-        {
             return new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0, 0);
-        }
 
         var result = await response.Content.ReadFromJsonAsync<TotalCountsResponseDto>();
-
-        return result!;
+        return result ?? new TotalCountsResponseDto(0, 0, 0, [], 0, [], 0, 0, 0, 0);
     }
 }

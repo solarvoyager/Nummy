@@ -10,58 +10,61 @@ namespace NummyApi.Controllers;
 public class ApplicationController(IApplicationService applicationService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ApplicationToListDto>>> Get()
+    public async Task<ActionResult<List<ApplicationToListDto>>> Get(CancellationToken cancellationToken)
     {
-        var applications = await applicationService.GetAsync();
+        var applications = await applicationService.GetAsync(cancellationToken);
         return Ok(applications);
     }
 
     [HttpGet("stackType")]
-    public async Task<ActionResult<List<ApplicationStackToListDto>>> GetStackType()
+    public async Task<ActionResult<List<ApplicationStackToListDto>>> GetStackType(CancellationToken cancellationToken)
     {
-        var stackTypes = await applicationService.GetStackTypeAsync();
+        var stackTypes = await applicationService.GetStackTypeAsync(cancellationToken);
         return Ok(stackTypes);
     }
 
     [HttpGet("healthCheckerUrl")]
-    public async Task<ActionResult<List<ApplicationHealthCheckerUrlToListDto>>> GetHealthCheckerUrl()
+    public async Task<ActionResult<List<ApplicationHealthCheckerUrlToListDto>>> GetHealthCheckerUrl(CancellationToken cancellationToken)
     {
-        var stackTypes = await applicationService.GetHealthCheckerUrlAsync();
-        return Ok(stackTypes);
+        var urls = await applicationService.GetHealthCheckerUrlAsync(cancellationToken);
+        return Ok(urls);
     }
 
     [HttpPut("isHealthy")]
-    public async Task<ActionResult> UpdateIsHealthy([FromBody] List<ApplicationIsHealthyToUpdateDto> applications)
+    public async Task<ActionResult> UpdateIsHealthy([FromBody] List<ApplicationIsHealthyToUpdateDto> applications, CancellationToken cancellationToken)
     {
-        await applicationService.UpdateIsHealthyAsync(applications);
-        return Ok();
+        if (applications.Count == 0)
+            return NoContent();
+
+        await applicationService.UpdateIsHealthyAsync(applications, cancellationToken);
+        return NoContent();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApplicationToListDto>> Get(Guid id)
+    public async Task<ActionResult<ApplicationToListDto>> Get(Guid id, CancellationToken cancellationToken)
     {
-        var application = await applicationService.GetAsync(id);
+        var application = await applicationService.GetAsync(id, cancellationToken);
         return application == null ? NotFound() : Ok(application);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApplicationToListDto>> Add(ApplicationToAddDto request)
+    public async Task<ActionResult<ApplicationToListDto>> Add(ApplicationToAddDto request, CancellationToken cancellationToken)
     {
-        var application = await applicationService.AddAsync(request);
+        var application = await applicationService.AddAsync(request, cancellationToken);
         return Ok(application);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ApplicationToListDto>> Update(Guid id, ApplicationToUpdateDto request)
+    public async Task<ActionResult<ApplicationToListDto>> Update(Guid id, ApplicationToUpdateDto request, CancellationToken cancellationToken)
     {
-        var application = await applicationService.UpdateAsync(id, request);
+        var application = await applicationService.UpdateAsync(id, request, cancellationToken);
         return application == null ? NotFound() : Ok(application);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        await applicationService.DeleteAsync(id);
+        await applicationService.DeleteAsync(id, cancellationToken);
         return Ok();
     }
 }

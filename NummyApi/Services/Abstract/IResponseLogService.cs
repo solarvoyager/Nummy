@@ -1,12 +1,11 @@
-﻿using NummyShared.DTOs;
+using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
 
 namespace NummyApi.Services.Abstract;
 
 public interface IResponseLogService
 {
-    Task Add(ResponseLogToAddDto dto);
-    //Task<PaginatedListDto<ResponseLogToListDto>> Get(GetResponseLogsDto dto, Guid? httpLogId);
-    Task<HttpLogDto?> Get(Guid httpLogId);
-    Task<bool> Delete(DeleteResponseLogsDto dto);
+    Task Add(ResponseLogToAddDto dto, CancellationToken cancellationToken = default);
+    Task<HttpLogDto?> Get(Guid httpLogId, CancellationToken cancellationToken = default);
+    Task<bool> Delete(DeleteResponseLogsDto dto, CancellationToken cancellationToken = default);
 }

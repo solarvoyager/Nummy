@@ -1,17 +1,16 @@
 using NummyShared.DTOs;
 using NummyShared.DTOs.Domain;
-using NummyShared.DTOs.Enums;
 
 namespace NummyApi.Services.Abstract;
 
 public interface IApplicationService
 {
-    Task<ApplicationToListDto?> GetAsync(Guid id);
-    Task<IEnumerable<ApplicationToListDto>> GetAsync();
-    Task<IEnumerable<ApplicationStackToListDto>> GetStackTypeAsync();
-    Task<IEnumerable<ApplicationHealthCheckerUrlToListDto>> GetHealthCheckerUrlAsync();
-    Task UpdateIsHealthyAsync(List<ApplicationIsHealthyToUpdateDto> applications);
-    Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto);
-    Task<ApplicationToListDto?> UpdateAsync(Guid id, ApplicationToUpdateDto dto);
-    Task DeleteAsync(Guid id);
+    Task<ApplicationToListDto?> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationToListDto>> GetAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationStackToListDto>> GetStackTypeAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationHealthCheckerUrlToListDto>> GetHealthCheckerUrlAsync(CancellationToken cancellationToken = default);
+    Task UpdateIsHealthyAsync(List<ApplicationIsHealthyToUpdateDto> applications, CancellationToken cancellationToken = default);
+    Task<ApplicationToListDto> AddAsync(ApplicationToAddDto dto, CancellationToken cancellationToken = default);
+    Task<ApplicationToListDto?> UpdateAsync(Guid id, ApplicationToUpdateDto dto, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }

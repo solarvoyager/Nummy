@@ -1,98 +1,50 @@
-﻿using NummyShared.DTOs;
+using NummyShared.DTOs;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
-namespace NummyUi.Services
+namespace NummyUi.Services;
+
+public class UserService(IHttpClientFactory clientFactory) : IUserService
 {
-    public interface IUserService
+    private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+
+    public async Task<LoginResponseDto> Login(string email, string password)
     {
-        Task<LoginResponseDto> Login(string email, string password);
+        var response = await _client.PostAsJsonAsync(NummyConstants.LoginUrl,
+            new LoginRequestDto(email, password));
 
-        Task<RegisterResponseDto> Register(
-            string name,
-            string surname,
-            string email,
-            string? phone,
-            string password);
+        response.EnsureSuccessStatusCode();
 
-        Task<UserToListDto> Get(Guid id);
-        Task<IEnumerable<UserToListDto>> Get();
+        var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+        return result ?? throw new InvalidOperationException("Login response was empty.");
     }
 
-    public class UserService(IHttpClientFactory clientFactory) : IUserService
+    public async Task<RegisterResponseDto> Register(string name, string surname, string email, string? phone, string password)
     {
-        private readonly HttpClient _client = clientFactory.CreateClient(NummyConstants.ClientName);
+        var response = await _client.PostAsJsonAsync(NummyConstants.RegisterUrl,
+            new RegisterRequestDto(name, surname, email, phone, password));
 
-        public async Task<LoginResponseDto> Login(string email, string password)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(new LoginRequestDto(email, password)),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyConstants.LoginUrl, UriKind.Relative)
-            };
+        response.EnsureSuccessStatusCode();
 
-            var response = await _client.SendAsync(request);
+        var result = await response.Content.ReadFromJsonAsync<RegisterResponseDto>();
+        return result ?? throw new InvalidOperationException("Register response was empty.");
+    }
 
-            var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+    public async Task<UserToListDto> Get(Guid id)
+    {
+        var response = await _client.GetAsync(NummyConstants.GetUserUrl + $"/{id}");
+        response.EnsureSuccessStatusCode();
 
-            return result!;
-        }
+        var result = await response.Content.ReadFromJsonAsync<UserToListDto>();
+        return result ?? throw new InvalidOperationException($"User '{id}' response was empty.");
+    }
 
-        public async Task<RegisterResponseDto> Register(string name,
-            string surname,
-            string email,
-            string? phone,
-            string password)
-        {
-            var request = new HttpRequestMessage
-            {
-                Content = JsonContent.Create(
-                    new RegisterRequestDto(
-                        name,
-                        surname,
-                        email,
-                        phone,
-                        password
-                    )),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(NummyConstants.RegisterUrl, UriKind.Relative)
-            };
+    public async Task<IEnumerable<UserToListDto>> Get()
+    {
+        var response = await _client.GetAsync(NummyConstants.GetUserUrl);
+        response.EnsureSuccessStatusCode();
 
-            var response = await _client.SendAsync(request);
-
-            var result = await response.Content.ReadFromJsonAsync<RegisterResponseDto>();
-
-            return result!;
-        }
-
-        public async Task<UserToListDto> Get(Guid id)
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetUserUrl + $"/{id}", UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-
-            var result = await response.Content.ReadFromJsonAsync<UserToListDto>();
-
-            return result!;
-        }
-        
-        public async Task<IEnumerable<UserToListDto>> Get()
-        {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(NummyConstants.GetUserUrl, UriKind.Relative)
-            };
-
-            var response = await _client.SendAsync(request);
-
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<UserToListDto>>();
-
-            return result!;
-        }
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<UserToListDto>>();
+        return result ?? [];
     }
 }

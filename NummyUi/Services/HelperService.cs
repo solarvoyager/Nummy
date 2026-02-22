@@ -1,12 +1,8 @@
-﻿using NummyShared.DTOs.Domain;
+using NummyShared.DTOs.Domain;
+using NummyUi.Services.Abstract;
 using NummyUi.Utils;
 
 namespace NummyUi.Services;
-
-public interface IHelperService
-{
-    Task<ServiceUrlResponseDto> GetServiceUrl();
-}
 
 public class HelperService(IHttpClientFactory clientFactory) : IHelperService
 {
@@ -14,8 +10,10 @@ public class HelperService(IHttpClientFactory clientFactory) : IHelperService
 
     public async Task<ServiceUrlResponseDto> GetServiceUrl()
     {
-        var response = await _client.GetFromJsonAsync<ServiceUrlResponseDto>(NummyConstants.GetServiceUrlUrl);
+        var response = await _client.GetAsync(NummyConstants.GetServiceUrlUrl);
+        response.EnsureSuccessStatusCode();
 
-        return response!;
+        var result = await response.Content.ReadFromJsonAsync<ServiceUrlResponseDto>();
+        return result ?? throw new InvalidOperationException("Service URL response was empty.");
     }
 }
