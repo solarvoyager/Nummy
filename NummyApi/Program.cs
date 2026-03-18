@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using NummyApi.DataContext;
 using NummyApi.Mappers;
 using NummyApi.Middleware;
@@ -37,6 +38,8 @@ builder.Services.AddDbContext<NummyDataContext>(options =>
         options.EnableDetailedErrors();
         options.EnableSensitiveDataLogging();
     }
+    options.ConfigureWarnings(w =>
+        w.Ignore(RelationalEventId.PendingModelChangesWarning));
 });
 
 builder.Services.AddHealthChecks()
