@@ -16,6 +16,12 @@ services:
       - postgres-data:/var/lib/postgresql
     networks:
       - network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U nummy_user -d nummy_database" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
       
   # Nummy WORKER instance
   worker:
@@ -27,6 +33,9 @@ services:
       - NUMMY_API_PORT=8082
     ports:
       - "8084:8084"
+    depends_on:
+      api:
+        condition: service_healthy
     networks:
       - network
 
@@ -36,7 +45,7 @@ services:
     #container_name: nummy_api
     restart: on-failure:5
     environment:
-      - POSTGRES_HOST=postgres-1
+      - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB=nummy_database
       - POSTGRES_USER=nummy_user
@@ -46,6 +55,9 @@ services:
     ports:
       - "8082:8082"
       - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - network
 

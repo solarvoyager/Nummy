@@ -11,20 +11,13 @@ public static class DbInitializer
         await using var scope = serviceProvider.CreateAsyncScope();
         var context = scope.ServiceProvider.GetRequiredService<NummyDataContext>();
 
-        var migrations = await context.Database.GetPendingMigrationsAsync();
-        if (!migrations.Any())
-            return;
-
         await context.Database.MigrateAsync();
 
-        var email = Environment.GetEnvironmentVariable("UI_ADMIN_EMAIL");
-        var password = Environment.GetEnvironmentVariable("UI_ADMIN_PASSWORD");
+        var email = Environment.GetEnvironmentVariable("UI_ADMIN_EMAIL")
+                    ?? throw new InvalidOperationException("UI_ADMIN_EMAIL environment variable is not set.");
 
-        if (string.IsNullOrEmpty(email))
-            throw new InvalidOperationException("UI_ADMIN_EMAIL environment variable is not set.");
-
-        if (string.IsNullOrEmpty(password))
-            throw new InvalidOperationException("UI_ADMIN_PASSWORD environment variable is not set.");
+        var password = Environment.GetEnvironmentVariable("UI_ADMIN_PASSWORD")
+                       ?? throw new InvalidOperationException("UI_ADMIN_PASSWORD environment variable is not set.");
 
         var exists = await context.Users.AnyAsync(u => u.Email == email);
         if (exists)
