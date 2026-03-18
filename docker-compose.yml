@@ -60,6 +60,12 @@ services:
         condition: service_healthy
     networks:
       - network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8082/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   # Nummy UI instance
   ui:

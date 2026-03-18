@@ -86,6 +86,8 @@ namespace NummyApi.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    HealthCheckerUrl = table.Column<string>(type: "text", nullable: true),
+                    IsHealthy = table.Column<bool>(type: "boolean", nullable: true),
                     StackId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
